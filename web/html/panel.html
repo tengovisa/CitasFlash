@@ -1329,7 +1329,8 @@ async function validateAIS() {
   btn.textContent = '⏳ Validando...';
   btn.disabled = true;
   try {
-    const proxy = document.getElementById('f-proxies').value.trim();
+    const proxyEl = document.getElementById('f-proxies');
+    const proxy = proxyEl ? proxyEl.value.trim() : '';
     const body  = { email, password: pass, country: 'do' };
     if (proxy) body.proxy = proxy.split(',')[0].trim();
     const data = await api('POST', '/validate-ais', body);
@@ -1484,7 +1485,7 @@ function renderUsers() {
         <div class="act-btns">
           <button class="abt ${u.is_active ? 'pause' : 'play'}" onclick="toggleUser(${u.id})" title="${u.is_active ? 'Suspender' : 'Activar'}">${u.is_active ? '⏸' : '▶'}</button>
           <button class="abt edit" onclick="resetPass(${u.id})" title="Resetear clave">🔑</button>
-          ${canDelete ? `<button class="abt del" onclick="deleteUser(${u.id})" title="Eliminar">🗑</button>` : ''}
+          ${(SESSION && ['administrador','admin','superadmin'].includes(SESSION.rol)) ? `<button class="abt del" onclick="deleteUser(${u.id})" title="Eliminar">🗑</button>` : ''}
         </div>
       </td>
     </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">Sin usuarios</td></tr>';
@@ -2023,6 +2024,47 @@ async function resetAllProxies() {
   await api('POST', '/proxies/reset-all');
   toast('Todos los proxies reseteados', 'ok');
   loadProxies();
+}
+
+// ── FUNCIONES FALTANTES ──
+function checkBotStatus() {
+  checkServicioStatus();
+  updateConsoleProxyStats();
+  toast('Actualizando estado...', 'info');
+}
+
+function switchTab(tab) {
+  const logC  = document.getElementById('tab-log-content');
+  const termC = document.getElementById('tab-term-content');
+  const logB  = document.getElementById('tab-log');
+  const termB = document.getElementById('tab-term-btn');
+  const isLog = tab === 'log';
+  if (logC)  logC.style.display  = isLog ? 'block' : 'none';
+  if (termC) termC.style.display = isLog ? 'none'  : 'block';
+  if (logB)  { logB.style.background  = isLog ? 'var(--blue)' : 'var(--bg)'; logB.style.color  = isLog ? '#fff' : 'var(--text)'; }
+  if (termB) { termB.style.background = isLog ? 'var(--bg)' : 'var(--blue)'; termB.style.color = isLog ? 'var(--text)' : '#fff'; }
+}
+
+async function runCmd(endpoint, btn) {
+  const orig = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.style.opacity = '.6'; }
+  try {
+    await api('POST', '/' + endpoint);
+    toast('Comando ejecutado', 'ok');
+  } catch(e) { toast('Error: ' + e.message, 'err'); }
+  if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.textContent = orig; }
+}
+
+async function vaultCmd(cmd) {
+  const res = document.getElementById('cmd-result');
+  if (res) { res.style.background = 'var(--blue)'; res.style.color = '#fff'; res.textContent = '⏳ Ejecutando...'; }
+  try {
+    const d = await api('POST', '/vault/cmd', { cmd });
+    if (res) { res.style.background = 'var(--bg)'; res.style.color = 'var(--text)'; res.textContent = d.output || 'OK'; }
+  } catch(e) {
+    if (res) { res.style.background = '#fee2e2'; res.style.color = '#991b1b'; res.textContent = 'Error: ' + e.message; }
+    toast('Error ejecutando comando', 'err');
+  }
 }
 
 </script>

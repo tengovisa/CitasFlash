@@ -1,0 +1,125 @@
+{
+  "respuestas": [
+    {
+      "id": "saludo",
+      "palabras_clave": [
+        "hola",
+        "buenos",
+        "buenas",
+        "hi",
+        "hello",
+        "saludos",
+        "buen dia"
+      ],
+      "categoria": "Saludo",
+      "respuesta": "👋 ¡Hola! Gracias por contactar a *TengoVisa RD* 🇩🇴🇺🇸\n\n📅 Te ayudamos con:\n• Visa por primera vez\n• Renovación de visa\n• Adelantar cita para 2026\n\nIndícanos:\n1️⃣ ¿Qué necesitas?\n2️⃣ ¿Tienes pasaporte vigente?\n3️⃣ ¿Has tenido visa aprobada o negada?\n4️⃣ ¿Cuántas personas aplican?\n5️⃣ ¿Solo información o iniciar proceso?"
+    },
+    {
+      "id": "visa",
+      "palabras_clave": [
+        "visa",
+        "visas",
+        "turismo",
+        "b1",
+        "b2",
+        "b1/b2",
+        "necesito visa",
+        "quiero visa"
+      ],
+      "categoria": "Visa",
+      "respuesta": "🇺🇸 *Visa por Primera Vez — TengoVisa RD*\n\nAcompañamiento completo:\n✅ Llenado DS-160\n✅ Preparación entrevista\n✅ Gestión de cita\n\n💰 Evaluación: RD$2,500\n💰 Servicio completo: RD$30,000\n\n¿Deseas iniciar la evaluación?"
+    },
+    {
+      "id": "precio",
+      "palabras_clave": [
+        "precio",
+        "costo",
+        "cuanto",
+        "cuánto",
+        "tarifa",
+        "cobran",
+        "vale",
+        "inversion"
+      ],
+      "categoria": "Precios",
+      "respuesta": "💰 *Tarifas TengoVisa RD 2026:*\n\n📋 Evaluación: RD$2,500 (descontable)\n👫 Parejas: RD$4,000\n🇺🇸 Servicio completo: RD$30,000\n📅 Solo cita: RD$5,000\n\n¿Te interesa algún servicio?"
+    },
+    {
+      "id": "cita",
+      "palabras_clave": [
+        "cita",
+        "adelantar",
+        "appointment",
+        "fecha",
+        "reprogramar",
+        "cambiar cita"
+      ],
+      "categoria": "Citas",
+      "respuesta": "📅 *Gestión de Citas — TengoVisa RD*\n\nBuscamos la primera cita disponible en el próximo trimestre de la fecha actual y del año 2026.\n\n💰 Costo: RD$5,000\n✅ Se paga SOLO después de que la cita esté agendada y verificada.\n\n¿Tienes pasaporte vigente y DS-160 listo?"
+    },
+    {
+      "id": "evaluacion",
+      "palabras_clave": [
+        "evaluacion",
+        "evaluación",
+        "evalua",
+        "perfil",
+        "califica",
+        "saber si califico"
+      ],
+      "categoria": "Evaluación",
+      "respuesta": "📋 *Evaluación de Perfil GRATIS*\n\nCompleta en 5 minutos:\n👉 https://crm.tengovisard.com/evaluacion/\n\nRecibirás:\n✅ Score de probabilidad\n✅ Análisis IA\n✅ Documentos necesarios\n\n💳 Con asesor: RD$2,500 (descontable)"
+    },
+    {
+      "id": "agendar",
+      "palabras_clave": [
+        "agendar",
+        "agenda",
+        "asesor",
+        "consulta",
+        "reunion",
+        "cita con"
+      ],
+      "categoria": "Agendar",
+      "respuesta": "📅 *Agenda tu Cita de Asesoría*\n\nRegistra tus datos:\n👉 https://calendar.app.google/h8E33fxZsJefNLvD6\n\n⚠️ Paso obligatorio para seguimiento.\nSolo laboramos por cita previa.\n\n📞 Asesor: +18499189998"
+    },
+    {
+      "id": "pasaporte",
+      "palabras_clave": [
+        "pasaporte",
+        "passport",
+        "renovar pasaporte"
+      ],
+      "categoria": "Pasaporte",
+      "respuesta": "🪪 *Gestión de Pasaporte*\n\nSolicitud digital:\n👉 https://crm.tengovisard.com/pasaporte/\n\n¿Tu pasaporte está vigente o necesitas renovarlo?"
+    },
+    {
+      "id": "estado",
+      "palabras_clave": [
+        "estado",
+        "caso",
+        "proceso",
+        "como va",
+        "seguimiento",
+        "expediente",
+        "codigo"
+      ],
+      "categoria": "Estado caso",
+      "respuesta": "🔍 *Estado de tu Caso*\n\nNecesito tu código *TV-XXXXXX* o correo registrado.\n\n📊 También puedes ver en:\nhttps://crm.tengovisard.com/"
+    },
+    {
+      "id": "gracias",
+      "palabras_clave": [
+        "gracias",
+        "thank",
+        "ok",
+        "listo",
+        "excelente",
+        "perfecto",
+        "entendido"
+      ],
+      "categoria": "Cierre",
+      "respuesta": "😊 ¡Con mucho gusto! Recuerda:\n📋 Evaluación GRATIS: https://crm.tengovisard.com/evaluacion/\n📅 Agendar: https://calendar.app.google/h8E33fxZsJefNLvD6\n📞 +18499189998\n\n¡Éxito! 🇩🇴 *TengoVisa RD*"
+    }
+  ]
+}

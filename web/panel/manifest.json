@@ -1,0 +1,24 @@
+{
+  "name": "CitasFlash Panel",
+  "short_name": "CitasFlash",
+  "description": "Panel de gestión de citas de visa USA",
+  "start_url": "/panel/",
+  "display": "standalone",
+  "background_color": "#0A1F44",
+  "theme_color": "#0A1F44",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/panel/icons/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/panel/icons/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "es"
+}

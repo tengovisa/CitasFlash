@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Solicitud de pasaporte dominicano — TengoVisaRD">
+<title>Pasaporte Dominicano — TengoVisaRD</title>
+<link rel="icon" type="image/png" href="/icons/icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--pri:#001F73;--red:#DC2626;--gn:#16A34A;--yn:#CC1A1A;--bd:#D8E1F0;--bg:#F1F4F9;--tx:#0F172A;--s2:#475569;--s3:#64748B;--soft:#EAF0FF;--gnl:#EAF8EE}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+.hdr{background:var(--pri);color:#fff;padding:0 16px;height:52px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;border-bottom:3px solid var(--red)}
+.hdr img{height:30px;filter:brightness(0)invert(1);object-fit:contain}
+.hdr h1{font-size:13.5px;font-weight:800;flex:1}
+.hdr a{color:rgba(255,255,255,.8);text-decoration:none;font-size:11px;font-weight:600;padding:5px 10px;background:rgba(255,255,255,.12);border-radius:6px;border:1px solid rgba(255,255,255,.18)}
+.wrap{max-width:680px;margin:0 auto;padding:18px 14px 40px}
+/* HERO */
+.hero{background:var(--pri);color:#fff;border-radius:14px;padding:22px 20px;margin-bottom:22px;position:relative;overflow:hidden}
+.hero::before{content:'📘';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:60px;opacity:.12}
+.hero h2{font-size:20px;font-weight:800;margin-bottom:4px}
+.hero p{font-size:12.5px;opacity:.8;line-height:1.6}
+.hero-badges{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+.hb-tag{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 10px;font-size:10.5px;font-weight:600}
+/* TIPO */
+.tipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.tipo-btn{padding:16px 12px;border:2px solid var(--bd);border-radius:11px;background:#fff;cursor:pointer;text-align:center;transition:.15s;font-family:'Inter',sans-serif}
+.tipo-btn:hover{border-color:var(--pri);background:var(--soft)}
+.tipo-btn.sel{border-color:var(--pri);background:var(--soft)}
+.tipo-ico{font-size:28px;margin-bottom:6px}
+.tipo-nm{font-size:13px;font-weight:700;color:var(--pri)}
+.tipo-desc{font-size:10.5px;color:var(--s3);margin-top:2px;line-height:1.4}
+/* FORMULARIO */
+.card{background:#fff;border:1.5px solid var(--bd);border-radius:12px;padding:20px;margin-bottom:14px}
+.card-t{font-size:12px;font-weight:800;color:var(--s3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:6px}
+.fi{margin-bottom:13px}
+.fi label{display:block;font-size:10.5px;font-weight:700;color:var(--s2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.fi input,.fi select,.fi textarea{width:100%;padding:9px 11px;border:1.5px solid var(--bd);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;outline:none;background:#fff;color:var(--tx);transition:.15s}
+.fi input:focus,.fi select:focus,.fi textarea:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(0,31,115,.07)}
+.fi.req label::after{content:' *';color:var(--red)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+/* OFICINAS */
+.ofic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:7px}
+.ofic-btn{padding:8px 10px;border:1.5px solid var(--bd);border-radius:8px;background:#fff;cursor:pointer;font-size:11.5px;font-weight:600;font-family:'Inter',sans-serif;color:var(--tx);transition:.15s;text-align:left;line-height:1.3}
+.ofic-btn:hover{border-color:var(--pri);background:var(--soft);color:var(--pri)}
+.ofic-btn.sel{border-color:var(--pri);background:var(--soft);color:var(--pri);font-weight:700}
+.ofic-btn .prov{font-size:9px;color:var(--s3);font-weight:400;display:block;margin-top:1px}
+/* PASO INDICATOR */
+.pasos{display:flex;gap:0;margin-bottom:18px;background:#fff;border:1.5px solid var(--bd);border-radius:10px;overflow:hidden}
+.paso{flex:1;padding:10px 6px;text-align:center;font-size:10.5px;font-weight:600;color:var(--s3);border-right:1px solid var(--bd);cursor:pointer;transition:.15s}
+.paso:last-child{border-right:none}
+.paso.act{background:var(--pri);color:#fff;font-weight:700}
+.paso.done{background:var(--gnl);color:var(--gn)}
+.paso-n{font-size:14px;font-weight:800;display:block;margin-bottom:1px}
+/* SECTION HIDDEN */
+.sec{display:none}.sec.on{display:block}
+/* SUBMIT */
+.btn-submit{width:100%;padding:13px;background:var(--pri);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:.15s;margin-top:6px}
+.btn-submit:hover{background:#0A2A8B;transform:translateY(-1px)}
+.btn-next{width:100%;padding:11px;background:var(--soft);color:var(--pri);border:1.5px solid var(--pri);border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:.15s;margin-top:6px}
+.btn-next:hover{background:var(--pri);color:#fff}
+.btn-back{width:100%;padding:11px;background:#fff;color:var(--s3);border:1.5px solid var(--bd);border-radius:10px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;margin-top:8px}
+/* EXITO */
+.ok-box{background:var(--gnl);border:2px solid #86EFAC;border-radius:14px;padding:28px;text-align:center;display:none}
+.ok-ico{font-size:52px;margin-bottom:12px}
+.ok-t{font-size:17px;font-weight:800;color:var(--gn);margin-bottom:6px}
+.ok-s{font-size:13px;color:#15803d;line-height:1.6;margin-bottom:16px}
+.ok-wa{display:inline-flex;align-items:center;gap:6px;background:#25D366;color:#fff;padding:10px 20px;border-radius:9px;font-size:13.5px;font-weight:700;text-decoration:none}
+/* TOAST */
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--red);color:#fff;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:700;z-index:999;opacity:0;transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:600px){.row2,.row3{grid-template-columns:1fr}.tipo-grid{grid-template-columns:1fr 1fr}.ofic-grid{grid-template-columns:1fr 1fr}}
+</style>
+<style id="tvrd-palette">
+:root{
+  --tv-blue:#001F73;
+  --tv-red:#CC1A1A;
+  --tv-white:#FFFFFF;
+  --tv-blue2:#0A2A8B;
+  --tv-red2:#E02424;
+  --tv-gray-l:#F5F7FA;
+  --tv-gray-d:#1A1A1A;
+}
+</style>
+<style id="tv-p">
+:root{
+  --tv-blue:#001F73;--tv-red:#CC1A1A;--tv-white:#FFFFFF;
+  --tv-blue2:#0A2A8B;--tv-red2:#E02424;
+  --tv-gray-l:#F5F7FA;--tv-gray-d:#1A1A1A
+}
+</style>
+<style id="pas-responsive">
+@media(max-width:768px){
+  .card{border-radius:12px!important;margin-bottom:10px!important}
+  .btn,.btnp{min-height:48px!important;width:100%!important;font-size:14px!important}
+  .rg{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important}
+  .row{flex-direction:column!important}
+  .fg{width:100%!important}
+  input,select,textarea{font-size:14px!important;padding:10px!important}
+}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <img src="/icons/logo_tengovisa.png" alt="TengoVisaRD" onerror="this.style.display='none'">
+  <h1>Pasaporte Dominicano</h1>
+  <a href="/links/">← Servicios</a>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <h2>📘 Gestión de Pasaporte</h2>
+    <p>Solicitud de pasaporte nuevo o renovación con orientación completa. Te decimos exactamente qué llevar, cómo agendar y cómo obtenerlo en tiempo récord.</p>
+    <div class="hero-badges">
+      <span class="hb-tag">⚡ Proceso rápido</span>
+      <span class="hb-tag">📍 Todas las oficinas</span>
+      <span class="hb-tag">📲 Orientación por WA</span>
+    </div>
+  </div>
+
+  <!-- TIPO -->
+  <div style="font-size:11px;font-weight:800;color:var(--s3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">¿Qué necesitas? *</div>
+  <div class="tipo-grid" id="tipo-grid">
+    <button class="tipo-btn" onclick="selTipo('nuevo',this)">
+      <div class="tipo-ico">🆕</div>
+      <div class="tipo-nm">Pasaporte Nuevo</div>
+      <div class="tipo-desc">Primera vez, nunca he tenido pasaporte dominicano</div>
+    </button>
+    <button class="tipo-btn" onclick="selTipo('renovacion',this)">
+      <div class="tipo-ico">🔄</div>
+      <div class="tipo-nm">Renovación</div>
+      <div class="tipo-desc">Ya tengo pasaporte y necesito renovarlo</div>
+    </button>
+    <button class="tipo-btn" onclick="selTipo('urgente',this)">
+      <div class="tipo-ico">⚡</div>
+      <div class="tipo-nm">Urgente / Express</div>
+      <div class="tipo-desc">Lo necesito en menos de 5 días hábiles</div>
+    </button>
+    <button class="tipo-btn" onclick="selTipo('exterior',this)">
+      <div class="tipo-ico">✈️</div>
+      <div class="tipo-nm">Desde el Exterior</div>
+      <div class="tipo-desc">Estoy fuera de RD y necesito renovar</div>
+    </button>
+  </div>
+
+  <!-- PASOS -->
+  <div class="pasos" id="pasos">
+    <div class="paso act" id="p1"><span class="paso-n">1</span>Datos</div>
+    <div class="paso" id="p2"><span class="paso-n">2</span>Oficina</div>
+    <div class="paso" id="p3"><span class="paso-n">3</span>Confirmar</div>
+  </div>
+
+  <!-- FORMULARIO DATOS -->
+  <div class="sec on" id="sec1">
+    <div class="card">
+      <div class="card-t">👤 Datos Personales</div>
+      <div class="row2">
+        <div class="fi req"><label>Nombre(s)</label><input id="f-nom" placeholder="NOMBRE(S)" oninput="this.value=this.value.toUpperCase()"></div>
+        <div class="fi req"><label>Apellido(s)</label><input id="f-ap" placeholder="APELLIDO(S)" oninput="this.value=this.value.toUpperCase()"></div>
+      </div>
+      <div class="row2">
+        <div class="fi req"><label>Cédula</label><input id="f-ced" placeholder="000-0000000-0" maxlength="13" inputmode="numeric"></div>
+        <div class="fi req"><label>Fecha de Nacimiento</label><input id="f-dob" type="date"></div>
+      </div>
+      <div class="row2">
+        <div class="fi req"><label>Sexo</label>
+          <select id="f-sex"><option value="">— Seleccionar —</option><option>Masculino</option><option>Femenino</option></select>
+        </div>
+        <div class="fi req"><label>Estado Civil</label>
+          <select id="f-civil"><option value="">— Seleccionar —</option><option>Soltero/a</option><option>Casado/a</option><option>Divorciado/a</option><option>Viudo/a</option><option>Unión libre</option></select>
+        </div>
+      </div>
+      <div class="fi req"><label>Lugar de Nacimiento</label><input id="f-nac" placeholder="CIUDAD, PROVINCIA" oninput="this.value=this.value.toUpperCase()"></div>
+    </div>
+
+    <div class="card" id="card-renovacion" style="display:none">
+      <div class="card-t">🛂 Pasaporte Actual</div>
+      <div class="row2">
+        <div class="fi"><label>Número de Pasaporte</label><input id="f-numpas" placeholder="RD0000000" oninput="this.value=this.value.toUpperCase()"></div>
+        <div class="fi"><label>Fecha de Vencimiento</label><input id="f-vence" type="date"></div>
+      </div>
+      <div class="fi"><label>¿El pasaporte está dañado?</label>
+        <select id="f-danado"><option value="no">No, está en buen estado</option><option value="si">Sí, está deteriorado</option><option value="perdido">Lo perdí / me lo robaron</option></select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-t">📱 Contacto</div>
+      <div class="fi req"><label>WhatsApp</label><input id="f-wa" type="tel" placeholder="+1 849 000 0000" inputmode="tel"></div>
+      <div class="fi req"><label>Correo electrónico</label><input id="f-email" type="email" placeholder="correo@email.com"></div>
+      <div class="fi"><label>¿Vives en el exterior?</label>
+        <select id="f-ext"><option value="no">No, vivo en República Dominicana</option><option value="si">Sí, estoy en el exterior</option></select>
+      </div>
+      <div class="fi" id="fi-pais-ext" style="display:none"><label>País donde resides</label>
+        <input id="f-pais-ext" placeholder="EE.UU., España, etc." oninput="this.value=this.value.toUpperCase()">
+      </div>
+    </div>
+
+    <button class="btn-next" onclick="irPaso2()">Continuar → Seleccionar Oficina</button>
+  </div>
+
+  <!-- PASO 2: OFICINAS -->
+  <div class="sec" id="sec2">
+    <div class="card">
+      <div class="card-t">📍 Selecciona la Oficina de Pasaportes</div>
+      <div style="font-size:11.5px;color:var(--s3);margin-bottom:12px;line-height:1.5">Selecciona la oficina más cercana a ti donde deseas realizar el trámite. Todas emiten pasaportes.</div>
+      <div class="ofic-grid" id="ofic-grid">
+      </div>
+    </div>
+    <div id="ofic-info" style="display:none;background:var(--soft);border:1.5px solid var(--pri);border-radius:10px;padding:12px;margin-bottom:12px">
+      <div style="font-size:11px;font-weight:700;color:var(--pri);margin-bottom:4px">📍 Oficina seleccionada</div>
+      <div id="ofic-nombre" style="font-size:14px;font-weight:800;color:var(--pri)"></div>
+      <div id="ofic-dir" style="font-size:11.5px;color:var(--s2);margin-top:3px"></div>
+    </div>
+    <button class="btn-next" onclick="irPaso3()">Continuar → Confirmar</button>
+    <button class="btn-back" onclick="irPaso1()">← Volver</button>
+  </div>
+
+  <!-- PASO 3: CONFIRMAR -->
+  <div class="sec" id="sec3">
+    <div class="card" id="resumen-card">
+      <div class="card-t">✅ Resumen de tu solicitud</div>
+      <div id="resumen-content" style="font-size:12.5px;line-height:1.8"></div>
+    </div>
+    <div class="card" style="background:#FFF4DE;border-color:#FDE68A">
+      <div style="font-size:11.5px;color:#92400e;line-height:1.6">
+        <strong>📋 Documentos que debes llevar:</strong><br>
+        <span id="docs-lista"></span>
+      </div>
+    </div>
+    <div class="fi" style="margin-top:4px">
+      <label>Comentarios adicionales</label>
+      <textarea id="f-msg" placeholder="¿Algo que debamos saber sobre tu caso?" style="min-height:60px;resize:vertical"></textarea>
+    </div>
+    <button class="btn-submit" onclick="enviarSolicitud()">📲 Enviar Solicitud por WhatsApp</button>
+    <button class="btn-back" onclick="irPaso2()">← Volver</button>
+  </div>
+
+  <!-- ÉXITO -->
+  <div class="ok-box" id="ok-box">
+    <div class="ok-ico">✅</div>
+    <div class="ok-t">¡Solicitud enviada!</div>
+    <div class="ok-s">Tu solicitud fue enviada por WhatsApp. Te contactaremos para confirmar tu cita y orientarte sobre los documentos necesarios.<br><br>Horario: Lun-Vie 9am-6pm · Sáb 9am-12pm</div>
+    <a href="https://wa.me/18499189998" class="ok-wa">📲 Seguir por WhatsApp</a>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATOS ──────────────────────────────────────────────
+let _tipo = '', _oficina = '';
+
+const OFICINAS = [
+  // DISTRITO NACIONAL / SANTO DOMINGO
+  {id:'jce_dn', nm:'JCE Sede Central', prov:'Distrito Nacional', dir:'Av. Doctor Manuel de Jesús Troncoso de la Concha, SDN'},
+  {id:'ofic_gazcue', nm:'Ofic. Gazcue', prov:'Distrito Nacional', dir:'Calle Arzobispo Portes, Gazcue'},
+  {id:'ofic_sd_norte', nm:'Ofic. Santo Domingo Norte', prov:'Santo Domingo Norte', dir:'Villa Mella, SDN'},
+  {id:'ofic_sd_este', nm:'Ofic. Santo Domingo Este', prov:'Santo Domingo Este', dir:'San Pedro de Macorís esq. Las Américas'},
+  {id:'ofic_sd_oeste', nm:'Ofic. Santo Domingo Oeste', prov:'Santo Domingo Oeste', dir:'Herrera, SDO'},
+  {id:'ofic_boca_chica', nm:'Ofic. Boca Chica', prov:'Santo Domingo Este', dir:'Boca Chica, SD'},
+  // SANTIAGO
+  {id:'jce_stgo', nm:'JCE Santiago', prov:'Santiago', dir:'Av. Juan Pablo Duarte, Santiago'},
+  {id:'ofic_stgo_centro', nm:'Ofic. Santiago Centro', prov:'Santiago', dir:'Centro de Santiago'},
+  // NORTE
+  {id:'ofic_puerto_plata', nm:'Ofic. Puerto Plata', prov:'Puerto Plata', dir:'Calle José del Carmen Ariza, PP'},
+  {id:'ofic_moca', nm:'Ofic. Moca', prov:'Espaillat', dir:'Moca, Espaillat'},
+  {id:'ofic_nagua', nm:'Ofic. Nagua', prov:'María Trinidad Sánchez', dir:'Nagua, M.T. Sánchez'},
+  {id:'ofic_sfm', nm:'Ofic. San Francisco de Macorís', prov:'Duarte', dir:'San Francisco de Macorís'},
+  {id:'ofic_samana', nm:'Ofic. Samaná', prov:'Samaná', dir:'Santa Bárbara de Samaná'},
+  {id:'ofic_monte_cristi', nm:'Ofic. Monte Cristi', prov:'Monte Cristi', dir:'Monte Cristi'},
+  {id:'ofic_dajaban', nm:'Ofic. Dajabón', prov:'Dajabón', dir:'Dajabón (zona fronteriza)'},
+  // SUR
+  {id:'ofic_san_cristobal', nm:'Ofic. San Cristóbal', prov:'San Cristóbal', dir:'San Cristóbal'},
+  {id:'ofic_bani', nm:'Ofic. Baní', prov:'Peravia', dir:'Baní, Peravia'},
+  {id:'ofic_azua', nm:'Ofic. Azua', prov:'Azua', dir:'Azua de Compostela'},
+  {id:'ofic_san_juan', nm:'Ofic. San Juan de la Maguana', prov:'San Juan', dir:'San Juan de la Maguana'},
+  {id:'ofic_barahona', nm:'Ofic. Barahona', prov:'Barahona', dir:'Santa Cruz de Barahona'},
+  {id:'ofic_pedernales', nm:'Ofic. Pedernales', prov:'Pedernales', dir:'Pedernales (zona fronteriza)'},
+  {id:'ofic_neiba', nm:'Ofic. Neiba', prov:'Bahoruco', dir:'Neiba, Bahoruco'},
+  {id:'ofic_independencia', nm:'Ofic. Independencia', prov:'Independencia', dir:'Jimaní, Independencia'},
+  // ESTE
+  {id:'ofic_la_romana', nm:'Ofic. La Romana', prov:'La Romana', dir:'La Romana'},
+  {id:'ofic_higüey', nm:'Ofic. Higüey', prov:'La Altagracia', dir:'Salvaleón de Higüey'},
+  {id:'ofic_spm', nm:'Ofic. San Pedro de Macorís', prov:'San Pedro de Macorís', dir:'San Pedro de Macorís'},
+  {id:'ofic_hato_mayor', nm:'Ofic. Hato Mayor', prov:'Hato Mayor', dir:'Hato Mayor del Rey'},
+  {id:'ofic_el_seibo', nm:'Ofic. El Seibo', prov:'El Seibo', dir:'Santa Cruz del Seibo'},
+  {id:'ofic_monte_plata', nm:'Ofic. Monte Plata', prov:'Monte Plata', dir:'Monte Plata'},
+  {id:'ofic_cotui', nm:'Ofic. Cotuí', prov:'Sánchez Ramírez', dir:'Cotuí, S. Ramírez'},
+  {id:'ofic_bonao', nm:'Ofic. Bonao', prov:'Monseñor Nouel', dir:'Bonao, M. Nouel'},
+  {id:'ofic_la_vega', nm:'Ofic. La Vega', prov:'La Vega', dir:'La Vega'},
+  // AEROPUERTOS
+  {id:'aero_las_americas', nm:'Aeropuerto Las Américas', prov:'Aeropuerto (SDQ)', dir:'AILA, Santo Domingo'},
+  {id:'aero_cibao', nm:'Aeropuerto del Cibao', prov:'Aeropuerto (STI)', dir:'Aeropuerto Cibao, Santiago'},
+  {id:'aero_punta_cana', nm:'Aeropuerto Punta Cana', prov:'Aeropuerto (PUJ)', dir:'Aeropuerto Punta Cana'},
+  // EXTERIOR (Consulados)
+  {id:'cons_nueva_york', nm:'Consulado Nueva York', prov:'Exterior — EE.UU.', dir:'1501 Broadway, New York, NY'},
+  {id:'cons_miami', nm:'Consulado Miami', prov:'Exterior — EE.UU.', dir:'1038 Brickell Ave, Miami, FL'},
+  {id:'cons_boston', nm:'Consulado Boston', prov:'Exterior — EE.UU.', dir:'20 Park Plaza, Boston, MA'},
+  {id:'cons_chicago', nm:'Consulado Chicago', prov:'Exterior — EE.UU.', dir:'500 N Michigan Ave, Chicago, IL'},
+  {id:'cons_washington', nm:'Embajada Washington DC', prov:'Exterior — EE.UU.', dir:'1715 22nd St NW, Washington, DC'},
+  {id:'cons_madrid', nm:'Consulado Madrid', prov:'Exterior — España', dir:'Paseo de la Castellana, Madrid'},
+  {id:'cons_barcelona', nm:'Consulado Barcelona', prov:'Exterior — España', dir:'Barcelona, España'},
+];
+
+// Render oficinas
+function renderOficinas(){
+  const grid = document.getElementById('ofic-grid');
+  grid.innerHTML = OFICINAS.map(o => `
+    <button class="ofic-btn" id="ofic-${o.id}" onclick="selOfic('${o.id}')">
+      ${o.nm}<span class="prov">${o.prov}</span>
+    </button>`).join('');
+}
+
+function selOfic(id){
+  document.querySelectorAll('.ofic-btn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('ofic-'+id)?.classList.add('sel');
+  _oficina = id;
+  const o = OFICINAS.find(x=>x.id===id);
+  if(o){
+    document.getElementById('ofic-nombre').textContent = o.nm;
+    document.getElementById('ofic-dir').textContent = '📍 ' + o.dir;
+    document.getElementById('ofic-info').style.display = 'block';
+  }
+}
+
+// ── TIPO ──────────────────────────────────────────────
+function selTipo(tipo, btn){
+  _tipo = tipo;
+  document.querySelectorAll('.tipo-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  const cardRen = document.getElementById('card-renovacion');
+  cardRen.style.display = (tipo==='renovacion'||tipo==='urgente') ? 'block' : 'none';
+  const extSel = document.getElementById('f-ext');
+  if(tipo==='exterior'){ extSel.value='si'; toggleExt(); }
+}
+
+document.getElementById('f-ext').addEventListener('change', toggleExt);
+function toggleExt(){
+  const v = document.getElementById('f-ext').value;
+  document.getElementById('fi-pais-ext').style.display = v==='si' ? 'block' : 'none';
+}
+
+// ── PASOS ────────────────────────────────────────────
+function irPaso1(){ showSec('sec1'); setPaso(1); }
+function irPaso3(){ 
+  if(!_oficina){ toast('Selecciona una oficina'); return; }
+  showResumen(); showSec('sec3'); setPaso(3); 
+}
+
+function irPaso2(){
+  const nom=document.getElementById('f-nom').value.trim();
+  const ap=document.getElementById('f-ap').value.trim();
+  const ced=document.getElementById('f-ced').value.trim();
+  const wa=document.getElementById('f-wa').value.trim();
+  const email=document.getElementById('f-email').value.trim();
+  if(!_tipo){toast('Selecciona el tipo de trámite');return;}
+  if(!nom||!ap||!ced||!wa){toast('Completa los campos requeridos');return;}
+  showSec('sec2'); setPaso(2);
+}
+
+function showSec(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id)?.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function setPaso(n){
+  [1,2,3].forEach(i=>{
+    const el=document.getElementById('p'+i);
+    el.className='paso'+(i===n?' act':i<n?' done':'');
+  });
+}
+
+// ── RESUMEN ───────────────────────────────────────────
+const tipoLabel={'nuevo':'🆕 Pasaporte Nuevo','renovacion':'🔄 Renovación','urgente':'⚡ Urgente/Express','exterior':'✈️ Desde el Exterior'};
+function showResumen(){
+  const nom=document.getElementById('f-nom').value;
+  const ap=document.getElementById('f-ap').value;
+  const ced=document.getElementById('f-ced').value;
+  const dob=document.getElementById('f-dob').value;
+  const sex=document.getElementById('f-sex').value;
+  const civil=document.getElementById('f-civil').value;
+  const nac=document.getElementById('f-nac').value;
+  const wa=document.getElementById('f-wa').value;
+  const email=document.getElementById('f-email').value;
+  const ext=document.getElementById('f-ext').value;
+  const paisExt=document.getElementById('f-pais-ext').value;
+  const numpas=document.getElementById('f-numpas').value;
+  const vence=document.getElementById('f-vence').value;
+  const ofic=OFICINAS.find(o=>o.id===_oficina);
+
+  document.getElementById('resumen-content').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      ${row('Tipo',tipoLabel[_tipo]||_tipo)}
+      ${row('Nombre',nom+' '+ap)}
+      ${row('Cédula',ced)}
+      ${row('Fecha Nac.',dob)}
+      ${row('Sexo',sex)}
+      ${row('Estado Civil',civil)}
+      ${row('Lugar de Nac.',nac)}
+      ${row('WhatsApp',wa)}
+      ${row('Email',email)}
+      ${ext==='si'?row('País',paisExt):''}
+      ${numpas?row('Pasaporte Actual',numpas):''}
+      ${vence?row('Vencimiento',vence):''}
+      ${row('Oficina',ofic?ofic.nm:'—')}
+    </div>`;
+
+  // Documentos requeridos según tipo
+  const docs = {
+    nuevo: '• Acta de nacimiento original (apostillada si aplica)\n• Cédula de identidad y electoral\n• 2 fotos recientes 2x2 pulgadas fondo blanco\n• Formulario de solicitud lleno',
+    renovacion: '• Pasaporte actual (aunque esté vencido)\n• Cédula de identidad\n• 2 fotos recientes 2x2 pulgadas fondo blanco\n• Formulario de renovación',
+    urgente: '• Todos los documentos de renovación\n• Justificación de urgencia (carta, boleto, carta médica)\n• Pago de tarifa express\n• Cita previa obligatoria',
+    exterior: '• Pasaporte actual\n• Cédula vigente o constancia del consulado\n• 2 fotos fondo blanco\n• Formulario consular\n• Pago de tarifa consular',
+  };
+  document.getElementById('docs-lista').innerHTML = (docs[_tipo]||'').replace(/\n/g,'<br>');
+}
+
+function row(l,v){return v?`<div style="background:#f8fafc;border:1px solid var(--bd);border-radius:6px;padding:6px 8px"><div style="font-size:9.5px;font-weight:700;color:var(--s3);text-transform:uppercase">${l}</div><div style="font-size:12px;font-weight:600;margin-top:2px">${v}</div></div>`:'';}
+
+// ── ENVIAR ────────────────────────────────────────────
+async function enviarSolicitud(){
+  const nom=document.getElementById('f-nom').value;
+  const ap=document.getElementById('f-ap').value;
+  const ced=document.getElementById('f-ced').value;
+  const wa=document.getElementById('f-wa').value;
+  const email=document.getElementById('f-email').value;
+  const dob=document.getElementById('f-dob').value;
+  const nac=document.getElementById('f-nac').value;
+  const msg=document.getElementById('f-msg').value;
+  const ofic=OFICINAS.find(o=>o.id===_oficina);
+
+  // Guardar en CRM
+  try{
+    await fetch('https://crm.tengovisard.com/api/pasaporte/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':'TengoVisa2026API'},
+      body:JSON.stringify({
+        lead_id:'web-pasaporte',
+        tipo_tramite:_tipo,
+        tipo_cita:'regular',
+        nombre_completo:(nom+' '+ap).trim(),
+        telefono:wa,
+        email:email,
+        cedula:ced,
+        fecha_nacimiento:dob,
+        oficina:(ofic?ofic.nm:(_oficina||'')),
+        pasaporte_actual:(document.getElementById('f-numpas')?document.getElementById('f-numpas').value:''),
+        pasaporte_vence:(document.getElementById('f-vence')?document.getElementById('f-vence').value:''),
+        tuvo_pasaporte:(document.getElementById('f-tuvo')?document.getElementById('f-tuvo').value:''),
+        familiares:[],
+        total_beneficiarios:1,
+        observaciones:msg
+      })
+    });
+  }catch(e){}
+
+  // Push al asesor
+  try{
+    await fetch(`https://tengovisard.com/push/api.php?token=tgvsa&user_id=tengovisa%40gmail.com&title=${encodeURIComponent('📘 Nueva solicitud pasaporte')}&message=${encodeURIComponent(nom+' '+ap+' · '+wa)}`);
+  }catch(e){}
+
+  // WhatsApp
+  const texto=`Hola TengoVisaRD! 👋\n\n*Solicitud de Pasaporte Dominicano enviada al panel interno*\n\n*Tipo:* ${tipoLabel[_tipo]||_tipo}\n*Nombre:* ${nom} ${ap}\n*Cédula:* ${ced}\n*Fecha Nac.:* ${dob}\n*Lugar Nac.:* ${nac}\n*Oficina:* ${ofic?.nm||'—'}\n*WhatsApp:* ${wa}\n*Email:* ${email}\n${msg?'*Notas:* '+msg:''}\n\nSolicitud enviada correctamente al panel y correo interno`;
+
+  document.getElementById('sec3').style.display='none';
+  document.getElementById('ok-box').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(()=>console.log('WA final desactivado en Pasaporte'),800);
+}
+
+function toast(m){
+  const t=document.getElementById('toast');
+  t.textContent=m;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ── INIT ─────────────────────────────────────────────
+renderOficinas();
+
+// ── AUTOSAVE Pasaporte ──
+function autoSavePas(){
+  try{
+    const fields={};
+    document.querySelectorAll('input:not([type=radio]):not([type=checkbox]),select,textarea').forEach(el=>{
+      if(el.id) fields[el.id]=el.value;
+    });
+    document.querySelectorAll('input[type=radio]:checked').forEach(el=>{
+      fields['r_'+el.name]=el.value;
+    });
+    fields._step=typeof curS!=='undefined'?curS:1;
+    localStorage.setItem('pas_progress',JSON.stringify(fields));
+  }catch(e){}
+}
+function restorePas(){
+  try{
+    const saved=localStorage.getItem('pas_progress');
+    if(!saved) return;
+    const data=JSON.parse(saved);
+    Object.keys(data).forEach(k=>{
+      if(k==='_step') return;
+      if(k.startsWith('r_')){
+        const el=document.querySelector(`input[name="${k.slice(2)}"][value="${data[k]}"]`);
+        if(el){el.checked=true;el.dispatchEvent(new Event('change'));}
+      } else {
+        const el=document.getElementById(k);
+        if(el) el.value=data[k];
+      }
+    });
+  }catch(e){}
+}
+
+</script>
+
+<script id="tv-pasaporte-fix">
+window.TV_PAS_OFFICES = [
+  "Sede Central",
+  "Azua",
+  "Barahona",
+  "La Vega",
+  "Montecristi",
+  "Nagua",
+  "Puerto Plata",
+  "San Francisco de Macorís",
+  "San Pedro de Macorís",
+  "Santiago",
+  "Zona Oriental",
+  "Punto de Captura y Entrega-ACIS",
+  "Oficina Centro Atención al Ciudadano Punto Gob Sambil"
+];
+
+window.tvFillPasaporteOffices = function(){
+  const sels = [
+    document.getElementById('f-oficina'),
+    document.getElementById('oficina'),
+    document.querySelector('select[name="oficina"]')
+  ].filter(Boolean);
+
+  sels.forEach(sel=>{
+    const current = sel.value || '';
+    sel.innerHTML = '<option value="">Selecciona una oficina</option>' +
+      window.TV_PAS_OFFICES.map(x => `<option value="${x}">${x}</option>`).join('');
+    if(current && window.TV_PAS_OFFICES.includes(current)) sel.value = current;
+  });
+};
+
+document.addEventListener('DOMContentLoaded', function(){
+  try{ window.tvFillPasaporteOffices(); }catch(e){}
+  setTimeout(function(){ try{ window.tvFillPasaporteOffices(); }catch(e){} }, 300);
+  setTimeout(function(){ try{ window.tvFillPasaporteOffices(); }catch(e){} }, 1200);
+});
+</script>
+
+
+<script id="tv-pasaporte-hardfix">
+window.TV_PAS_OFFICES = [
+  "Sede Central",
+  "Azua",
+  "Barahona",
+  "La Vega",
+  "Montecristi",
+  "Nagua",
+  "Puerto Plata",
+  "San Francisco de Macorís",
+  "San Pedro de Macorís",
+  "Santiago",
+  "Zona Oriental",
+  "Punto de Captura y Entrega-ACIS",
+  "Oficina Centro Atención al Ciudadano Punto Gob Sambil"
+];
+
+window.tvPasApplyOffices = function(){
+  const vals = window.TV_PAS_OFFICES;
+
+  // arregla arrays JS si existen
+  ['oficinas','OFICINAS','offices','OFFICES','_oficinas'].forEach(k=>{
+    try{
+      if(Array.isArray(window[k])){
+        window[k].length=0;
+        vals.forEach((nm,i)=>window[k].push({id:i+1,nm:nm,nombre:nm,label:nm}));
+      }
+    }catch(e){}
+  });
+
+  // arregla selects
+  const sels = [
+    document.getElementById('f-oficina'),
+    document.getElementById('oficina'),
+    document.querySelector('select[name="oficina"]')
+  ].filter(Boolean);
+
+  sels.forEach(sel=>{
+    const current = sel.value || '';
+    sel.innerHTML = '<option value="">Selecciona una oficina</option>' + vals.map(x=>`<option value="${x}">${x}</option>`).join('');
+    if(current && vals.includes(current)) sel.value=current;
+  });
+
+  // arregla contenedores visuales si existen
+  const wrap = document.getElementById('oficinas-wrap') || document.getElementById('oficina-list') || document.querySelector('.of-grid') || document.querySelector('.oficinas');
+  if(wrap){
+    wrap.innerHTML = vals.map((nm,i)=>`<button type="button" class="of-btn" data-tv-of="${nm}" style="padding:10px 12px;border:1px solid #D8E1F0;border-radius:10px;background:#fff;cursor:pointer;text-align:left;font:600 12px Inter,Arial,sans-serif">${nm}</button>`).join('');
+    wrap.querySelectorAll('[data-tv-of]').forEach(btn=>{
+      btn.onclick=function(){
+        const v=this.getAttribute('data-tv-of');
+        sels.forEach(sel=>sel.value=v);
+        wrap.querySelectorAll('[data-tv-of]').forEach(x=>{x.style.borderColor='#D8E1F0';x.style.background='#fff';});
+        this.style.borderColor='#001F73'; this.style.background='#EAF0FF';
+      };
+    });
+  }
+
+  // texto botón
+  document.querySelectorAll('button').forEach(b=>{
+    const t=(b.textContent||'').toLowerCase();
+    if(t.includes('whatsapp') || t.includes('consultar ahora') || t.includes('enviar por whatsapp')) b.textContent='Enviar solicitud';
+  });
+};
+
+document.addEventListener('DOMContentLoaded',function(){
+  try{ tvPasApplyOffices(); }catch(e){}
+  setTimeout(()=>{ try{ tvPasApplyOffices(); }catch(e){} },300);
+  setTimeout(()=>{ try{ tvPasApplyOffices(); }catch(e){} },1200);
+});
+</script>
+
+</body>
+</html>

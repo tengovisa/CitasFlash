@@ -1,0 +1,10 @@
+{
+  "mode": "NORMAL",
+  "workers": 1,
+  "delay": 15.0,
+  "use_proxies": true,
+  "proxy_pool": "auto",
+  "pause_outside_window": false,
+  "backoff_on_error": true,
+  "applied_at": "2026-05-18T20:15:04.612333"
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>DS-160 AutoFill</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#F5F7FB;color:#0F172A;width:340px;padding-bottom:8px}
+.hdr{background:#001F73;color:#fff;padding:11px 14px;display:flex;align-items:center;gap:10px}
+.hdr img{width:34px;height:34px;border-radius:7px;background:#fff;padding:2px;object-fit:contain}
+.hdr h1{font-size:13px;font-weight:700}.hdr .sub{font-size:10px;opacity:.7}
+.body{padding:13px}
+.card{background:#fff;border:1px solid #D8E1F0;border-radius:10px;padding:11px;margin-bottom:10px;font-size:12px}
+.card.ok{border-color:#86EFAC;background:#EAF8EE}
+.ct{font-weight:700;margin-bottom:3px}.cs{color:#475569;font-size:11px;line-height:1.5}
+.btn{display:block;width:100%;padding:10px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;margin-bottom:7px;text-align:center;background:#EAF0FF;color:#001F73}
+.bp{background:#001F73;color:#fff}.bp:hover{background:#003399}
+.bs{background:#EAF0FF;color:#001F73;border:1px solid #C5D2E6}
+.bd{background:#EAF8EE;color:#15803d;border:1px solid #86EFAC}
+.warn{background:#FFF4DE;border:1px solid #FDE68A;border-radius:8px;padding:8px 10px;font-size:10px;color:#92400E;margin-bottom:10px;line-height:1.5}
+.prev{background:#fff;border:1px solid #D8E1F0;border-radius:8px;padding:8px;margin-bottom:10px;max-height:100px;overflow-y:auto}
+.fr{display:flex;gap:6px;font-size:10px;padding:2px 0;border-bottom:1px solid #F1F5F9}
+.fr:last-child{border:none}
+.fk{font-family:monospace;color:#001F73;min-width:90px;flex-shrink:0}
+.fv{color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prog{background:#E2E8F0;border-radius:20px;height:5px;overflow:hidden;margin:8px 0}
+.pf{height:100%;background:#001F73;border-radius:20px;transition:width .3s;width:0%}
+.pl{font-size:10px;color:#64748B;text-align:center;margin-top:3px}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <img src="icons/icon48.png" alt="TV">
+  <div><h1>DS-160 AutoFill</h1><div class="sub">TengoVisaRD · ceac.state.gov</div></div>
+</div>
+<div class="body">
+  <div id="s-init">
+    <div class="warn">1️⃣ Abre <strong>ceac.state.gov</strong> e inicia el DS-160<br>2️⃣ Carga el JSON y presiona Llenar</div>
+    <button class="btn bp" id="btn-cargar">📂 Cargar JSON del CRM</button>
+    <button class="btn bs" id="btn-ceac">🌐 Abrir CEAC</button>
+  </div>
+  <div id="s-loaded" style="display:none">
+    <div class="card ok">
+      <div class="ct">✅ <span id="cn">—</span></div>
+      <div class="cs" id="ci">—</div>
+    </div>
+    <div class="prev" id="prev"></div>
+    <button class="btn bp" id="btn-fill">▶ Llenar esta página en CEAC</button>
+    <button class="btn bd" id="btn-rep">📄 Descargar reporte</button>
+    <button class="btn bs" id="btn-reset">↺ Otro cliente</button>
+  </div>
+  <div id="s-filling" style="display:none">
+    <div class="card">
+      <div class="ct">⏳ Llenando página actual...</div>
+      <div class="cs" id="fst">Iniciando...</div>
+    </div>
+    <div class="prog"><div class="pf" id="pf"></div></div>
+    <div class="pl" id="pl">0%</div>
+  </div>
+  <div id="s-done" style="display:none">
+    <div class="card ok">
+      <div class="ct">✅ Página llenada</div>
+      <div class="cs">Revisa los campos, corrige si es necesario, luego presiona <strong>Next</strong> en CEAC.</div>
+    </div>
+    <div class="warn">⚠️ Repite para cada página. <strong>Firma y Submit son manuales.</strong></div>
+    <button class="btn bp" id="btn-sig">▶ Llenar siguiente página</button>
+    <button class="btn bs" id="btn-new">↺ Nuevo cliente</button>
+  </div>
+</div>
+<script src="popup.js"></script>
+</body>
+</html>

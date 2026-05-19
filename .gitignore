@@ -1,0 +1,44 @@
+# Credenciales - NUNCA SUBIR
+firebase-adminsdk.json
+google_calendar_credentials.json
+proxy_key.txt
+cookies.txt
+bot_config.json
+proxies.txt
+proxies2.txt
+
+# Datos personales
+ds160_*.json
+auditoria_*.json
+usuarios_*.json
+
+# Logs
+*.log
+log_*.txt
+logs.txt
+error.txt
+nohup.out
+cleanup.log
+error_monitor_latest.log
+prueba_tiempo.txt
+
+# Backups
+*.bak
+*.bak.*
+*.save
+*.save.*
+backup_*.html
+*_backup*.html
+*.tar.gz
+*.gz
+
+# Entornos virtuales Python
+botenv/
+nexus_env/
+__pycache__/
+*.pyc
+*.pyo
+
+# Sistema
+snap/
+.env

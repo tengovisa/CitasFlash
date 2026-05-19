@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" href="/icons/icon-192.png">
+<title>Evaluaciones — TengoVisaRD</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--pri:#001F73;--red:#DC2626;--gn:#16A34A;--yn:#CC1A1A;--pu:#001F73;--bg:#F1F4F9;--bd:#D8E1F0;--tx:#0F172A;--s3:#64748B}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--tx)}
+.hdr{background:var(--pri);color:#fff;padding:0 16px;height:50px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+.hdr img{height:28px;filter:brightness(0)invert(1)}
+.hdr h1{font-size:13px;font-weight:800;flex:1}
+.hb{padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif;text-decoration:none;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.main{max-width:900px;margin:0 auto;padding:14px}
+.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.tab{padding:7px 14px;border-radius:8px;font-size:11.5px;font-weight:700;cursor:pointer;border:1.5px solid var(--bd);background:#fff;color:var(--s3);font-family:'Inter',sans-serif}
+.tab.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.sb{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap}
+.si{flex:1;min-width:140px;padding:8px 10px;border:1.5px solid var(--bd);border-radius:7px;font-size:12px;font-family:'Inter',sans-serif;outline:none}
+.si:focus{border-color:var(--pri)}
+.sbtn{padding:8px 12px;background:var(--bg);border:1.5px solid var(--bd);border-radius:7px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif}
+.item{background:#fff;border:1px solid var(--bd);border-radius:9px;padding:11px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.12s;margin-bottom:6px}
+.item:hover{border-color:#93C5FD;box-shadow:0 2px 10px rgba(0,31,115,.08);transform:translateY(-1px)}
+.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;background:#F3E8FF;color:var(--pu)}
+.ii{flex:1;min-width:0}
+.inm{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.iem{font-size:10px;color:var(--s3);margin-top:1px}
+.imeta{display:flex;gap:4px;margin-top:3px;flex-wrap:wrap}
+.badge{padding:2px 6px;border-radius:7px;font-size:9px;font-weight:700}
+.b-gn{background:#EAF8EE;color:var(--gn)}.b-rd{background:#FCEBEB;color:var(--red)}
+.b-yn{background:#FFF4DE;color:#92400e}.b-bl{background:#EAF0FF;color:var(--pri)}
+.b-pu{background:#F3E8FF;color:var(--pu)}
+.idate{font-size:9px;color:var(--s3);flex-shrink:0}
+.empty{text-align:center;padding:44px;color:var(--s3)}
+/* MODAL */
+.mov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:14px;overflow-y:auto}
+.mov.open{display:flex}
+.modal{background:#fff;border-radius:12px;width:100%;max-width:680px;margin:auto;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.mhdr{background:linear-gradient(135deg,var(--pri),var(--pu));color:#fff;padding:14px 16px;display:flex;align-items:flex-start;gap:10px}
+.mtw{flex:1}.mttl{font-size:14px;font-weight:800}.msub{font-size:9.5px;opacity:.75;margin-top:2px}
+.macts{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.mb{padding:5px 9px;border-radius:7px;font-size:10.5px;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif}
+.mb-pu{background:#F3E8FF;color:var(--pu)}.mb-yn{background:#FFF4DE;color:#92400e}
+.mb-w{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.xcls{background:rgba(255,255,255,.15);border:none;color:#fff;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center}
+.mbody{max-height:72vh;overflow-y:auto;padding:14px}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.df{background:#f8fafc;border:1px solid var(--bd);border-radius:8px;padding:8px 10px}
+.dl{font-size:9px;font-weight:700;color:var(--s3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.dv{font-size:11.5px;font-weight:600;word-break:break-word}
+.ia-box{background:#f8fafc;border:1px solid var(--bd);border-radius:8px;padding:12px;font-size:11px;line-height:1.7;white-space:pre-wrap;max-height:300px;overflow-y:auto;margin-top:8px}
+.dec-badge{padding:10px 14px;border-radius:9px;text-align:center;margin-bottom:12px}
+.dec-badge .dec-n{font-size:18px;font-weight:800;margin-bottom:2px}
+.dec-badge .dec-s{font-size:11px;opacity:.8}
+.ntsv{padding:6px 12px;background:var(--pri);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-top:6px}
+.nta{width:100%;padding:8px;border:1.5px solid var(--bd);border-radius:7px;font-size:11px;font-family:'Inter',sans-serif;outline:none;resize:vertical;min-height:55px;margin-top:5px}
+.nta:focus{border-color:var(--pri)}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--pri);color:#fff;padding:7px 16px;border-radius:20px;font-size:11.5px;font-weight:700;z-index:9999;opacity:0;transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{background:var(--gn)}.toast.err{background:var(--red)}
+@media(max-width:600px){.dg{grid-template-columns:1fr}.modal{border-radius:12px 12px 0 0}.mov{padding:0;align-items:flex-end}}
+</style>
+<style id="tvrd-palette">
+:root{
+  --tv-blue:#001F73;
+  --tv-red:#CC1A1A;
+  --tv-white:#FFFFFF;
+  --tv-blue2:#0A2A8B;
+  --tv-red2:#E02424;
+  --tv-gray-l:#F5F7FA;
+  --tv-gray-d:#1A1A1A;
+}
+
+@media(max-width:768px){
+  body{font-size:13px}
+  .wrap{padding:8px!important}
+  .hdr{padding:8px 10px!important;flex-wrap:wrap;gap:6px}
+  .logo{height:28px!important}
+  .hbtns{flex-wrap:wrap;gap:4px}
+  .hb{font-size:10px!important;padding:6px 8px!important}
+  .tabs{overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+  .tab-btn{font-size:10px!important;padding:7px 8px!important;flex-shrink:0}
+  .stats{grid-template-columns:1fr 1fr!important;gap:8px!important}
+  .item{padding:10px 12px!important}
+  .mov{padding:0!important;align-items:flex-end!important}
+  .mcard,.modal-card,[class*="modal"]{border-radius:16px 16px 0 0!important;max-height:92vh!important;overflow-y:auto!important}
+  .mhdr,.modal-hdr{position:sticky;top:0;z-index:10}
+  .mb{font-size:10px!important;padding:6px 8px!important}
+  .ia-box{font-size:11px!important;padding:10px!important}
+  .badge{font-size:9px!important;padding:2px 6px!important}
+  .score-grid{grid-template-columns:1fr 1fr!important;gap:6px!important}
+  .fila{flex-direction:column!important}
+  .toast{bottom:16px!important;right:10px!important;left:10px!important;text-align:center}
+}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <img src="/icons/logo_tengovisa.png" alt="TengoVisaRD" onerror="this.style.display='none'">
+  <h1>Evaluaciones — TengoVisaRD</h1>
+  <a href="/ds160/admin.html" class="hb">← CRM Principal</a>
+</header>
+
+<div class="main">
+  <div class="tabs">
+    <button class="tab on" id="tab-todas" onclick="setTab('todas',this)">📋 Todas</button>
+    <button class="tab" id="tab-eval" onclick="setTab('eval',this)">🧠 B1/B2</button>
+    <button class="tab" id="tab-rrss" onclick="setTab('rrss',this)">📱 RRSS</button>
+    <button class="tab" id="tab-apr" onclick="setTab('apr',this)">✅ Puede Aplicar</button>
+    <button class="tab" id="tab-ojo" onclick="setTab('ojo',this)">⚠️ Mejorar</button>
+    <button class="tab" id="tab-no" onclick="setTab('no',this)">❌ No Aplicar</button>
+  </div>
+  <div class="sb">
+    <input class="si" id="srch" placeholder="🔍 Nombre, email..." oninput="render()">
+    <button class="sbtn" onclick="load()">↻ Actualizar</button>
+  </div>
+  <div id="lista"><div class="empty">⏳ Cargando evaluaciones...</div></div>
+</div>
+
+<!-- MODAL -->
+<div class="mov" id="modal">
+<div class="modal">
+  <div class="mhdr">
+    <div class="mtw"><div class="mttl" id="mttl">Evaluación</div><div class="msub" id="msub">—</div></div>
+    <div class="macts">
+      <button class="mb mb-pu" onclick="runIA()" id="ia-btn">🧠 Analizar</button>
+      <button class="mb mb-yn" onclick="exportPDF()">📄 PDF</button>
+      <button class="mb mb-w" onclick="openWA()">📲 WA</button>
+      <button class="xcls" onclick="closeM()">✕</button>
+    </div>
+  </div>
+  <div class="mbody" id="mbody"></div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const API='/api', KEY='TengoVisa2026API';
+const hdr=()=>({'x-api-key':KEY,'Content-Type':'application/json'});
+let evals=[],tab='todas',CA=null;
+
+function toast(m,t=''){const e=document.getElementById('toast');e.textContent=m;e.className='toast'+(t?' '+t:'');e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2600);}
+const esc=v=>v?String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'';
+const ini=nm=>(nm||'').split(' ').map(x=>x[0]||'').slice(0,2).join('').toUpperCase()||'?';
+const up=v=>(v||'').toUpperCase();
+
+async function load(){
+  try{
+    const r=await fetch(`${API}/evaluacion/all`,{headers:hdr()});
+    const d=await r.json();
+    evals=d.casos||d.records||[];
+    evals=evals.map(ev=>{
+      const dat=ev.datos||{};
+      ev._nombre=dat.nombre||dat.q2_nombre||'';
+      ev._apellido=dat.apellido||dat.q1_apellido||'';
+      ev._email=dat.email||'';
+      ev._plan=dat.plan||'';
+      ev._fuente=dat.fuente||'';
+      return ev;
+    });
+    render();
+  }catch(e){document.getElementById('lista').innerHTML='<div class="empty">Error de conexión</div>';}
+}
+
+function setTab(t,btn){
+  tab=t;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  render();
+}
+
+function render(){
+  const q=(document.getElementById('srch').value||'').toLowerCase();
+  let lista=evals;
+  if(tab==='eval')lista=lista.filter(e=>e._fuente!=='rrss'&&!e._plan);
+  if(tab==='rrss')lista=lista.filter(e=>e._fuente==='rrss'||e._plan);
+  if(tab==='apr')lista=lista.filter(e=>e.decision_ia==='APLICAR');
+  if(tab==='ojo')lista=lista.filter(e=>e.decision_ia==='MEJORAR');
+  if(tab==='no')lista=lista.filter(e=>e.decision_ia==='NO APLICAR');
+  if(q)lista=lista.filter(e=>(e._nombre+e._apellido+e._email).toLowerCase().includes(q));
+  if(!lista.length){document.getElementById('lista').innerHTML='<div class="empty">Sin resultados</div>';return;}
+  const dc={APLICAR:'b-gn',MEJORAR:'b-yn','NO APLICAR':'b-rd',PENDIENTE:'b-bl'};
+  const planL={'basico':'💙 Básico','full':'⭐ Full'};
+  document.getElementById('lista').innerHTML=lista.map(ev=>{
+    const nm=((ev._nombre)+(ev._apellido?' '+ev._apellido:'')).trim().toUpperCase()||'Sin nombre';
+    const dec=ev.decision_ia||'PENDIENTE';
+    const isRRSS=ev._fuente==='rrss'||ev._plan;
+    return `<div class="item" onclick="openEval('${ev.id}')">
+      <div class="av">${ini(nm)}</div>
+      <div class="ii">
+        <div class="inm">${esc(nm)}</div>
+        <div class="iem">${esc(ev._email||'—')} · ${(ev.created_at||'').substring(0,10)}</div>
+        <div class="imeta">
+          ${isRRSS?`<span class="badge b-pu">${planL[ev._plan]||'📱 RRSS'}</span>`:'<span class="badge b-bl">B1/B2</span>'}
+          <span class="badge ${dc[dec]||'b-bl'}">${dec}</span>
+          ${ev.score_ia?`<span class="badge b-pu">Score: ${ev.score_ia}</span>`:''}
+          <span class="badge ${ev.estado==='completado'?'b-gn':'b-yn'}">${ev.estado||'pendiente'}</span>
+        </div>
+      </div>
+      <div class="idate">${(ev.created_at||'').substring(0,10)}</div>
+    </div>`;
+  }).join('');
+}
+
+async function openEval(id){
+  CA=null;
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('mbody').innerHTML='<div class="empty">⏳ Cargando...</div>';
+  try{
+    const r=await fetch(`${API}/evaluacion/${id}`,{headers:hdr()});
+    const d=await r.json();
+    CA=d;
+    const dat=d.datos||{};
+    const nm=up((dat.nombre||'')+(dat.apellido?' '+dat.apellido:'')||'Sin nombre');
+    document.getElementById('mttl').textContent=nm;
+    document.getElementById('msub').textContent=`${d.estado||'pendiente'} · ${(d.created_at||'').substring(0,10)}`;
+    const dec=d.decision_ia||'PENDIENTE';
+    const decColors={APLICAR:'background:#EAF8EE;border:1px solid #86EFAC',MEJORAR:'background:#FFF4DE;border:1px solid #FDE68A','NO APLICAR':'background:#FCEBEB;border:1px solid #FCA5A5',PENDIENTE:'background:#EAF0FF;border:1px solid #B5D4F4'};
+    const decIcon={APLICAR:'✅',MEJORAR:'⚠️','NO APLICAR':'❌',PENDIENTE:'⏳'};
+    const decColor={APLICAR:'#15803d',MEJORAR:'#92400e','NO APLICAR':'#991b1b',PENDIENTE:'#001F73'};
+    const campos=Object.entries(dat).filter(([k,v])=>v&&!['lead_id','_generado','_token','otp_verificado'].includes(k));
+    let html=`<div class="dec-badge" style="${decColors[dec]||decColors.PENDIENTE}">
+      <div class="dec-n" style="color:${decColor[dec]||'#001F73'}">${decIcon[dec]||'⏳'} ${dec}</div>
+      ${d.score_ia?`<div class="dec-s">Score: ${d.score_ia}/100</div>`:''}
+    </div>
+    <div class="dg">`;
+    campos.forEach(([k,v])=>{
+      html+=`<div class="df"><div class="dl">${k.replace(/_/g,' ')}</div><div class="dv">${esc(up(String(v)))}</div></div>`;
+    });
+    html+='</div>';
+    if(d.resultado_ia){
+      html+=`<div style="font-size:10px;font-weight:700;color:var(--s3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px">🧠 Análisis del Perfil</div>
+      <div class="ia-box">${esc(d.resultado_ia).replace(/\n/g,'<br>')}</div>`;
+    }
+    html+=`<div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:10px">
+      <div style="font-size:10px;font-weight:700;color:var(--s3);margin-bottom:4px">📝 NOTAS DEL ASESOR</div>
+      <textarea class="nta" id="notas-ev" placeholder="Agrega notas sobre este caso...">${esc(d.revision_notas||'')}</textarea>
+      <button class="ntsv" onclick="saveNotas()">💾 Guardar notas</button>
+    </div>`;
+    document.getElementById('mbody').innerHTML=html;
+  }catch(e){document.getElementById('mbody').innerHTML=`<div class="empty">Error: ${e.message}</div>`;}
+}
+
+function closeM(){document.getElementById('modal').classList.remove('open');CA=null;}
+
+function showExistingIA(){
+  if(!CA || !CA.resultado_ia) return;
+  setTimeout(()=>{
+    let iaEl=document.querySelector('.ia-box');
+    if(!iaEl){
+      const div=document.createElement('div');
+      div.style.cssText='margin-top:10px';
+      div.innerHTML='<div class="ia-box"></div>';
+      const mb=document.getElementById('mbody');
+      if(mb) mb.appendChild(div);
+      iaEl=document.querySelector('.ia-box');
+    }
+    if(iaEl) iaEl.innerHTML=renderIAResult(CA.resultado_ia);
+  },200);
+}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))closeM();});
+document.getElementById('modal').addEventListener('transitionend',()=>{if(CA&&CA.resultado_ia)showExistingIA();},{once:false});
+
+async function runIA(){
+  if(!CA){toast('Abre una evaluación primero','err');return;}
+  document.getElementById('ia-btn').textContent='⏳ Analizando...';
+  document.getElementById('ia-btn').disabled=true;
+  try{
+    const r=await fetch(`${API}/evaluacion/ia/${CA.id}`,{method:'POST',headers:hdr()});
+    const d=await r.json();
+    const raw=d.resultado||d.resultado_ia||d.ia_texto||d; const txt=typeof raw==='object'?JSON.stringify(raw,null,2):raw;
+    CA.resultado_ia=txt;CA.decision_ia=d.decision||CA.decision_ia;
+    const iaEl=document.querySelector('.ia-box');
+    if(iaEl){iaEl.innerHTML=typeof (d.resultado||d.resultado_ia) === 'object' ? '<pre style="font-size:10px;white-space:pre-wrap">'+JSON.stringify(d.resultado||d.resultado_ia,null,2)+'</pre>' : esc(txt).replace(/\n/g,'<br>')}
+    else{document.getElementById('mbody').innerHTML+=`<div style="margin-top:10px"><div class="ia-box">${esc(txt).replace(/\n/g,'<br>')}</div></div>`;}
+    toast('✓ Análisis listo','ok');
+    document.getElementById('ia-btn').textContent='🧠 Re-analizar';
+    document.getElementById('ia-btn').disabled=false;
+  }catch(e){toast('Error en análisis','err');document.getElementById('ia-btn').textContent='🧠 Analizar';document.getElementById('ia-btn').disabled=false;}
+}
+
+async function saveNotas(){
+  if(!CA)return;
+  const n=document.getElementById('notas-ev').value;
+  await fetch(`${API}/ds160/notes/v2/${CA.id}`,{method:'POST',headers:hdr(),body:JSON.stringify({notes:n})});
+  toast('✓ Notas guardadas','ok');
+}
+
+function openWA(){
+  if(!CA)return;
+  const dat=CA.datos||{};
+  const nm=up((dat.nombre||'')+(dat.apellido?' '+dat.apellido:''))||'Cliente';
+  const tel=(dat.whatsapp||dat.q33_tel||dat.telefono_principal||'18499189998').replace(/\D/g,'');
+  const msg=`Hola ${nm}! 👋\n\nHemos revisado tu evaluación de perfil.\n\nResultado: ${CA.decision_ia||'En proceso'}\n\n${CA.resultado_ia?'Tenemos recomendaciones importantes para mejorar tu perfil. ':''}_TengoVisaRD · 849-918-9998_`;
+  window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function exportPDF(){
+  if(!CA)return;
+  const dat=CA.datos||{};
+  const nm=up((dat.nombre||'')+(dat.apellido?' '+dat.apellido:'')||'Sin nombre');
+  const now=new Date().toLocaleDateString('es-DO',{day:'2-digit',month:'long',year:'numeric'});
+  const w=window.open('','_blank','width=800,height:950');
+  if(!w)return;
+  const dec=CA.decision_ia||'PENDIENTE';
+  const decColors={APLICAR:'#EAF8EE',MEJORAR:'#FFF4DE','NO APLICAR':'#FCEBEB',PENDIENTE:'#EAF0FF'};
+  const decText={APLICAR:'✅ PUEDE APLICAR',MEJORAR:'⚠️ MEJORAR PERFIL','NO APLICAR':'❌ NO APLICAR',PENDIENTE:'⏳ PENDIENTE'};
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Evaluación ${nm}</title>
+  <style>body{font-family:Arial,sans-serif;padding:24px;color:#0F172A}@media print{body{padding:14px}@page{margin:12mm}}
+  .wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:64px;font-weight:900;color:rgba(0,31,115,0.055);white-space:nowrap;pointer-events:none;z-index:0}</style>
+  </head><body>
+  <div class="wm">DOCUMENTO NO OFICIAL</div>
+  <div style="background:linear-gradient(135deg,#001F73,#3B0764);color:#fff;padding:14px 18px;border-radius:9px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
+    <div><div style="font-size:16px;font-weight:800">🧠 TengoVisaRD · Evaluación de Perfil</div>
+    <div style="font-size:9.5px;opacity:.75">Asesoría Migratoria · 849-918-9998 · tengovisard.com</div></div>
+    <div style="text-align:right;font-size:10px;opacity:.85">${now}</div>
+  </div>
+  <div style="background:${decColors[dec]||'#EAF0FF'};border-radius:9px;padding:14px;margin-bottom:12px;text-align:center">
+    <div style="font-size:20px;font-weight:800">${decText[dec]||dec}</div>
+    ${CA.score_ia?`<div style="font-size:13px;margin-top:4px">Score: ${CA.score_ia}/100</div>`:''}
+  </div>
+  <div style="font-size:12px;font-weight:700;margin-bottom:10px">Cliente: ${nm}</div>
+  ${CA.resultado_ia?`<div style="font-size:10.5px;line-height:1.8;white-space:pre-wrap">${CA.resultado_ia}</div>`:'<div style="padding:20px;text-align:center;color:#64748B">Sin análisis generado aún</div>'}
+  <div style="margin-top:16px;padding-top:9px;border-top:1px solid #E2E8F0;display:flex;justify-content:space-between;font-size:9px;color:#94A3B8">
+    <span>TengoVisaRD · Santo Domingo, RD</span>
+    <span style="color:#E24B4A;font-weight:700">DOCUMENTO NO OFICIAL</span>
+  </div>
+  <script>window.onload=()=>setTimeout(()=>window.print(),600);<\/script>
+  
+<!-- MODAL IA EVALUACION -->
+<div id="modal-ia-eval" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;align-items:flex-end;justify-content:center;padding:0">
+  <div style="background:#fff;width:100%;max-width:640px;border-radius:20px 20px 0 0;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch">
+    <div style="background:linear-gradient(135deg,#001F73,#3B0764);padding:16px 18px;border-radius:20px 20px 0 0;position:sticky;top:0;z-index:10">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="color:#fff;font-size:15px;font-weight:800" id="ia-modal-nombre">Análisis IA</div>
+          <div style="color:rgba(255,255,255,.6);font-size:10px">TengoVisaRD · Evaluación Migratoria B1/B2</div>
+        </div>
+        <button onclick="closeIAModal()" style="background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer">✕</button>
+      </div>
+    </div>
+    <div id="ia-modal-body" style="padding:16px"></div>
+    <div style="padding:12px 16px;border-top:1px solid #E2E8F0;display:flex;gap:8px;position:sticky;bottom:0;background:#fff">
+      <button onclick="closeIAModal()" style="flex:1;padding:11px;background:#F1F5F9;color:#64748B;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer">Cerrar</button>
+      <button onclick="exportIAPDF()" style="flex:1;padding:11px;background:#001F73;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer">📄 PDF</button>
+      <button onclick="sendIAWhatsApp()" style="flex:1;padding:11px;background:#25D366;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer">📲 WA</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function closeIAModal(){document.getElementById('modal-ia-eval').style.display='none';}
+
+function renderIAResult(data, nombre){
+  if(!data) return '<p style="color:#94A3B8;font-size:12px;text-align:center;padding:20px">Sin análisis aún.</p>';
+  
+  if(typeof data === 'string'){
+    return '<div style="font-size:12px;line-height:1.7;color:#0F172A;padding:4px">'+
+      data.replace(/## ([^
+]+)/g,'<div style="font-size:13px;font-weight:800;color:#001F73;margin:14px 0 6px;padding-bottom:4px;border-bottom:2px solid #EAF0FF">$1</div>')
+          .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+          .replace(/^[-•] (.+)/gm,'<div style="padding:4px 0 4px 12px;border-left:3px solid #FF1117;margin:3px 0;font-size:11px">$1</div>')
+          .replace(/
+/g,'<br>')+'</div>';
+  }
+
+  const d = typeof data === 'string' ? JSON.parse(data) : data;
+  const scoreColor = (d.score_total||0)>=70?'#16A34A':(d.score_total||0)>=50?'#D97706':'#CC1A1A';
+  const decMap = {
+    'APROBAR':'✅ APROBAR','RIESGO_MEDIO':'⚠️ RIESGO MEDIO',
+    'NO_APLICAR':'🔴 NO APLICAR','ALTO_RIESGO':'🔴 ALTO RIESGO',
+    'MEJORAR':'🟡 MEJORAR PERFIL','PENDIENTE':'⏳ PENDIENTE'
+  };
+  const decLabel = decMap[d.decision] || d.decision || '—';
+
+  let html = `
+  <div style="background:linear-gradient(135deg,${scoreColor}22,${scoreColor}11);border:2px solid ${scoreColor}44;border-radius:12px;padding:14px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <div style="font-size:36px;font-weight:900;color:${scoreColor}">${d.score_total||0}<span style="font-size:14px;opacity:.6">/100</span></div>
+      <div style="font-size:11px;color:#64748B;font-weight:600">Score de aprobación</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:13px;font-weight:800;color:${scoreColor}">${decLabel}</div>
+      <div style="font-size:11px;color:#64748B;margin-top:4px">Probabilidad: <strong>${d.probabilidad_aprobacion||'—'}</strong></div>
+    </div>
+  </div>`;
+
+  // Sub-scores
+  if(d.score_economico !== undefined){
+    const scores = [
+      ['💰','Económico',d.score_economico,'#0EA5E9'],
+      ['👨‍👩‍👦','Familiar',d.score_familiar,'#8B5CF6'],
+      ['🗺️','Migratorio',d.score_migratorio,'#16A34A'],
+      ['✈️','Propósito',d.score_proposito,'#F59E0B']
+    ];
+    html += `<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:14px">
+      ${scores.map(([ic,lb,vl,cl])=>`
+      <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:8px;text-align:center">
+        <div style="font-size:14px">${ic}</div>
+        <div style="font-size:18px;font-weight:800;color:${cl}">${vl||0}</div>
+        <div style="font-size:8px;color:#64748B;font-weight:600">${lb}</div>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  // Narrativa
+  if(d.narrativa_central){
+    html += `<div style="background:#EAF0FF;border-left:4px solid #001F73;border-radius:0 10px 10px 0;padding:12px 14px;margin-bottom:12px;font-size:12px;color:#001F73;line-height:1.6">
+      <strong>📋 Análisis:</strong> ${d.narrativa_central}</div>`;
+  }
+
+  // Fortalezas
+  if(d.fortalezas?.length){
+    html += `<div style="margin-bottom:12px">
+      <div style="font-size:12px;font-weight:800;color:#16A34A;margin-bottom:6px">✅ FORTALEZAS</div>
+      ${d.fortalezas.map(f=>`<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid #F1F5F9;font-size:11px;color:#0F172A;align-items:flex-start">
+        <span style="color:#16A34A;flex-shrink:0">●</span>${f}</div>`).join('')}
+    </div>`;
+  }
+
+  // Red flags
+  if(d.red_flags?.length){
+    html += `<div style="margin-bottom:12px">
+      <div style="font-size:12px;font-weight:800;color:#CC1A1A;margin-bottom:6px">🚩 BANDERAS ROJAS</div>
+      ${d.red_flags.map(f=>`<div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid #FFF1F2;font-size:11px;color:#0F172A;align-items:flex-start">
+        <span style="color:#CC1A1A;flex-shrink:0">●</span>${f}</div>`).join('')}
+    </div>`;
+  }
+
+  // Recomendaciones
+  if(d.recomendaciones?.length){
+    html += `<div style="margin-bottom:12px">
+      <div style="font-size:12px;font-weight:800;color:#D97706;margin-bottom:6px">📌 RECOMENDACIONES</div>
+      ${d.recomendaciones.map((r,i)=>`<div style="display:flex;gap:8px;padding:6px 8px;background:#FFFBEB;border-radius:6px;margin-bottom:4px;font-size:11px;color:#0F172A;align-items:flex-start">
+        <span style="background:#D97706;color:#fff;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;flex-shrink:0">${i+1}</span>${r}</div>`).join('')}
+    </div>`;
+  }
+
+  // Documentos
+  if(d.documentos_prioritarios?.length){
+    html += `<div style="margin-bottom:12px">
+      <div style="font-size:12px;font-weight:800;color:#001F73;margin-bottom:6px">📁 DOCUMENTOS REQUERIDOS</div>
+      ${d.documentos_prioritarios.map(r=>`<div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid #EAF0FF;font-size:11px;color:#0F172A;align-items:center">
+        <span style="color:#001F73">📄</span>${r}</div>`).join('')}
+    </div>`;
+  }
+
+  // Respuestas modelo para el cónsul
+  if(d.respuestas_modelo && Object.keys(d.respuestas_modelo).length){
+    const rm = d.respuestas_modelo;
+    const labels = {
+      purpose_of_travel:'¿Cuál es el propósito de su visita?',
+      ties_to_home:'¿Por qué regresará a su país?',
+      job_duties:'¿Cuáles son sus funciones en el trabajo?'
+    };
+    html += `<div style="background:#FFF4DE;border-radius:12px;padding:12px 14px;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:800;color:#92400E;margin-bottom:10px">🎤 RESPUESTAS PARA EL CÓNSUL</div>
+      ${Object.entries(rm).map(([k,v])=>`
+      <div style="margin-bottom:10px">
+        <div style="font-size:9px;font-weight:800;color:#92400E;text-transform:uppercase;margin-bottom:3px">${labels[k]||k.replace(/_/g,' ')}</div>
+        <div style="background:#fff;border-radius:8px;padding:8px 10px;font-size:11px;color:#0F172A;font-style:italic;border-left:3px solid #F59E0B">"${v}"</div>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  return html;
+}
+
+function openIAModal(evalData, nombre){
+  document.getElementById('ia-modal-nombre').textContent = nombre || 'Análisis IA';
+  document.getElementById('ia-modal-body').innerHTML = renderIAResult(evalData, nombre);
+  document.getElementById('modal-ia-eval').style.display = 'flex';
+}
+
+function exportIAPDF(){
+  if(!CA) return;
+  window.print();
+}
+
+function sendIAWhatsApp(){
+  if(!CA) return;
+  const dat = CA.datos || {};
+  const nm = ((dat.nombre||'')+ ' '+(dat.apellido||'')).trim() || 'Cliente';
+  const tel = (dat.whatsapp||'18299189998').replace(/\D/g,'');
+  const res = CA.resultado_ia || {};
+  const score = res.score_total || CA.score_ia || 0;
+  const decision = res.decision || CA.decision_ia || '';
+  const prob = res.probabilidad_aprobacion || '';
+  const decLabel = {'APROBAR':'✅ APROBADO','RIESGO_MEDIO':'⚠️ Riesgo Medio','NO_APLICAR':'🔴 No Recomendado','MEJORAR':'🟡 Mejorar Perfil'}[decision] || decision;
+  
+  const recs = (res.recomendaciones||[]).slice(0,3).map((r,i)=>`${i+1}. ${r}`).join('
+');
+  const msg = `Hola ${nm}! 👋
+
+*Resultado de tu Evaluación Migratoria*
+
+🎯 *Score: ${score}/100*
+📊 *Decisión: ${decLabel}*
+📈 *Probabilidad: ${prob}*
+
+${recs?'*Próximos pasos:*
+'+recs+'
+
+':''}_TengoVisaRD · 849-918-9998_
+_tengovisard.com_`;
+  window.open('https://wa.me/'+tel+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+// Override runIA para usar el nuevo modal
+const _origRunIA = window.runIA;
+window.runIA = async function(){
+  if(!CA){toast('Abre una evaluación primero','err');return;}
+  const btn = document.getElementById('ia-btn');
+  btn.textContent='⏳ Analizando...';btn.disabled=true;
+  try{
+    const r = await fetch(API+'/evaluacion/ia/'+CA.id,{method:'POST',headers:hdr()});
+    const d = await r.json();
+    if(!d.ok){toast('Error IA: '+(d.error||'sin respuesta'),'err');btn.textContent='🧠 Analizar';btn.disabled=false;return;}
+    
+    const resultado = d.resultado || d.resultado_ia || d;
+    CA.resultado_ia = resultado;
+    CA.score_ia = (resultado.score_total || CA.score_ia);
+    CA.decision_ia = (resultado.decision || CA.decision_ia);
+    
+    const dat = CA.datos || {};
+    const nombre = ((dat.nombre||'')+(dat.apellido?' '+dat.apellido:'')).trim()||'Cliente';
+    
+    openIAModal(resultado, nombre);
+    toast('✓ Análisis listo','ok');
+    btn.textContent='🧠 Re-analizar';btn.disabled=false;
+  }catch(e){
+    toast('Error: '+e.message,'err');
+    btn.textContent='🧠 Analizar';btn.disabled=false;
+  }
+};
+</script>
+
+</body>
+</html>

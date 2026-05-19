@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="TengoVisaRD — Asesoría migratoria profesional en Santo Domingo. Visa B1/B2, DS-160, Global Entry, Pasaportes.">
+<title>Servicios — TengoVisaRD</title>
+<link rel="icon" type="image/png" href="/icons/icon-192.png"><link rel="icon" sizes="32x32" href="/icons/icon-32x32.png"><link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/logo_tengovisa.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pri:#001F73;--pri2:#0A2A8B;--red:#CC1A1A;--red2:#E53E3E;
+  --tv-red:#CC1A1A;--white:#FFFFFF;--off:#F8F9FF;--soft:#E8ECF8;
+  --tx:#001F73;--s2:#3D4566;--s3:#717AA3;--bd:#D0D5EE;
+  --gn:#16A34A;--gnl:#EAF8EE;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--white);color:var(--tx);overflow-x:hidden}
+
+/* NAV */
+.nav{
+  background:var(--pri);padding:0 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:58px;position:sticky;top:0;z-index:100;
+  border-bottom:3px solid var(--red);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo img{height:36px;filter:brightness(0)invert(1);object-fit:contain}
+.nav-logo-txt{color:#fff}
+.nav-logo-nm{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;line-height:1}
+.nav-logo-sb{font-size:9px;opacity:.6;letter-spacing:1px;text-transform:uppercase}
+.nav-right{display:flex;gap:8px;align-items:center}
+.nav-link{color:rgba(255,255,255,.75);text-decoration:none;font-size:12px;font-weight:600;padding:5px 9px;border-radius:6px;transition:.15s}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,.1)}
+.nav-cta{background:var(--red);color:#fff;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;transition:.15s;display:flex;align-items:center;gap:4px}
+.nav-cta:hover{background:var(--red2)}
+
+/* HERO */
+.hero{
+  background:var(--pri);
+  position:relative;overflow:hidden;min-height:85vh;
+  display:flex;align-items:center;
+}
+/* Fondo texturizado estrellas */
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 20% 50%,rgba(204,26,26,.15) 0%,transparent 60%),
+    radial-gradient(ellipse at 80% 30%,rgba(245,166,35,.08) 0%,transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M40 10l3 9h9l-7 5 3 9-8-6-8 6 3-9-7-5h9z'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* Banda de estrellas arriba */
+.stars-band{background:var(--red);padding:6px;text-align:center;color:#fff;font-size:12px;letter-spacing:10px;font-weight:700}
+
+.hero-inner{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  width:100%;max-width:1100px;margin:0 auto;
+  padding:60px 20px;position:relative;z-index:10;align-items:center;
+}
+.hero-txt h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(52px,8vw,90px);
+  color:#fff;line-height:.95;margin-bottom:16px;
+}
+.hero-txt h1 .line-red{color:var(--red)}
+.hero-txt h1 .line-gold{color:var(--tv-red)}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.9);padding:5px 14px;border-radius:20px;
+  font-size:11px;font-weight:600;letter-spacing:.5px;margin-bottom:16px;
+}
+.hero-sub{
+  font-size:clamp(14px,2.5vw,16px);color:rgba(255,255,255,.8);
+  line-height:1.7;margin-bottom:28px;font-weight:300;max-width:460px;
+}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn-p{padding:12px 24px;background:var(--red);color:#fff;border-radius:10px;font-size:13.5px;font-weight:700;text-decoration:none;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+.btn-p:hover{background:var(--red2);transform:translateY(-1px)}
+.btn-s{padding:12px 24px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:10px;font-size:13.5px;font-weight:600;text-decoration:none;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+.btn-s:hover{background:rgba(255,255,255,.18)}
+/* Imagen hero derecha */
+.hero-img{
+  position:relative;display:flex;align-items:center;justify-content:center;
+}
+.hero-img-wrap{
+  width:100%;max-width:460px;aspect-ratio:4/3;border-radius:18px;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);border:2px solid rgba(255,255,255,.15);
+  position:relative;background:linear-gradient(135deg,#001840,#0A2A8B);
+}
+/* Skyline NYC SVG como fondo con foto overlay */
+.hero-img-inner{
+  width:100%;height:100%;
+  background:
+    linear-gradient(to bottom, rgba(0,15,80,.5) 0%, rgba(0,0,20,.2) 40%, transparent 100%),
+    url('https://images.unsplash.com/photo-14849-918-99981-5b1fd3805eee?w=800&q=80') center/cover no-repeat;
+  display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;
+  padding:14px;
+}
+.hero-img-caption{
+  background:rgba(0,31,115,.85);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.15);border-radius:9px;
+  padding:8px 12px;color:#fff;font-size:10.5px;font-weight:600;
+  text-align:right;
+}
+.hero-img-caption .city{font-size:14px;font-weight:800;letter-spacing:.5px}
+/* Stats en hero */
+.hero-stats{
+  display:flex;gap:24px;margin-top:28px;flex-wrap:wrap;
+}
+.hstat{text-align:left}
+.hstat-n{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--tv-red);line-height:1}
+.hstat-l{font-size:10px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.05em;margin-top:1px}
+
+/* SECTION */
+section{padding:64px 20px}
+.container{max-width:1040px;margin:0 auto}
+.sec-badge{display:inline-block;background:var(--soft);color:var(--pri);padding:4px 12px;border-radius:20px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.sec-h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(34px,5.5vw,52px);color:var(--pri);line-height:1;margin-bottom:8px}
+.sec-h2 span{color:var(--red)}
+.sec-sub{font-size:14.5px;color:var(--s2);line-height:1.65;max-width:560px}
+
+/* SERVICIOS */
+.sv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-top:36px}
+.sv-card{
+  background:#fff;border:1.5px solid var(--bd);border-radius:15px;
+  padding:22px;transition:.2s;position:relative;overflow:hidden;
+  text-decoration:none;color:inherit;display:flex;flex-direction:column;
+}
+.sv-card:hover{border-color:var(--pri);box-shadow:0 8px 28px rgba(0,31,115,.1);transform:translateY(-2px)}
+.sv-card-top{height:3px;background:linear-gradient(90deg,var(--pri),var(--red));border-radius:3px 3px 0 0;position:absolute;top:0;left:0;right:0;opacity:0;transition:.2s}
+.sv-card:hover .sv-card-top{opacity:1}
+.sv-ico{width:48px;height:48px;background:var(--soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px;flex-shrink:0}
+.sv-nm{font-size:15px;font-weight:700;color:var(--pri);margin-bottom:6px;line-height:1.25}
+.sv-desc{font-size:12.5px;color:var(--s2);line-height:1.65;flex:1;margin-bottom:14px}
+.sv-link{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--pri);color:#fff;padding:7px 13px;
+  border-radius:7px;font-size:11.5px;font-weight:700;text-decoration:none;
+  transition:.15s;align-self:flex-start;
+}
+.sv-link:hover{background:var(--pri2)}
+.sv-link.r{background:var(--red)}.sv-link.r:hover{background:var(--red2)}
+.sv-link.g{background:#25D366;color:#fff}
+.sv-link.gld{background:var(--tv-red);color:var(--tx)}
+.sv-tag{position:absolute;top:12px;right:12px;background:var(--red);color:#fff;padding:2px 8px;border-radius:9px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+
+/* CITA EMERGENCIA */
+.cita-sec{background:var(--off);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+.cita-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.cita-info h3{font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--pri);margin-bottom:10px;line-height:1}
+.cita-info h3 span{color:var(--red)}
+.cita-info p{font-size:13.5px;color:var(--s2);line-height:1.7;margin-bottom:18px}
+.cita-feats{display:flex;flex-direction:column;gap:7px}
+.cf-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--s2)}
+.cf-ico{width:24px;height:24px;background:var(--gnl);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.form-card{background:#fff;border:1.5px solid var(--bd);border-radius:16px;padding:26px}
+.form-card h4{font-size:15.5px;font-weight:700;color:var(--pri);margin-bottom:3px}
+.form-card .fsub{font-size:11.5px;color:var(--s3);margin-bottom:18px}
+.fi{margin-bottom:12px}
+.fi label{display:block;font-size:10px;font-weight:700;color:var(--s2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.fi input,.fi select,.fi textarea{
+  width:100%;padding:9px 11px;border:1.5px solid var(--bd);border-radius:8px;
+  font-size:13px;font-family:'Outfit',sans-serif;outline:none;background:#fff;color:var(--tx);
+  transition:.15s;
+}
+.fi input:focus,.fi select:focus,.fi textarea:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(0,31,115,.07)}
+.fi textarea{min-height:65px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-form{width:100%;padding:11px;background:var(--red);color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:.15s;margin-top:4px}
+.btn-form:hover{background:var(--red2);transform:translateY(-1px)}
+.form-ok{display:none;background:var(--gnl);border:1px solid #86EFAC;border-radius:8px;padding:14px;text-align:center;margin-top:10px}
+.form-ok .ico{font-size:26px;margin-bottom:4px}
+.form-ok .msg{font-size:13px;font-weight:700;color:var(--gn)}
+.form-ok .sub2{font-size:11px;color:var(--gn);margin-top:2px}
+
+/* AGENDA VIRTUAL */
+.agenda-sec{background:#fff}
+.horarios{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.hor-btn{
+  padding:10px 16px;border:1.5px solid var(--bd);border-radius:9px;
+  font-size:12.5px;font-weight:600;cursor:pointer;background:#fff;
+  font-family:'Outfit',sans-serif;color:var(--tx);transition:.15s;
+}
+.hor-btn:hover,.hor-btn.sel{border-color:var(--pri);background:var(--soft);color:var(--pri)}
+.sesion-tipo{display:flex;gap:10px;margin:12px 0}
+.st-btn{
+  padding:9px 14px;border:1.5px solid var(--bd);border-radius:9px;
+  font-size:12px;font-weight:600;cursor:pointer;background:#fff;
+  font-family:'Outfit',sans-serif;color:var(--tx);transition:.15s;
+  display:flex;align-items:center;gap:6px;flex:1;justify-content:center;
+}
+.st-btn.sel{border-color:var(--pri);background:var(--soft);color:var(--pri)}
+.agenda-link{display:none;background:var(--gnl);border:1px solid #86EFAC;border-radius:10px;padding:14px;margin-top:12px;text-align:center}
+.agenda-link a{color:var(--gn);font-weight:700;font-size:14px;word-break:break-all}
+.agenda-link .meet-ico{font-size:28px;margin-bottom:6px}
+
+/* FAQ */
+.faq-list{margin-top:32px;display:flex;flex-direction:column;gap:9px}
+.faq-item{background:#fff;border:1.5px solid var(--bd);border-radius:11px;overflow:hidden;transition:.15s}
+.faq-q{padding:14px 16px;font-size:13.5px;font-weight:600;color:var(--pri);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.faq-q:hover{background:var(--off)}
+.faq-ico{width:22px;height:22px;min-width:22px;background:var(--soft);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--pri);transition:.25s}
+.faq-a{display:none;padding:0 16px 14px;font-size:13px;color:var(--s2);line-height:1.7;border-top:1px solid var(--bd)}
+.faq-item.open .faq-q{background:var(--soft)}
+.faq-item.open .faq-ico{transform:rotate(45deg);background:var(--pri);color:#fff}
+.faq-item.open .faq-a{display:block}
+.faq-cta{display:inline-flex;align-items:center;gap:5px;background:var(--red);color:#fff;padding:7px 13px;border-radius:7px;font-size:11.5px;font-weight:700;text-decoration:none;margin-top:8px}
+
+/* REDES */
+.redes-sec{background:var(--pri)}
+.redes-inner{max-width:1040px;margin:0 auto;padding:60px 20px;text-align:center}
+.redes-h{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,46px);color:#fff;line-height:1;margin-bottom:8px}
+.redes-h span{color:var(--tv-red)}
+.redes-sub{font-size:14px;color:rgba(255,255,255,.7);margin-bottom:28px}
+.redes-grid{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.red-card{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+  border-radius:13px;padding:16px 22px;text-align:center;
+  text-decoration:none;color:#fff;transition:.2s;min-width:130px;
+}
+.red-card:hover{background:rgba(255,255,255,.2);transform:translateY(-2px)}
+.red-ico{font-size:28px;margin-bottom:6px}
+.red-nm{font-size:12px;font-weight:700;opacity:.9}
+.red-handle{font-size:10.5px;opacity:.55;margin-top:2px}
+
+footer{background:var(--tx);color:rgba(255,255,255,.65);text-align:center;padding:20px 16px;font-size:11.5px}
+footer strong{color:#fff}
+
+/* MOBILE */
+@media(max-width:750px){
+  .hero-inner{grid-template-columns:1fr;padding:40px 16px}
+  .hero-img{display:none}
+  .nav-link{display:none}
+  .cita-wrap{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  section{padding:44px 16px}
+  .hero-stats{gap:16px}
+  .hstat-n{font-size:26px}
+}
+
+@media(max-width:480px){
+  .hero-txt h1{font-size:48px}
+  .btn-p,.btn-s{width:100%;justify-content:center;padding:13px 16px}
+  .hero-btns{flex-direction:column}
+  .hstat-n{font-size:22px}
+  .sv-grid{grid-template-columns:1fr}
+  .nav-cta{font-size:11px;padding:6px 10px}
+  .form-card{padding:18px 14px}
+  .fi input,.fi select,.fi textarea{font-size:14px}
+  .btn-form{font-size:14px;padding:12px}
+  .redes-grid{gap:8px}
+  .red-card{min-width:100px;padding:12px 16px}
+  .faq-q{font-size:13px;padding:12px 14px}
+  .hor-btn{padding:8px 12px;font-size:12px}
+  .st-btn{font-size:11.5px}
+  .sec-h2{font-size:32px}
+}
+@media(max-width:360px){
+  .hero-txt h1{font-size:40px}
+  .redes-grid{grid-template-columns:1fr 1fr}
+}
+
+</style>
+
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="visa americana Santo Domingo, DS-160 República Dominicana, asesoría migratoria RD, visa B1 B2 dominicana, Global Entry RD, cita embajada americana, adelantar cita visa USA, TengoVisaRD, visa turismo EE.UU., preparación entrevista consular">
+<meta name="author" content="TengoVisaRD">
+<meta property="og:title" content="TengoVisaRD — Visa Americana, DS-160, Global Entry · Santo Domingo">
+<meta property="og:description" content="Asesoría migratoria profesional en Santo Domingo. Evaluación de perfil, DS-160, Global Entry, pasaportes y preparación para la entrevista consular. 849-918-9998">
+<meta property="og:image" content="https://crm.tengovisard.com/icons/logo_tengovisa.png">
+<meta property="og:url" content="https://crm.tengovisard.com/servicios/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_DO">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TengoVisaRD — Visa Americana Santo Domingo">
+<meta name="twitter:description" content="Evaluación de perfil, DS-160, Global Entry y preparación consular. Llámanos: 849-918-9998">
+<meta name="twitter:image" content="https://crm.tengovisard.com/icons/logo_tengovisa.png">
+<link rel="canonical" href="https://crm.tengovisard.com/servicios/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "TengoVisaRD",
+  "description": "Asesoría migratoria profesional en Santo Domingo. Visa B1/B2, DS-160, Global Entry, pasaportes y preparación para entrevista consular.",
+  "url": "https://tengovisard.com",
+  "telephone": "+1849-918-9998",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Santo Domingo",
+    "addressCountry": "DO"
+  },
+  "openingHours": ["Mo-Fr 09:00-18:00","Sa 09:00-12:00"],
+  "sameAs": [
+    "https://instagram.com/tengovisard",
+    "https://facebook.com/tengovisaeeuu",
+    "https://tiktok.com/@tengovisard"
+  ],
+  "priceRange": "RD$$",
+  "image": "https://crm.tengovisard.com/icons/logo_tengovisa.png",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Servicios Migratorios",
+    "itemListElement": [
+      {"@type":"Offer","name":"Evaluación de Perfil B1/B2","url":"https://crm.tengovisard.com/evaluacion/rrss/"},
+      {"@type":"Offer","name":"Formulario DS-160","url":"https://crm.tengovisard.com/ds160/"},
+      {"@type":"Offer","name":"Global Entry","url":"https://crm.tengovisard.com/globalentry/"},
+      {"@type":"Offer","name":"Cita de Emergencia","url":"https://crm.tengovisard.com/servicios/#cita"}
+    ]
+  }
+}
+</script>
+<style id="tvrd-palette">
+:root{
+  --tv-blue:#001F73;
+  --tv-red:#CC1A1A;
+  --tv-white:#FFFFFF;
+  --tv-blue2:#0A2A8B;
+  --tv-red2:#E02424;
+  --tv-gray-l:#F5F7FA;
+  --tv-gray-d:#1A1A1A;
+}
+</style>
+<style id="tv-p">
+:root{
+  --tv-blue:#001F73;--tv-red:#CC1A1A;--tv-white:#FFFFFF;
+  --tv-blue2:#0A2A8B;--tv-red2:#E02424;
+  --tv-gray-l:#F5F7FA;--tv-gray-d:#1A1A1A
+}
+</style>
+<style>:root{--tv-blue-primary:#001F73;--tv-red-primary:#CC1A1A;--tv-white:#FFFFFF;--tv-blue-accent:#0A2A8B;--tv-red-accent:#E02424;--tv-gray-light:#F5F7FA;--tv-gray-dark:#1A1A1A}</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="https://tengovisard.com" class="nav-logo">
+    <img src="/icons/logo_tengovisa.png" alt="TengoVisaRD" onerror="this.style.display='none'">
+    <div class="nav-logo-txt">
+      <div class="nav-logo-nm">TengoVisaRD</div>
+      <div class="nav-logo-sb">Asesoría Migratoria</div>
+    </div>
+  </a>
+  <div class="nav-right">
+    <a href="#servicios" class="nav-link">Servicios</a>
+    <a href="#agenda" class="nav-link">Agendar</a>
+    <a href="#cita" class="nav-link">Emergencia</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+    <a href="https://wa.me/18499189998" class="nav-cta">📲 849-918-9998</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="stars-band">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-txt">
+      <div class="hero-badge">🇺🇸 Asesoría Migratoria · Santo Domingo, RD</div>
+      <h1>
+        <div>TU</div>
+        <div class="line-red">VISA</div>
+        <div class="line-gold">AMERICANA</div>
+      </h1>
+      <p class="hero-sub">
+        Te acompañamos en todo el proceso: desde la evaluación de tu perfil, el DS-160, Global Entry, pasaportes y la preparación para tu entrevista consular.
+      </p>
+      <div class="hero-btns">
+        <a href="https://crm.tengovisard.com/evaluacion/rrss/" class="btn-p">📋 Evaluar mi perfil</a>
+        <a href="#servicios" class="btn-s">Ver todos los servicios ↓</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-n">+500</div><div class="hstat-l">Clientes asesorados</div></div>
+        <div class="hstat"><div class="hstat-n">98%</div><div class="hstat-l">Satisfacción</div></div>
+        <div class="hstat"><div class="hstat-n">5★</div><div class="hstat-l">Calificación</div></div>
+      </div>
+    </div>
+    <div class="hero-img">
+      <div class="hero-img-wrap">
+        <div class="hero-img-inner">
+          <div class="hero-img-caption">
+            <div class="city">🗽 Nueva York</div>
+            <div>Destino favorito de los dominicanos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+<div class="container">
+  <div class="sec-badge">Nuestros Servicios</div>
+  <h2 class="sec-h2">TODO LO QUE<br>NECESITAS <span>AQUÍ</span></h2>
+  <p class="sec-sub">Desde la evaluación de tu perfil hasta la preparación para la entrevista. Te acompañamos en cada paso con experiencia y profesionalismo.</p>
+
+  <div class="sv-grid">
+
+    <div class="sv-card">
+      <div class="sv-card-top"></div>
+      <span class="sv-tag">Más popular</span>
+      <div class="sv-ico">📋</div>
+      <div class="sv-nm">Evaluación de Perfil B1/B2</div>
+      <div class="sv-desc">
+        Analizamos tu perfil migratorio completo con tecnología avanzada y experiencia consular. Recibe un veredicto, puntuación y plan de acción personalizado. Incluye revisión de redes sociales, estrategia para la entrevista y documentos prioritarios. Dos planes disponibles.
+      </div>
+      <a href="https://crm.tengovisard.com/evaluacion/rrss/" class="sv-link r">Evaluar mi perfil →</a>
+    </div>
+
+    <div class="sv-card">
+      <div class="sv-card-top"></div>
+      <div class="sv-ico">🛂</div>
+      <div class="sv-nm">Formulario DS-160</div>
+      <div class="sv-desc">
+        El DS-160 es la solicitud oficial de visa americana. Te asistimos en completar correctamente cada sección: datos personales, historial de viajes, información laboral, familia y preguntas de seguridad. Un error puede costar la visa.
+      </div>
+      <a href="https://crm.tengovisard.com/ds160/" class="sv-link r">Iniciar DS-160 →</a>
+    </div>
+
+    <div class="sv-card">
+      <div class="sv-card-top"></div>
+      <div class="sv-ico">🌐</div>
+      <div class="sv-nm">Global Entry / TSA PreCheck</div>
+      <div class="sv-desc">
+        Accede a los carriles rápidos en aeropuertos de EE.UU. El programa Global Entry permite entrada pre-aprobada sin filas. Gestionamos tu solicitud, preparamos tu entrevista y te orientamos en cada paso del proceso de aprobación.
+      </div>
+      <a href="https://crm.tengovisard.com/globalentry/" class="sv-link gld">Solicitar Global Entry →</a>
+    </div>
+
+    <div class="sv-card">
+      <div class="sv-card-top"></div>
+      <div class="sv-ico">📘</div>
+      <div class="sv-nm">Pasaporte Dominicano</div>
+      <div class="sv-desc">
+        Solicitud de pasaporte nuevo o renovación con orientación completa. Te explicamos qué documentos llevar, cómo agendar tu cita en la JCE sin perder tiempo, qué hacer si vives en el exterior, y cómo obtener el pasaporte en tiempo récord. También gestionamos apostillas y documentos para uso en el exterior.
+      </div>
+      <a href="https://crm.tengovisard.com/pasaporte/" class="sv-link">Gestionar pasaporte →</a>
+    </div>
+
+    <div class="sv-card">
+      <div class="sv-card-top"></div>
+      <div class="sv-ico">🎤</div>
+      <div class="sv-nm">Preparación para la Entrevista</div>
+      <div class="sv-desc">
+        Simulamos la entrevista consular con preguntas reales usadas en la Embajada en Santo Domingo. Analizamos tus respuestas, lenguaje corporal y coherencia con el DS-160. Te preparamos para responder con seguridad y congruencia en el momento clave.
+      </div>
+      <a href="#agenda" class="sv-link">Agendar sesión →</a>
+    </div>
+
+    <div class="sv-card">
+      <div class="sv-card-top"></div>
+      <div class="sv-ico">💳</div>
+      <div class="sv-nm">Renovación de Visa</div>
+      <div class="sv-desc">
+        ¿Tu visa venció o necesitas renovarla? Te ayudamos con el proceso completo: Interview Waiver (renovación sin ir a la Embajada si calificas), preparación de documentos actualizados, nuevo DS-160 y seguimiento hasta la aprobación.
+      </div>
+      <a href="#agenda" class="sv-link">Verificar si califico →</a>
+    </div>
+
+    <div class="sv-card">
+      <div class="sv-card-top"></div>
+      <div class="sv-ico">⚡</div>
+      <div class="sv-nm">Citas de Emergencia</div>
+      <div class="sv-desc">
+        ¿Tu cita está muy lejos y tienes una emergencia documentada? Gestionamos el proceso de cita expedita ante la Embajada de EE.UU. en Santo Domingo. Analizamos tu caso y preparamos la justificación adecuada para agilizar el proceso.
+      </div>
+      <a href="#cita" class="sv-link r">Solicitar cita urgente →</a>
+    </div>
+
+    <div class="sv-card">
+      <div class="sv-card-top"></div>
+      <div class="sv-ico">💬</div>
+      <div class="sv-nm">Asesoría Migratoria Completa</div>
+      <div class="sv-desc">
+        Consultoría personalizada sobre tu situación migratoria. Analizamos negaciones previas, historial de viajes, lazos familiares y todos los factores que impactan tu caso. Diseñamos una estrategia específica para tu perfil.
+      </div>
+      <a href="https://wa.me/18499189998" class="sv-link g">📲 Consultar ahora →</a>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- AGENDA VIRTUAL -->
+<section id="agenda">
+<div class="container">
+  <div class="sec-badge">Solo Virtual por el momento</div>
+  <h2 class="sec-h2">AGENDA TU<br><span>SESIÓN</span></h2>
+  <p class="sec-sub">Sesiones virtuales con disponibilidad garantizada en 48 horas. Selecciona tu horario preferido y genera el enlace de videollamada al instante.</p>
+
+  <div style="background:#fff;border:1.5px solid var(--bd);border-radius:16px;padding:28px;max-width:600px;margin-top:28px">
+    <div style="font-size:14px;font-weight:700;color:var(--pri);margin-bottom:4px">🗓️ Seleccionar horario</div>
+    <div style="font-size:12px;color:var(--s3);margin-bottom:16px">Disponibilidad: Lunes a Sábado · 48 horas de anticipación</div>
+
+    <div class="fi">
+      <label>Tu nombre *</label>
+      <input id="ag-nom" placeholder="NOMBRE COMPLETO" oninput="this.value=this.value.toUpperCase()">
+    </div>
+    <div class="fi">
+      <label>Tu WhatsApp *</label>
+      <input id="ag-wa" type="tel" placeholder="+1 849-918-9998">
+    </div>
+    <div class="fi">
+      <label>Tipo de sesión *</label>
+      <div class="sesion-tipo">
+        <button class="st-btn sel" id="st-prep" onclick="selTipo('prep',this)">🎤 Preparación entrevista</button>
+        <button class="st-btn" id="st-ases" onclick="selTipo('ases',this)">💬 Asesoría general</button>
+      </div>
+    </div>
+    <div class="fi">
+      <label>Horario preferido *</label>
+      <div class="horarios">
+        <button class="hor-btn" onclick="selHor('9am',this)">☀️ 9:00 AM</button>
+        <button class="hor-btn" onclick="selHor('10am',this)">☀️ 10:00 AM</button>
+        <button class="hor-btn" onclick="selHor('11am',this)">☀️ 11:00 AM</button>
+        <button class="hor-btn" onclick="selHor('12pm',this)">🌤 12:00 PM</button>
+        <button class="hor-btn" onclick="selHor('3pm',this)">🌇 3:00 PM</button>
+        <button class="hor-btn" onclick="selHor('4pm',this)">🌇 4:00 PM</button>
+        <button class="hor-btn" onclick="selHor('5pm',this)">🌆 5:00 PM</button>
+        <button class="hor-btn" onclick="selHor('6pm',this)">🌆 6:00 PM</button>
+      </div>
+    </div>
+    <div class="fi">
+      <label>Fecha preferida *</label>
+      <input type="date" id="ag-fecha" min="">
+    </div>
+    <button class="btn-form" onclick="generarSesion()">📅 Confirmar y generar enlace</button>
+    <div class="agenda-link" id="agenda-link">
+      <div class="meet-ico">📹</div>
+      <div style="font-size:13px;font-weight:700;color:var(--gn);margin-bottom:6px">✅ ¡Sesión confirmada!</div>
+      <div style="font-size:11.5px;color:var(--s2);margin-bottom:8px">Haz clic para unirte a la videollamada en Google Meet:</div>
+      <a id="meet-link" href="#" target="_blank" style="display:block;background:var(--gnl);border:1.5px solid #86EFAC;border-radius:8px;padding:10px;font-size:12px;font-weight:700;color:var(--gn);text-decoration:none;word-break:break-all"></a>
+      <div style="font-size:11px;color:var(--s3);margin-top:8px">Te notificaremos por WhatsApp con el enlace y recordatorio</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- CITA DE EMERGENCIA -->
+<section id="cita" class="cita-sec">
+<div class="container">
+  <div class="cita-wrap">
+    <div class="cita-info">
+      <div class="sec-badge">Urgente</div>
+      <h3>CITA DE<br><span>EMERGENCIA</span></h3>
+      <p>¿Tienes una emergencia y necesitas tu visa de forma urgente? Cuéntanos tu situación. Evaluamos tu caso y gestionamos la solicitud de cita expedita ante la Embajada americana en Santo Domingo.</p>
+      <div class="cita-feats">
+        <div class="cf-item"><div class="cf-ico">⚡</div>Respuesta en menos de 24 horas</div>
+        <div class="cf-item"><div class="cf-ico">📋</div>Evaluación gratuita de tu caso</div>
+        <div class="cf-item"><div class="cf-ico">🛂</div>Preparación completa de documentos</div>
+        <div class="cf-item"><div class="cf-ico">🇺🇸</div>Experiencia real con la Embajada en SD</div>
+        <div class="cf-item"><div class="cf-ico">📲</div>Contacto directo: 849-918-9998</div>
+      </div>
+    </div>
+    <div class="form-card">
+      <h4>🚨 Solicitar Cita de Emergencia</h4>
+      <div class="fsub">Completa el formulario y te contactamos de inmediato</div>
+      <div id="cita-form">
+        <div class="form-row">
+          <div class="fi"><label>Nombre *</label><input id="cf-nom" placeholder="NOMBRE" oninput="this.value=this.value.toUpperCase()"></div>
+          <div class="fi"><label>Apellido *</label><input id="cf-ap" placeholder="APELLIDOS" oninput="this.value=this.value.toUpperCase()"></div>
+        </div>
+        <div class="fi"><label>WhatsApp *</label><input id="cf-wa" type="tel" placeholder="+1 849-918-9998"></div>
+        <div class="fi"><label>Fecha de tu cita actual</label><input id="cf-fecha" type="date"></div>
+        <div class="fi">
+          <label>Tipo de emergencia *</label>
+          <select id="cf-tipo">
+            <option value="">— Seleccionar —</option>
+            <option>Emergencia médica familiar</option>
+            <option>Viaje de negocios urgente</option>
+            <option>Funeral o duelo</option>
+            <option>Evento académico o graduación</option>
+            <option>Mi cita está muy lejos (más de 1 año)</option>
+            <option>Otro motivo urgente</option>
+          </select>
+        </div>
+        <div class="fi"><label>Cuéntanos tu situación</label><textarea id="cf-msg" placeholder="Describe brevemente tu emergencia..."></textarea></div>
+        <button class="btn-form" onclick="enviarCita()">⚡ Solicitar Ahora</button>
+      </div>
+      <div class="form-ok" id="cita-ok">
+        <div class="ico">✅</div>
+        <div class="msg">¡Solicitud enviada!</div>
+        <div class="sub2">Te contactamos en menos de 24 horas</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+<div class="container">
+  <div class="sec-badge">Preguntas Frecuentes</div>
+  <h2 class="sec-h2">TODO LO QUE<br>DEBES <span>SABER</span></h2>
+  <p class="sec-sub">Las preguntas que más nos hacen nuestros clientes, respondidas con claridad.</p>
+
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="togFaq(this)">
+        <span>¿Cuánto tiempo tarda el proceso de visa B1/B2?</span>
+        <div class="faq-ico">+</div>
+      </div>
+      <div class="faq-a">El tiempo varía según la demanda de la Embajada. En promedio, desde que comienzas el proceso hasta la entrevista puede tomar hasta 12 meses. Por eso es importante empezar lo antes posible. Con nuestra asesoría, tu perfil estará correctamente preparado para maximizar las probabilidades de aprobación y conseguir una cita en tiempo récord.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="togFaq(this)">
+        <span>¿Me garantizan que me van a dar la visa?</span>
+        <div class="faq-ico">+</div>
+      </div>
+      <div class="faq-a">Ninguna agencia puede garantizar la aprobación de una visa — eso es una decisión exclusiva del cónsul americano. Lo que sí garantizamos es que tu expediente estará correctamente preparado, que tu DS-160 no tendrá errores, y que irás a la entrevista con la mejor preparación posible. Nuestros clientes bien preparados tienen una tasa de aprobación significativamente más alta.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="togFaq(this)">
+        <span>¿Cuánto cuestan los planes de evaluación de perfil?</span>
+        <div class="faq-ico">+</div>
+      </div>
+      <div class="faq-a">
+        Ofrecemos dos planes según tu necesidad:
+        <br><br>
+        <strong>💙 Plan Básico:</strong> Análisis completo de tu perfil + informe detallado en PDF entregado en 24 horas.
+        <br><br>
+        <strong>⭐ Plan Full:</strong> Análisis experto + comunicación directa por WhatsApp en 12 horas + sesión de pre-entrevista virtual de 30 minutos + 10% de descuento en el proceso completo + prioridad en agendamiento de cita.
+        <br><br>
+        <a href="https://crm.tengovisard.com/evaluacion/rrss/" class="faq-cta">Ver planes y precios →</a>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="togFaq(this)">
+        <span>¿Qué pasa si me negaron la visa antes?</span>
+        <div class="faq-ico">+</div>
+      </div>
+      <div class="faq-a">Una negación previa no te descalifica automáticamente. Lo más importante es entender POR QUÉ te negaron — generalmente es la sección 214b (presunción de inmigrante) o lazos insuficientes con RD — y fortalecer esos puntos antes de volver a aplicar. Nuestro análisis identifica exactamente qué necesitas mejorar en tu perfil.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="togFaq(this)">
+        <span>¿Qué documentos debo llevar a la entrevista?</span>
+        <div class="faq-ico">+</div>
+      </div>
+      <div class="faq-a">
+        Los básicos son: pasaporte vigente, confirmación de cita, foto 2x2 pulgadas, comprobante de pago MRV y DS-160 impreso.
+        <br><br>
+        Dependiendo de tu perfil, también se recomiendan: carta de empleo, estados de cuenta bancarios, títulos de propiedades, invitación de familiar o amigo en EE.UU., y otros documentos que demuestren tus lazos con República Dominicana.
+        <br><br>
+        Nuestro análisis identifica exactamente qué documentos son prioritarios para tu caso específico.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="togFaq(this)">
+        <span>¿El DS-160 lo llena el cliente o lo llenan ustedes?</span>
+        <div class="faq-ico">+</div>
+      </div>
+      <div class="faq-a">El formulario DS-160 lo llena el cliente con información verídica — es una declaración jurada ante el gobierno americano. Nuestro rol es guiarte para que respondas correctamente, sin inconsistencias, usando la terminología adecuada, y sin omitir nada importante. Revisamos el formulario completo antes de enviarlo.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="togFaq(this)">
+        <span>¿Atienden de forma presencial o solo virtual?</span>
+        <div class="faq-ico">+</div>
+      </div>
+      <div class="faq-a">
+        Trabajamos de ambas formas: virtual (WhatsApp y videollamada) y presencial. La modalidad virtual nos permite atender clientes en todo el país y en el exterior con la misma calidad. Las sesiones presenciales en Santo Domingo se realizan bajo cita previa.
+        <br><br>
+        <a href="#agenda" class="faq-cta">📅 Agendar sesión virtual →</a>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="togFaq(this)">
+        <span>¿Cuándo es recomendable aplicar al Global Entry?</span>
+        <div class="faq-ico">+</div>
+      </div>
+      <div class="faq-a">Global Entry es ideal si ya tienes visa B1/B2 vigente y viajas frecuentemente a EE.UU. El programa permite entrada por carriles FAST sin filas de inmigración. El proceso incluye revisión de historial, pago de tarifa y una entrevista en un aeropuerto americano. Puede tomar de 3 a 12 meses en completarse.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="togFaq(this)">
+        <span>¿Puedo renovar mi visa sin ir a la Embajada?</span>
+        <div class="faq-ico">+</div>
+      </div>
+      <div class="faq-a">Sí, en muchos casos es posible a través del programa Interview Waiver. Si tu visa americana venció hace menos de 48 meses, eres mayor de 14 y menor de 79 años, y no tienes historial de negaciones recientes, podrías calificar para renovar sin entrevista. Te ayudamos a verificar si calificas y a completar el proceso correctamente.</div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- REDES -->
+<section class="redes-sec">
+<div class="redes-inner">
+  <div style="display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.85);padding:4px 12px;border-radius:20px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Síguenos</div>
+  <div class="redes-h">ESTAMOS EN<br>TODAS <span>PARTES</span></div>
+  <div class="redes-sub">Tips, casos reales, noticias de la Embajada y contenido útil cada semana</div>
+  <div class="redes-grid">
+    <a href="https://instagram.com/tengovisard" class="red-card" target="_blank">
+      <div class="red-ico">📸</div><div class="red-nm">Instagram</div><div class="red-handle">@tengovisard</div>
+    </a>
+    <a href="https://facebook.com/tengovisaeeuu" class="red-card" target="_blank">
+      <div class="red-ico">👥</div><div class="red-nm">Facebook</div><div class="red-handle">TengoVisaRD</div>
+    </a>
+    <a href="https://tiktok.com/@tengovisard" class="red-card" target="_blank">
+      <div class="red-ico">🎵</div><div class="red-nm">TikTok</div><div class="red-handle">@tengovisard</div>
+    </a>
+    <a href="https://wa.me/18499189998" class="red-card" target="_blank" style="background:rgba(37,211,102,.18);border-color:rgba(37,211,102,.3)">
+      <div class="red-ico">💬</div><div class="red-nm">WhatsApp</div><div class="red-handle">849-918-9998</div>
+    </a>
+    <a href="https://tengovisard.com" class="red-card" target="_blank">
+      <div class="red-ico">🌐</div><div class="red-nm">Web</div><div class="red-handle">tengovisard.com</div>
+    </a>
+  </div>
+</div>
+</section>
+
+<footer>
+  <strong>TengoVisaRD</strong> · Asesoría Migratoria · Santo Domingo, República Dominicana · <strong>849-918-9998</strong><br>
+  <span style="opacity:.45;font-size:10.5px;margin-top:4px;display:block">
+    Los servicios de TengoVisaRD son de asesoría y preparación. No somos la Embajada ni el Departamento de Estado de EE.UU. La decisión de otorgar la visa es exclusiva del cónsul americano.
+  </span>
+</footer>
+
+<script>
+// ── FAQ ──
+function togFaq(el){
+  const item=el.parentElement;
+  const open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!open)item.classList.add('open');
+}
+
+// ── AGENDA ──
+let selHorario='',selTipoSesion='prep';
+function selHor(h,btn){
+  selHorario=h;
+  document.querySelectorAll('.hor-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+function selTipo(t,btn){
+  selTipoSesion=t;
+  document.querySelectorAll('.st-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+// Fijar fecha mínima 48h
+const hoy=new Date();hoy.setDate(hoy.getDate()+2);
+const fechaMin=hoy.toISOString().split('T')[0];
+document.getElementById('ag-fecha').min=fechaMin;
+document.getElementById('ag-fecha').value=fechaMin;
+
+const horMap={'9am':'09:00','10am':'10:00','11am':'11:00','12pm':'12:00','3pm':'15:00','4pm':'16:00','5pm':'17:00','6pm':'18:00'};
+const tipoLabel={'prep':'Preparación para Entrevista Consular','ases':'Asesoría Migratoria General'};
+
+function generarSesion(){
+  const nom=document.getElementById('ag-nom').value.trim();
+  const wa=document.getElementById('ag-wa').value.trim();
+  const fecha=document.getElementById('ag-fecha').value;
+  if(!nom||!wa||!selHorario||!fecha){
+    alert('Por favor completa todos los campos y selecciona un horario');return;
+  }
+  const hora=horMap[selHorario]||'09:00';
+  const tipo=tipoLabel[selTipoSesion]||'Asesoría';
+  // Crear Google Meet link (formato estándar)
+  const meetCode='tvrd-'+Math.random().toString(36).substring(2,8);
+  const meetUrl=`https://meet.google.com/${meetCode}`;
+  // Google Calendar link
+  const dtStr=fecha.replace(/-/g,'');
+  const [hh,mm]=hora.split(':');
+  const startDT=`${dtStr}T${hh}${mm}00`;
+  const endHH=String(parseInt(hh)+1).padStart(2,'0');
+  const endDT=`${dtStr}T${endHH}${mm}00`;
+  const calTitle=encodeURIComponent(`TengoVisaRD — ${tipo}`);
+  const calDesc=encodeURIComponent(`Sesión virtual con TengoVisaRD\n\nCliente: ${nom}\nWhatsApp: ${wa}\nTipo: ${tipo}\n\nEnlace Meet: ${meetUrl}`);
+  const calUrl=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calTitle}&dates=${startDT}/${endDT}&details=${calDesc}&location=${encodeURIComponent(meetUrl)}&sf=true&output=xml`;
+  // Mostrar resultado
+  document.getElementById('meet-link').href=meetUrl;
+  document.getElementById('meet-link').textContent=meetUrl;
+  document.getElementById('agenda-link').style.display='block';
+  // Notificar por WhatsApp
+  const msg=`Hola TengoVisaRD! 👋\n\n*Confirmación de sesión virtual:*\n• Nombre: ${nom}\n• Tipo: ${tipo}\n• Fecha: ${fecha}\n• Hora: ${selHorario.toUpperCase()}\n• Enlace Meet: ${meetUrl}\n\n¿Está confirmada? 🙏`;
+  setTimeout(()=>{
+    window.open(`https://wa.me/18499189998?text=${encodeURIComponent(msg)}`,'_blank');
+    window.open(calUrl,'_blank');
+  },1200);
+  // Push notificación
+  fetch(`https://tengovisard.com/push/api.php?token=tgvsa&user_id=tengovisa%40gmail.com&title=${encodeURIComponent('📅 Nueva sesión agendada')}&message=${encodeURIComponent(nom+' · '+selHorario+' · '+fecha)}`).catch(()=>{});
+  // Email notification al cliente y al asesor
+  const emailCliente=prompt('¿Cuál es tu email para enviarte la confirmación? (opcional)','');
+  if(emailCliente&&emailCliente.includes('@')){
+    fetch('https://crm.tengovisard.com/api/ds160/save-full',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':'TVPublic2026'},
+      body:JSON.stringify({
+        q2_nombre:nom,q33_tel:wa,email:emailCliente,
+        q55_proposito:'SESION_VIRTUAL',
+        q65_dir_hospedaje:meetUrl,
+        q64_duracion:`${fecha} ${selHorario}`,
+        q141_funciones:tipo,
+        fuente:'agenda_virtual'
+      })
+    }).catch(()=>{});
+  }
+}
+
+// ── CITA EMERGENCIA ──
+function enviarCita(){
+  const nom=document.getElementById('cf-nom').value.trim();
+  const ap=document.getElementById('cf-ap').value.trim();
+  const wa=document.getElementById('cf-wa').value.trim();
+  const tipo=document.getElementById('cf-tipo').value;
+  if(!nom||!wa||!tipo){alert('Por favor completa los campos requeridos');return;}
+  const fecha=document.getElementById('cf-fecha').value;
+  const msg=document.getElementById('cf-msg').value;
+  const texto=`Hola TengoVisaRD! 👋\n\nEstoy interesado en ADELANTAR MI CITA de emergencia.\n\n*Mis datos de contacto:*\n• Nombre: ${nom} ${ap}\n• WhatsApp: ${wa}\n• Tipo de emergencia: ${tipo}\n• Fecha de cita actual: ${fecha||'No tengo cita aún'}\n${msg?'• Descripción: '+msg:''}\n\n¿Pueden ayudarme? 🙏`;
+  fetch('https://crm.tengovisard.com/api/ds160/save-full',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':'TVPublic2026'},
+    body:JSON.stringify({q2_nombre:nom,q1_apellido:ap,q33_tel:wa,email:'cita@tengovisard.com',q95_razon_neg:`TIPO: ${tipo} | FECHA: ${fecha||'N/A'} | MSG: ${msg}`,fuente:'cita_emergencia'})
+  }).catch(()=>{});
+  fetch(`https://tengovisard.com/push/api.php?token=tgvsa&user_id=tengovisa%40gmail.com&title=${encodeURIComponent('🚨 Cita emergencia')}&message=${encodeURIComponent(nom+' '+ap+' · '+wa)}`).catch(()=>{});
+  document.getElementById('cita-form').style.display='none';
+  document.getElementById('cita-ok').style.display='block';
+  setTimeout(()=>window.open(`https://wa.me/18499189998?text=${encodeURIComponent(texto)}`,'_blank'),800);
+}
+</script>
+</body>
+</html>

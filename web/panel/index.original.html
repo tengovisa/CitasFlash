@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CitasFlash Panel</title>
+<!-- Favicon navegador -->
+<link rel="icon" type="image/png" sizes="32x32" href="/panel/icons/favicon-32.png">
+<!-- Icono iPhone / iPad -->
+<link rel="apple-touch-icon" sizes="180x180" href="/panel/icons/apple-icon.png">
+<!-- PWA -->
+<link rel="manifest" href="/panel/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CitasFlash">
+<meta name="mobile-web-app-capable" content="yes">
+<!-- Color barra superior movil -->
+<meta name="theme-color" content="#0A1F44">
+<!-- Seguridad -->
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- OneSignal Push Notifications -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--red:#E50914;--red-dark:#B20710;--blue:#1565C0;--blue-light:#1976D2;--text:#2E2E2E;--bg:#F4F6F8;--card:#fff;--border:#e2e8f0;--muted:#64748b;--success:#16a34a;--warn:#d97706;--info:#0891b2;--purple:#7c3aed;--sidebar:230px}
+body.dark{--text:#e2e8f0;--bg:#0f172a;--card:#1e293b;--border:#334155;--muted:#94a3b8}
+body.dark .sidebar{background:#1e293b;border-color:#334155}
+body.dark .topbar{background:#1e293b;border-color:#334155}
+body.dark .stat{background:#1e293b;border-color:#334155}
+body.dark .card{background:#1e293b;border-color:#334155}
+body.dark tr:hover td{background:#334155}
+body.dark .lf-input{background:#1e293b;border-color:#334155;color:#e2e8f0}
+body.dark .ff input,body.dark .ff select,body.dark .ff textarea{background:#1e293b;border-color:#334155;color:#e2e8f0}
+body.dark .modal{background:#1e293b}
+body.dark .modal-head{background:#1e293b;border-color:#334155}
+body.dark .toggle-row{background:#0f172a;border-color:#334155}
+body.dark .tab.on{background:#334155}
+body.dark .search-wrap{background:#1e293b;border-color:#334155}
+body.dark .search-wrap input{color:#e2e8f0}
+body.dark #dark-btn{color:#fbbf24}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);font-size:15px;min-height:100vh}
+.ripple{position:relative;overflow:hidden}
+.ripple::after{content:'';position:absolute;border-radius:50%;background:rgba(255,255,255,0.3);width:0;height:0;top:50%;left:50%;transform:translate(-50%,-50%);transition:width .5s,height .5s,opacity .5s;opacity:0}
+.ripple:active::after{width:300px;height:300px;opacity:0;transition:0s}
+@keyframes pulse-blue{0%,100%{box-shadow:0 0 0 0 rgba(21,101,192,0.5)}50%{box-shadow:0 0 0 10px rgba(21,101,192,0)}}
+@keyframes pulse-green{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,0.4)}50%{box-shadow:0 0 0 8px rgba(22,163,74,0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{transform:translateX(-8px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes bellRing{0%,100%{transform:rotate(0)}20%{transform:rotate(15deg)}40%{transform:rotate(-15deg)}60%{transform:rotate(10deg)}80%{transform:rotate(-10deg)}}
+@keyframes redPulse{0%,100%{background:#fff0f0}50%{background:#fecaca}}
+
+/* LOGIN */
+#login-page{display:flex;min-height:100vh;background:linear-gradient(145deg,#0a1628 0%,#1a2d5a 40%,#8b0000 80%,#0a1628 100%);align-items:center;justify-content:center;position:relative;overflow:hidden}
+#login-page::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(21,101,192,0.35) 0%,transparent 55%),radial-gradient(ellipse at 80% 50%,rgba(229,9,20,0.25) 0%,transparent 55%)}
+.login-left{flex:1;max-width:480px;padding:60px;position:relative;z-index:1}
+.ll-logo img{height:90px;filter:drop-shadow(0 4px 20px rgba(229,9,20,0.5));margin-bottom:24px}
+.ll-logo-text{display:none;font-size:40px;font-weight:700;color:#fff;margin-bottom:24px}
+.ll-logo-text span{color:#E50914}
+.ll-headline{font-size:36px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:12px}
+.ll-headline span{color:#E50914}
+.ll-sub{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:24px}
+.ll-flags{display:flex;gap:10px;flex-wrap:wrap}
+.flag-pill{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:6px 14px;font-size:13px;color:rgba(255,255,255,0.85)}
+.login-card{width:100%;max-width:420px;background:rgba(255,255,255,0.97);border-radius:20px;padding:40px 36px;box-shadow:0 24px 64px rgba(0,0,0,0.35);position:relative;z-index:1}
+.lc-title{font-size:24px;font-weight:700;color:var(--text);margin-bottom:4px}
+.lc-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
+.lf-group{margin-bottom:16px}
+.lf-label{display:block;font-size:11px;font-weight:600;color:var(--text);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.lf-wrap{position:relative}
+.lf-wrap .ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted)}
+.lf-input{width:100%;padding:13px 13px 13px 40px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:'Poppins',sans-serif;outline:none;transition:border .2s,box-shadow .2s;color:var(--text)}
+.lf-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,101,192,0.12)}
+.lf-btn{width:100%;padding:15px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;margin-top:8px;animation:pulse-blue 2s infinite;transition:background .2s,transform .1s}
+.lf-btn:hover{background:var(--blue-light);animation:none;transform:translateY(-1px)}
+.lf-forgot{text-align:center;margin-top:14px;font-size:13px;color:var(--muted)}
+.lf-forgot a{color:var(--blue);font-weight:500;cursor:pointer}
+.forgot-box{display:none;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;color:var(--blue)}
+.forgot-box.show{display:block;animation:fadeIn .3s ease}
+#login-error{color:var(--red);font-size:13px;text-align:center;margin-top:8px;min-height:18px;font-weight:500}
+
+/* APP */
+#app{display:none}
+.layout{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform .25s;box-shadow:2px 0 12px rgba(0,0,0,0.06)}
+.sb-brand{padding:18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sb-brand img{height:38px;object-fit:contain}
+.sb-brand-text{display:none;font-size:18px;font-weight:700;color:var(--red)}
+.sb-close{margin-left:auto;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;display:none}
+.nav-sec{padding:12px 8px 4px}
+.nav-lbl{font-size:10px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;padding:0 8px 6px;font-weight:600}
+.ni{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:9px;cursor:pointer;color:var(--muted);font-size:14px;font-weight:500;transition:all .15s;min-height:44px}
+.ni:hover{background:#fff0f0;color:var(--red)}
+.ni.on{background:linear-gradient(135deg,#fff0f0,#fff8f8);color:var(--red);font-weight:700;border-left:3px solid var(--red)}
+.ni .ico{font-size:17px;width:22px;text-align:center;flex-shrink:0}
+.nb{margin-left:auto;background:var(--red);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700}
+.nb.g{background:var(--success)}.nb.b{background:var(--blue)}.nb.w{background:var(--warn)}.nb.p{background:var(--purple)}
+.sb-footer{margin-top:auto;padding:14px;border-top:1px solid var(--border)}
+.user-row{display:flex;align-items:center;gap:10px;padding:8px;border-radius:9px}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.user-name{font-size:14px;font-weight:600;color:var(--text)}
+.user-role{font-size:11px;color:var(--muted)}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99}
+.sb-overlay.open{display:block}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{height:60px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:14px;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+.menu-btn{display:none;background:none;border:none;font-size:24px;cursor:pointer;color:var(--text);padding:4px}
+.page-title{font-size:17px;font-weight:700;color:var(--text)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.search-wrap{display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:9px 13px;width:210px;transition:all .2s}
+.search-wrap:focus-within{border-color:var(--blue);width:250px;box-shadow:0 0 0 3px rgba(21,101,192,0.1)}
+.search-wrap input{border:none;background:transparent;outline:none;font-size:14px;font-family:'Poppins',sans-serif;color:var(--text);width:100%}
+.search-wrap input::placeholder{color:var(--muted)}
+.spin-ico{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;display:none}
+.search-wrap.loading .spin-ico{display:block}
+.search-wrap.loading .s-ico{display:none}
+.bell-btn{position:relative;background:none;border:none;cursor:pointer;padding:8px;border-radius:9px;font-size:20px;color:var(--muted)}
+.bell-btn:hover{background:var(--bg)}
+.bell-btn.ringing{animation:bellRing .5s ease}
+.bell-dot{position:absolute;top:6px;right:6px;width:9px;height:9px;background:var(--red);border-radius:50%;border:2px solid var(--card);display:none}
+.bell-dot.show{display:block}
+.notif-panel{position:absolute;top:60px;right:20px;width:340px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12);z-index:200;display:none;animation:fadeIn .2s ease}
+.notif-panel.open{display:block}
+.notif-head{padding:14px 16px;border-bottom:1px solid var(--border);font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.notif-item{padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;cursor:pointer}
+.notif-item.unread{background:#fff0f0}
+.notif-item .nt{font-weight:600;margin-bottom:2px}
+.notif-item .ns{color:var(--muted);font-size:12px}
+.add-btn{background:var(--blue);color:#fff;border:none;border-radius:10px;padding:11px 20px;font-size:15px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;white-space:nowrap;animation:pulse-blue 2s infinite;transition:background .2s,transform .1s}
+.add-btn:hover{background:var(--blue-light);animation:none;transform:translateY(-1px)}
+
+/* BTNS */
+.btn{padding:10px 18px;border-radius:9px;font-size:14px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;border:1.5px solid var(--border);background:var(--card);color:var(--text);transition:all .15s;white-space:nowrap}
+.btn:hover{background:var(--bg);transform:translateY(-1px)}
+.btn.red{background:var(--red);color:#fff;border-color:var(--red)}
+.btn.green{background:var(--success);color:#fff;border-color:var(--success)}
+.btn.blue{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn.blue:hover{background:var(--blue-light)}
+.btn.warn{background:var(--warn);color:#fff;border-color:var(--warn)}
+.btn.purple{background:var(--purple);color:#fff;border-color:var(--purple)}
+.btn.sm{padding:7px 13px;font-size:13px}
+.btn.ghost{background:transparent;border:1.5px solid var(--red);color:var(--red)}
+.btn.ghost:hover{background:#fff0f0}
+.btn.ghost-blue{background:transparent;border:1.5px solid var(--blue);color:var(--blue)}
+.btn.ghost-blue:hover{background:#eff6ff}
+
+/* CONTENT */
+.content{padding:22px;display:flex;flex-direction:column;gap:18px;padding-bottom:90px}
+
+/* STATS */
+.stats-6{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;position:relative;overflow:hidden;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.stat:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+.stat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.stat.red::after{background:var(--red)}.stat.green::after{background:var(--success)}.stat.amber::after{background:var(--warn)}.stat.blue-s::after{background:var(--blue)}.stat.cyan::after{background:var(--info)}.stat.purple::after{background:var(--purple)}
+.stat-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:8px}
+.stat.red .stat-icon{background:#fff0f0;color:var(--red)}.stat.green .stat-icon{background:#ecfdf5;color:var(--success)}.stat.amber .stat-icon{background:#fffbeb;color:var(--warn)}.stat.blue-s .stat-icon{background:#eff6ff;color:var(--blue)}.stat.cyan .stat-icon{background:#ecfeff;color:var(--info)}.stat.purple .stat-icon{background:#f5f3ff;color:var(--purple)}
+.stat-val{font-size:26px;font-weight:700;color:var(--text);line-height:1}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500}
+.prog{height:3px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden}
+.prog-fill{height:100%;border-radius:2px;transition:width 1s ease}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.card-header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.card-title{font-size:15px;font-weight:700;color:var(--text)}
+
+/* CLIENT DETAIL */
+.client-detail{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;display:none;animation:fadeIn .3s ease}
+.client-detail.show{display:block}
+.cd-header{display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.cd-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;flex-shrink:0}
+.cd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cd-field{background:var(--bg);border-radius:8px;padding:10px 12px}
+.cd-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.cd-value{font-size:13px;font-weight:600;color:var(--text)}
+
+/* TABS */
+.tabs{display:flex;gap:4px;overflow-x:auto}.tabs::-webkit-scrollbar{display:none}
+.tab{padding:7px 15px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;color:var(--muted);white-space:nowrap;transition:all .15s}
+.tab.on{background:linear-gradient(135deg,#fff0f0,#fff5f5);color:var(--red);font-weight:700}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th{text-align:left;padding:12px 16px;font-size:11px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;text-transform:uppercase;letter-spacing:.4px}
+td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border);color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fffafa}
+tr.outside-booking td{background:#fff0f0;animation:redPulse 2s infinite}
+tr.cancelled td{background:#f5f3ff;opacity:.8}
+.code-tag{background:#fff0f0;color:var(--red);font-family:monospace;font-size:11px;padding:3px 8px;border-radius:5px;font-weight:700}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:10px;font-size:12px;font-weight:600}
+.badge.green{background:#ecfdf5;color:#059669}.badge.amber{background:#fffbeb;color:#b45309}.badge.red{background:#fff0f0;color:var(--red)}.badge.gray{background:var(--bg);color:var(--muted)}.badge.blue{background:#eff6ff;color:var(--blue)}.badge.cyan{background:#ecfeff;color:var(--info)}.badge.outside{background:#fecaca;color:#991b1b;animation:blink 1.5s infinite}.badge.purple{background:#f5f3ff;color:var(--purple)}
+
+/* ACTION BTNS */
+.act-btns{display:flex;gap:4px;flex-wrap:nowrap}
+.abt{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1.5px solid var(--border);background:transparent;font-size:13px;transition:all .2s;color:var(--muted);flex-shrink:0}
+.abt:hover{transform:scale(1.12)}
+.abt.edit:hover{background:#eff6ff;border-color:#93c5fd;color:var(--blue)}
+.abt.play:hover{background:#ecfdf5;border-color:#86efac;color:var(--success)}
+.abt.pause:hover{background:#fffbeb;border-color:#fcd34d;color:var(--warn)}
+.abt.del:hover{background:#fff0f0;border-color:#fca5a5;color:var(--red)}
+.abt.print:hover{background:#fff0f0;border-color:#fca5a5;color:var(--red)}
+.abt.cancel:hover{background:#f5f3ff;border-color:#c4b5fd;color:var(--purple)}
+.abt.reactivate:hover{background:#ecfdf5;border-color:#86efac;color:var(--success)}
+.abt.sync:hover{background:#ecfeff;border-color:#67e8f9;color:var(--info);box-shadow:0 2px 8px rgba(8,145,178,0.2)}
+
+/* PIE + CHART */
+.chart-row{display:grid;grid-template-columns:1fr 200px;gap:16px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px}
+.chart-title{font-size:15px;font-weight:700;margin-bottom:14px;color:var(--text)}
+.pie-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;display:flex;flex-direction:column;align-items:center}
+.pie-legend{width:100%;margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.pie-item{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
+.pie-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+/* LOG TABLE — 3 cols: Fecha, Cuenta(email), Mensaje */
+.log-table-wrap{background:#0f172a;border-radius:0 0 12px 12px;overflow:auto;height:320px}
+.log-table-wrap::-webkit-scrollbar{width:4px}
+.log-table-wrap::-webkit-scrollbar-thumb{background:#334155;border-radius:3px}
+.log-table{width:100%;border-collapse:collapse;font-family:monospace;font-size:12px}
+.log-table th{padding:8px 12px;font-size:10px;color:#475569;font-weight:600;text-transform:uppercase;border-bottom:1px solid #1e293b;position:sticky;top:0;background:#0f172a;white-space:nowrap}
+.log-table td{padding:7px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;vertical-align:middle}
+.log-table tr:hover td{background:#1e293b}
+.lt-ok{color:#4ade80}.lt-err{color:#f87171}.lt-warn{color:#fbbf24}.lt-info{color:#60a5fa}
+.lt-email{color:#e2e8f0;font-weight:500;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lt-msg{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lt-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:5px;font-size:11px;font-weight:600;white-space:nowrap}
+.lt-badge.ok{background:rgba(74,222,128,0.15);color:#4ade80}
+.lt-badge.err{background:rgba(248,113,113,0.15);color:#f87171}
+.lt-badge.warn{background:rgba(251,191,36,0.15);color:#fbbf24}
+.lt-badge.info{background:rgba(96,165,250,0.15);color:#60a5fa}
+
+/* CONSOLA */
+.cons-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.status-pill{display:inline-flex;align-items:center;gap:7px;background:var(--bg);padding:7px 15px;border-radius:20px;font-size:13px;font-weight:500}
+.sdot{width:9px;height:9px;border-radius:50%;background:var(--muted)}
+.sdot.on{background:var(--success);animation:pulse-green 1.5s infinite}.sdot.off{background:var(--red)}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border-radius:16px;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;animation:fadeIn .25s ease}
+.modal-head{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--card);z-index:1}
+.modal-head h3{font-size:16px;font-weight:700;color:var(--text)}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)}
+.modal-close:hover{color:var(--red)}
+.modal-body{padding:20px 24px}
+.modal-foot{padding:14px 24px 20px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.ff{margin-bottom:14px}
+.ff label{display:block;font-size:11px;font-weight:600;color:var(--text);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+.ff input,.ff select,.ff textarea{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;font-family:'Poppins',sans-serif;outline:none;transition:border .2s;color:var(--text)}
+.ff input:focus,.ff select:focus,.ff textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,101,192,0.1)}
+.ff textarea{resize:vertical;min-height:60px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;margin-bottom:14px}
+.toggle-row span{font-size:14px;font-weight:500}
+.tog{width:44px;height:25px;background:var(--border);border-radius:13px;cursor:pointer;position:relative;transition:background .2s;border:none;flex-shrink:0}
+.tog::after{content:'';position:absolute;top:3px;left:3px;width:19px;height:19px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,0.2)}
+.tog.on{background:var(--blue)}.tog.on::after{transform:translateX(19px)}
+.validate-card{background:linear-gradient(135deg,#eff6ff,#f0f9ff);border:1.5px solid #bfdbfe;border-radius:12px;padding:16px;margin-bottom:14px}
+.v-result{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:12px;margin-top:10px;display:none;animation:fadeIn .3s ease}
+.mode-btns{display:flex;gap:10px;margin-bottom:14px}
+.mode-btn{flex:1;padding:12px;border-radius:10px;font-size:13px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;border:2px solid var(--border);background:var(--card);color:var(--muted);transition:all .2s;text-align:center;line-height:1.4}
+.mode-btn.sel-pause{border-color:var(--warn);background:#fffbeb;color:var(--warn)}
+.mode-btn.sel-run{border-color:var(--blue);background:#eff6ff;color:var(--blue);animation:pulse-blue 2s infinite}
+
+/* BOTTOM NAV */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:58px;background:var(--card);border-top:1px solid var(--border);z-index:50;padding:0 8px;align-items:center;justify-content:space-around}
+.bn-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 10px;border-radius:9px;cursor:pointer;color:var(--muted);font-size:11px;font-weight:500;transition:all .15s;flex:1;position:relative}
+.bn-item.on{color:var(--blue)}.bn-ico{font-size:22px}
+.bn-badge{position:absolute;top:3px;right:6px;background:var(--red);color:#fff;font-size:9px;padding:1px 4px;border-radius:6px}
+#toast{position:fixed;bottom:72px;right:20px;padding:13px 20px;border-radius:10px;font-size:14px;font-weight:500;z-index:500;transform:translateY(60px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);max-width:340px;font-family:'Poppins',sans-serif}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.ok{background:#166534;color:#fff}#toast.err{background:#991b1b;color:#fff}#toast.info{background:var(--blue);color:#fff}#toast.warn{background:#92400e;color:#fff}
+
+/* SECURITY */
+.sensitive{-webkit-user-select:none;-moz-user-select:none;user-select:none}
+body{-webkit-touch-callout:none}
+
+/* RESPONSIVE 900px */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.sb-close{display:block}
+  .menu-btn{display:block}.main{margin-left:0}
+  .stats-6{grid-template-columns:repeat(3,1fr)!important}.chart-row{grid-template-columns:1fr}.cons-grid{grid-template-columns:1fr}
+  .bottom-nav{display:flex}.content{padding-bottom:80px}
+  .topbar-right .add-btn{display:none}.search-wrap{width:140px}
+  .form-row{grid-template-columns:1fr!important}.cd-grid{grid-template-columns:repeat(2,1fr)!important}
+  table{min-width:600px}.tbl-wrap{-webkit-overflow-scrolling:touch;overflow-x:auto}
+  .modal{max-width:100%!important;margin:0;border-radius:20px 20px 0 0;position:fixed;bottom:0;max-height:92vh}
+  .modal-overlay{align-items:flex-end;padding:0}
+  .card-header{flex-wrap:wrap;gap:8px}
+  #page-ti>div:first-child{grid-template-columns:repeat(2,1fr)!important}
+}
+
+/* RESPONSIVE 600px */
+@media(max-width:600px){
+  .stats-6{grid-template-columns:repeat(2,1fr)!important;gap:8px!important}
+  .topbar{padding:0 12px;gap:6px}
+  .page-title{font-size:14px}
+  .search-wrap{width:110px;padding:7px 10px}
+  .act-btns{gap:2px;flex-wrap:nowrap}
+  .abt{width:26px;height:26px;font-size:11px}
+  .content{padding:10px;gap:10px}
+  .card-header{padding:12px 14px}
+  .card-title{font-size:14px}
+  td{padding:10px 10px;font-size:12px}
+  th{padding:10px 10px;font-size:10px}
+  .nb{display:none}
+  .sb-brand img{height:30px}
+  .chart-row{grid-template-columns:1fr!important}
+  #ti-grid{grid-template-columns:repeat(2,1fr)!important}
+  .cd-grid{grid-template-columns:1fr!important}
+}
+
+/* RESPONSIVE 400px */
+@media(max-width:400px){
+  .stats-6{grid-template-columns:repeat(2,1fr)!important}
+  .bottom-nav{padding:0 4px}
+  .bn-item{font-size:10px;padding:4px 6px}
+  .bn-ico{font-size:19px}
+  .content{padding:8px;gap:8px}
+  #ti-grid{grid-template-columns:1fr!important}
+}
+
+/* iOS safe area */
+@supports(padding:max(0px)){
+  .topbar{padding-top:max(0px,env(safe-area-inset-top))}
+  .bottom-nav{padding-bottom:max(8px,env(safe-area-inset-bottom))}
+}
+
+/* MOBILE CARD VIEW — tabla como tarjetas en movil */
+@media(max-width:700px){
+  .tbl-wrap{overflow-x:visible}
+  table,thead,tbody,th,td,tr{display:block}
+  thead tr{position:absolute;top:-9999px;left:-9999px}
+  tr{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;padding:12px 14px;position:relative}
+  tr:hover td{background:transparent}
+  tr.outside-booking{border-left:4px solid var(--red)}
+  tr.cancelled{border-left:4px solid var(--purple);opacity:.8}
+  td{border:none;padding:4px 0;font-size:13px;display:flex;align-items:center;gap:8px;min-height:28px}
+  td:before{content:attr(data-label);font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;min-width:90px;flex-shrink:0}
+  td:last-child{padding-top:10px;border-top:1px solid var(--border);margin-top:6px;justify-content:flex-start;flex-wrap:wrap}
+  td:last-child:before{display:none}
+  .act-btns{flex-wrap:wrap;gap:6px}
+  .abt{width:34px;height:34px;font-size:14px}
+  /* Log table stays horizontal */
+  .log-table,
+  .log-table thead,
+  .log-table tbody,
+  .log-table th,
+  .log-table td,
+  .log-table tr{display:table;display:revert}
+  .log-table{display:table;width:100%}
+}
+@media(max-width:480px){.stats-6{grid-template-columns:repeat(2,1fr);gap:8px}.content{padding:14px;gap:14px}#login-page{flex-direction:column}.login-left{display:none}}
+/* SECURITY - prevent copy of sensitive data */
+.no-copy{-webkit-user-select:none;-moz-user-select:none;user-select:none}
+td{-webkit-user-select:text;user-select:text}
+.code-tag,.badge{cursor:default}
+/* Gestor restricted view */
+.admin-only{display:block}
+.gestor-hidden{display:none}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-page">
+  <div class="login-left">
+    <div class="ll-logo">
+      <img src="citasflash_logo_hd_pngd.png" alt="CitasFlash" onerror="this.style.display='none';document.getElementById('ll-txt').style.display='block'">
+      <div id="ll-txt" class="ll-logo-text">Citas<span>Flash</span></div>
+    </div>
+    <div class="ll-headline">Agenda más rápido.<br><span>Consigue tu cita</span> primero.</div>
+    <div class="ll-sub">Panel profesional para agendamiento de citas de visa USA.</div>
+    <div class="ll-flags">
+      <div class="flag-pill">🇺🇸 Embajada USA</div>
+      <div class="flag-pill">⚡ Tiempo real</div>
+      <div class="flag-pill">🔒 Seguro SSL</div>
+    </div>
+  </div>
+  <div class="login-card">
+    <div class="lc-title">Bienvenido</div>
+    <div class="lc-sub">Ingresa tus credenciales para acceder</div>
+    <div class="forgot-box" id="forgot-box">
+      <strong>Recuperar contraseña</strong>
+      <div style="margin-top:10px">
+        <input class="lf-input" id="forgot-email" placeholder="tu@correo.com" style="padding:10px 13px;margin-bottom:8px">
+        <button class="btn blue" style="width:100%;font-size:14px" onclick="sendForgot()">Enviar nueva contraseña</button>
+      </div>
+    </div>
+    <div class="lf-group">
+      <label class="lf-label">Correo electrónico</label>
+      <div class="lf-wrap"><span class="ico">✉</span><input class="lf-input" type="email" id="l-email" placeholder="admin@citaflash.com" autocomplete="email"></div>
+    </div>
+    <div class="lf-group">
+      <label class="lf-label">Contraseña</label>
+      <div class="lf-wrap"><span class="ico">🔒</span><input class="lf-input" type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"></div>
+    </div>
+    <button class="lf-btn ripple" onclick="doLogin()">Ingresar al panel</button>
+    <div id="login-error"></div>
+    <div id="biometric-btn" style="display:none;text-align:center;margin-top:12px">
+      <button onclick="loginBiometric()" style="background:none;border:1.5px solid var(--blue);color:var(--blue);padding:10px 24px;border-radius:10px;font-size:14px;font-family:Poppins,sans-serif;cursor:pointer;font-weight:600">
+        🔐 Face ID / Huella digital
+      </button>
+    </div>
+    <div class="lf-forgot"><a onclick="document.getElementById('forgot-box').classList.toggle('show')">¿Olvidaste tu contraseña?</a></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="layout">
+    <div class="sb-overlay" id="sb-overlay" onclick="closeSB()"></div>
+    <div class="sidebar" id="sidebar">
+      <div class="sb-brand">
+        <img src="citasflash_logo_hd_pngd.png" alt="CitasFlash" onerror="this.style.display='none';document.getElementById('sb-txt').style.display='block'">
+        <div id="sb-txt" class="sb-brand-text">CitasFlash</div>
+        <button class="sb-close" onclick="closeSB()">✕</button>
+      </div>
+      <div class="nav-sec">
+        <div class="nav-lbl">Principal</div>
+        <div class="ni on" onclick="goPage('dashboard',this)"><span class="ico">▦</span>Dashboard</div>
+        <div class="ni" onclick="goPage('todos',this)"><span class="ico">◎</span>Todos<span class="nb" id="nb-total">0</span></div>
+        <div class="ni" onclick="goPage('clientes',this)"><span class="ico">👥</span>Clientes</div>
+        <div class="ni" onclick="goPage('agendados',this)"><span class="ico">✓</span>Agendados<span class="nb g" id="nb-ok">0</span></div>
+        <div class="ni" onclick="goPage('proceso',this)"><span class="ico">↻</span>En proceso<span class="nb w" id="nb-proc">0</span></div>
+        <div class="ni" onclick="goPage('pausados',this)"><span class="ico">⏸</span>Pausados<span class="nb b" id="nb-pause">0</span></div>
+        <div class="ni" onclick="goPage('cancelados',this)"><span class="ico">✗</span>Cancelados<span class="nb p" id="nb-cancel">0</span></div>
+      </div>
+      <div class="nav-sec">
+        <div class="nav-lbl">Sistema</div>
+        <div class="ni" onclick="goPage('consola',this)"><span class="ico">⚡</span>Consola</div>
+        <div class="ni admin-only" onclick="goPage('usuarios',this)"><span class="ico">◈</span>Usuarios</div>
+        <div class="ni admin-only" onclick="goPage('gestores',this)"><span class="ico">👥</span>Gestores</div>
+        <div class="ni admin-only" onclick="goPage('ti',this)"><span class="ico">🖥</span>Panel TI</div>
+        <div class="ni" onclick="goPage('reportes',this)"><span class="ico">▤</span>Reportes</div>
+      </div>
+      <div class="sb-footer">
+        <div class="user-row">
+          <div class="avatar" id="user-av">AD</div>
+          <div style="flex:1;min-width:0"><div class="user-name" id="user-name">Admin</div><div class="user-role" id="user-role">Administrador</div></div>
+          <button class="btn sm ghost" onclick="logout()">↩</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="topbar">
+        <button class="menu-btn" onclick="openSB()">☰</button>
+        <div class="page-title" id="page-title">Dashboard</div>
+        <div class="topbar-right">
+          <div class="search-wrap" id="srch-wrap">
+            <span class="s-ico" style="color:var(--muted);font-size:15px">⌕</span>
+            <div class="spin-ico"></div>
+            <input type="text" placeholder="Buscar..." id="srch-input" oninput="handleSearch(this)">
+          </div>
+          <button onclick="toggleDark()" id="dark-btn" style="background:none;border:none;cursor:pointer;padding:8px;border-radius:9px;font-size:18px;color:var(--muted)" title="Modo oscuro">🌙</button>
+          <button class="bell-btn" id="bell-btn" onclick="toggleNotifs()">
+            🔔<div class="bell-dot" id="bell-dot"></div>
+          </button>
+          <div class="notif-panel" id="notif-panel">
+            <div class="notif-head">Notificaciones <span id="notif-count" style="background:var(--red);color:#fff;font-size:11px;padding:2px 7px;border-radius:8px">0</span></div>
+            <div id="notif-list"><div style="padding:16px;text-align:center;color:var(--muted);font-size:13px">Sin notificaciones</div></div>
+          </div>
+          <button class="btn ghost-blue" onclick="openModal('import-modal')" style="white-space:nowrap">📥 Importar CSV</button>
+          <button class="add-btn ripple" onclick="openModal('add-modal')">⚡ + Ingresar solicitante</button>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <!-- DASHBOARD -->
+        <div id="page-dashboard">
+          <!-- GESTOR INFO BAR - solo para gestores -->
+          <div id="gestor-bar" style="display:none;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe;border-radius:12px;padding:14px 18px;margin-bottom:14px;align-items:center;gap:12px">
+            <div style="font-size:24px">👤</div>
+            <div>
+              <div style="font-weight:700;color:var(--blue)" id="gestor-nombre">Gestor</div>
+              <div style="font-size:13px;color:var(--muted)">Mis clientes: <strong id="gestor-count">0</strong> / 25 · Solo puedes ver y gestionar tus clientes asignados</div>
+            </div>
+          </div>
+          <div class="stats-6">
+            <div class="stat blue-s" onclick="goPage('todos',document.querySelector('.ni:nth-child(2)'))"><div class="stat-icon">◎</div><div class="stat-val" id="st-total">0</div><div class="stat-lbl">Total</div></div>
+            <div class="stat green" onclick="goPage('agendados',document.querySelector('.ni:nth-child(3)'))"><div class="stat-icon">✓</div><div class="stat-val" id="st-ok">0</div><div class="stat-lbl">Agendados</div><div class="prog"><div class="prog-fill" id="pf-ok" style="background:var(--success);width:0%"></div></div></div>
+            <div class="stat amber" onclick="goPage('proceso',document.querySelector('.ni:nth-child(4)'))"><div class="stat-icon">↻</div><div class="stat-val" id="st-proc">0</div><div class="stat-lbl">En proceso</div><div class="prog"><div class="prog-fill" id="pf-proc" style="background:var(--warn);width:0%"></div></div></div>
+            <div class="stat red" onclick="goPage('pausados',document.querySelector('.ni:nth-child(5)'))"><div class="stat-icon">⏸</div><div class="stat-val" id="st-pause">0</div><div class="stat-lbl">Pausados</div></div>
+            <div class="stat cyan"><div class="stat-icon">✈</div><div class="stat-val" id="st-approved">0</div><div class="stat-lbl">Visa aprobada</div></div>
+            <div class="stat purple"><div class="stat-icon">✗</div><div class="stat-val" id="st-rejected">0</div><div class="stat-lbl">Visa rechazada</div></div>
+          </div>
+
+          <!-- CLIENT DETAIL CARD -->
+          <div class="client-detail" id="client-detail">
+            <div class="cd-header">
+              <div class="cd-avatar" id="cd-av">CF</div>
+              <div style="flex:1">
+                <div style="font-size:17px;font-weight:700" id="cd-nombre">—</div>
+                <div style="font-size:13px;color:var(--muted)" id="cd-email">—</div>
+                <div style="margin-top:6px" id="cd-badge"></div>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button class="btn sm ghost-blue" onclick="openCEAC(selectedClientId)" title="Verificar estado visa en CEAC">🔍 CEAC</button>
+                <button class="btn sm ghost" onclick="document.getElementById('client-detail').classList.remove('show')">✕ Cerrar</button>
+              </div>
+            </div>
+            <div class="cd-grid" id="cd-grid"></div>
+          </div>
+
+          <div class="chart-row">
+            <div class="chart-card">
+              <div class="chart-title">Actividad reciente</div>
+              <div id="recent-list" style="display:flex;flex-direction:column;gap:8px"></div>
+            </div>
+            <div class="pie-card">
+              <div class="chart-title" style="align-self:flex-start">Progreso</div>
+              <svg width="120" height="120" viewBox="0 0 36 36">
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="#f0f0f0" stroke-width="3.5"/>
+                <circle id="pie-ok" cx="18" cy="18" r="15.9" fill="none" stroke="#16a34a" stroke-width="3.5" stroke-dasharray="0 100" stroke-dashoffset="25" stroke-linecap="round"/>
+                <circle id="pie-proc" cx="18" cy="18" r="15.9" fill="none" stroke="#d97706" stroke-width="3.5" stroke-dasharray="0 100" stroke-dashoffset="25" stroke-linecap="round"/>
+                <circle id="pie-pause" cx="18" cy="18" r="15.9" fill="none" stroke="#E50914" stroke-width="3.5" stroke-dasharray="0 100" stroke-dashoffset="25" stroke-linecap="round"/>
+                <text id="pie-pct" x="18" y="20" text-anchor="middle" font-size="6" font-weight="700" fill="#2E2E2E">0%</text>
+              </svg>
+              <div class="pie-legend">
+                <div class="pie-item"><div class="pie-dot" style="background:#16a34a"></div><span id="leg-ok">Agendados 0%</span></div>
+                <div class="pie-item"><div class="pie-dot" style="background:#d97706"></div><span id="leg-proc">En proceso 0%</span></div>
+                <div class="pie-item"><div class="pie-dot" style="background:#E50914"></div><span id="leg-pause">Pausados 0%</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Clientes</div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <button class="btn sm ghost-blue ripple" onclick="syncAllAccounts()" title="Sincronizar todos con AIS">↻ Sync masivo</button>
+                <div class="tabs">
+                <div class="tab on" onclick="filterTab('todos',this)">Todos</div>
+                <div class="tab" onclick="filterTab('proceso',this)">En proceso</div>
+                <div class="tab" onclick="filterTab('agendado',this)">Agendados</div>
+                <div class="tab" onclick="filterTab('pausado',this)">Pausados</div>
+                <div class="tab" onclick="filterTab('cancelado',this)">Cancelados</div>
+                </div>
+              </div>
+            </div>
+            <div class="tbl-wrap"><table>
+              <thead><tr><th>Código</th><th>Cliente</th><th>Tipo visa</th><th>Fecha a buscar</th><th>ASC</th><th>Estado</th><th>Última cita AIS</th><th>Acciones</th></tr></thead>
+              <tbody id="main-tbody"></tbody>
+            </table></div>
+          </div>
+        </div>
+
+        <!-- CLIENTES FILTRADOS -->
+        <div id="page-clientes" style="display:none">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title" id="clientes-title">Clientes</div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                <div id="sec-btn-wrap" style="display:none">
+                  <button class="btn warn sm ripple" onclick="openModal('seconds-modal')">⏱ Cambiar segundos</button>
+                </div>
+                <button class="btn sm ghost-blue ripple" onclick="syncAllAccounts()">↻ Sync masivo</button>
+              </div>
+            </div>
+            <div class="tbl-wrap"><table>
+              <thead><tr><th>Código</th><th>Cliente</th><th>Tipo visa</th><th>Fecha a buscar</th><th>ASC</th><th>Estado</th><th>Última cita AIS</th><th>Acciones</th></tr></thead>
+              <tbody id="clientes-tbody"></tbody>
+            </table></div>
+          </div>
+        </div>
+
+        <!-- CLIENTES FULL -->
+        <div id="page-clientes-full" style="display:none">
+          <div class="stats-6" style="margin-bottom:16px">
+            <div class="stat blue-s"><div class="stat-icon">◎</div><div class="stat-val" id="cf-total">0</div><div class="stat-lbl">Total</div></div>
+            <div class="stat green"><div class="stat-icon">✓</div><div class="stat-val" id="cf-ok">0</div><div class="stat-lbl">Agendados</div></div>
+            <div class="stat amber"><div class="stat-icon">↻</div><div class="stat-val" id="cf-proc">0</div><div class="stat-lbl">En proceso</div></div>
+            <div class="stat red"><div class="stat-icon">⏸</div><div class="stat-val" id="cf-pause">0</div><div class="stat-lbl">Pausados</div></div>
+            <div class="stat cyan"><div class="stat-icon">✈</div><div class="stat-val" id="cf-approved">0</div><div class="stat-lbl">Visa aprobada</div></div>
+            <div class="stat purple"><div class="stat-icon">✗</div><div class="stat-val" id="cf-cancelled">0</div><div class="stat-lbl">Cancelados</div></div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Todos los clientes</div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                <div class="search-wrap" style="width:180px">
+                  <span style="color:var(--muted);font-size:14px">⌕</span>
+                  <input type="text" id="cf-search" placeholder="Buscar..." oninput="renderClientesFull()" style="font-size:13px">
+                </div>
+                <select id="cf-filter" onchange="renderClientesFull()" style="padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:'Poppins',sans-serif;outline:none;color:var(--text)">
+                  <option value="todos">Todos los estados</option>
+                  <option value="agendado">Agendados</option>
+                  <option value="proceso">En proceso</option>
+                  <option value="pausado">Pausados</option>
+                  <option value="cancelado">Cancelados</option>
+                </select>
+                <button class="btn sm ghost-blue ripple" onclick="syncAllAccounts()">↻ Sync masivo</button>
+                <button class="btn blue sm ripple" onclick="openModal('add-modal')">+ Agregar</button>
+              </div>
+            </div>
+            <div class="tbl-wrap">
+              <table>
+                <thead><tr>
+                  <th>Código</th>
+                  <th>Nombre</th>
+                  <th>Email AIS</th>
+                  <th>Pasaporte</th>
+                  <th>DS-160</th>
+                  <th>Visa</th>
+                  <th>Cita consular</th>
+                  <th>Cita ASC</th>
+                  <th>Fecha buscar</th>
+                  <th>Estado</th>
+                  <th>Asesor</th>
+                  <th>Tarifa</th>
+                  <th>Acciones</th>
+                </tr></thead>
+                <tbody id="clientes-full-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- GESTORES -->
+        <div id="page-gestores" style="display:none">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Resumen por gestor</div>
+              <button class="btn sm ripple" onclick="loadGestores()">Actualizar</button>
+            </div>
+            <div class="tbl-wrap"><table>
+              <thead><tr><th>Gestor</th><th>Email</th><th>Rol</th><th>Estado</th><th>Clientes</th><th>Agendados</th><th>Balance</th><th>Limite</th><th>Acciones</th></tr></thead>
+              <tbody id="gestores-tbody"></tbody>
+            </table></div>
+          </div>
+        </div>
+
+        <!-- PANEL TI -->
+        <div id="page-ti" style="display:none">
+          <div style="margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:13px;color:var(--muted)">Ultima actualizacion: <span id="ti-last">cargando...</span></div>
+            <button class="btn sm ripple" onclick="loadTI()">Actualizar</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px" id="ti-grid">
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;color:var(--muted)">Cargando...</div>
+          </div>
+        </div>
+
+        <!-- CONSOLA -->
+        <div id="page-consola" style="display:none">
+          <div class="cons-grid">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">⚡ Control de procesos</div>
+                <div class="status-pill"><div class="sdot" id="sdot"></div><span id="stext">Verificando...</span></div>
+              </div>
+              <div style="padding:16px">
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+                  <button class="btn green ripple" onclick="botCmd('start')">▶ Iniciar</button>
+                  <button class="btn red ripple" onclick="botCmd('stop')">■ Detener</button>
+                  <button class="btn warn ripple" onclick="botCmd('restart')">↺ Reiniciar</button>
+                  <button class="btn ripple" onclick="loadLogs()">↻ Logs</button>
+                </div>
+                <div style="font-size:12px;color:var(--muted)">VPS: vps.citaflash.com · Servicio: citafast</div>
+              </div>
+              <!-- LOG: 3 cols: Fecha | Cuenta (email) | Mensaje -->
+              <div class="log-table-wrap">
+                <table class="log-table">
+                  <thead><tr>
+                    <th style="width:80px">Fecha</th>
+                    <th style="width:160px">Cuenta</th>
+                    <th>Mensaje</th>
+                  </tr></thead>
+                  <tbody id="log-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">📊 Resumen</div></div>
+              <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;justify-content:space-between;padding:11px 13px;background:var(--bg);border-radius:9px"><span style="color:var(--muted);font-size:14px">Activas</span><span style="font-weight:700" id="cons-active">0</span></div>
+                <div style="display:flex;justify-content:space-between;padding:11px 13px;background:var(--bg);border-radius:9px"><span style="color:var(--muted);font-size:14px">Agendadas</span><span style="font-weight:700;color:var(--success)" id="cons-total">0</span></div>
+                <div style="display:flex;justify-content:space-between;padding:11px 13px;background:var(--bg);border-radius:9px"><span style="color:var(--muted);font-size:14px">Con error</span><span style="font-weight:700;color:var(--red)" id="cons-err">0</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- USUARIOS -->
+        <div id="page-usuarios" style="display:none">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Usuarios del panel</div>
+              <button class="btn blue sm ripple" onclick="openModal('user-modal')">+ Nuevo usuario</button>
+            </div>
+            <div class="tbl-wrap"><table>
+              <thead><tr><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Rol</th><th>Estado</th><th>Demo</th><th>Último acceso</th><th>Acciones</th></tr></thead>
+              <tbody id="users-tbody"></tbody>
+            </table></div>
+          </div>
+        </div>
+
+        <!-- REPORTES -->
+        <div id="page-reportes" style="display:none">
+          <div class="stats-6" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px">
+            <div class="stat blue-s"><div class="stat-icon">▤</div><div class="stat-val" id="rep-total">0</div><div class="stat-lbl">Total agendadas</div></div>
+            <div class="stat green"><div class="stat-icon">✓</div><div class="stat-val" id="rep-week">0</div><div class="stat-lbl">Esta semana</div></div>
+            <div class="stat amber"><div class="stat-icon">⏱</div><div class="stat-val">~5s</div><div class="stat-lbl">Tiempo promedio</div></div>
+            <div class="stat red"><div class="stat-icon">⚠</div><div class="stat-val" id="rep-err">0</div><div class="stat-lbl">Con error</div></div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Historial de citas agendadas</div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                <!-- FILTROS REPORTES -->
+                <div class="search-wrap" style="width:160px">
+                  <span style="color:var(--muted);font-size:14px">⌕</span>
+                  <input type="text" id="rep-search" placeholder="Email..." oninput="renderReports()" style="font-size:13px">
+                </div>
+                <input type="text" id="rep-codigo" placeholder="Código CF-" oninput="renderReports()" style="padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:'Poppins',sans-serif;outline:none;width:110px;color:var(--text)">
+                <input type="text" id="rep-nombre" placeholder="Nombre" oninput="renderReports()" style="padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:'Poppins',sans-serif;outline:none;width:120px;color:var(--text)">
+                <input type="text" id="rep-pasaporte" placeholder="Pasaporte" oninput="renderReports()" style="padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:'Poppins',sans-serif;outline:none;width:120px;color:var(--text)">
+                <button class="btn sm ripple" onclick="exportCSV()">⬇ CSV</button>
+              </div>
+            </div>
+            <div class="tbl-wrap"><table>
+              <thead><tr><th>Código</th><th>Email</th><th>Nombre</th><th>Pasaporte</th><th>DS-160</th><th>Fecha cita</th><th>País</th><th>Estado visa</th></tr></thead>
+              <tbody id="rep-tbody"></tbody>
+            </table></div>
+            <div style="padding:12px 18px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)">Total: <strong id="rep-count">0</strong></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-nav">
+        <div class="bn-item on" onclick="goPage('dashboard',this);setBN(this)"><span class="bn-ico">▦</span><span>Inicio</span></div>
+        <div class="bn-item" onclick="goPage('todos',this);setBN(this)"><span class="bn-ico">◎</span><span>Clientes</span><span class="bn-badge" id="bn-b">0</span></div>
+        <div class="bn-item" onclick="openModal('add-modal')"><span class="bn-ico" style="color:var(--blue);font-size:28px">⊕</span><span>Agregar</span></div>
+        <div class="bn-item" onclick="goPage('consola',this);setBN(this)"><span class="bn-ico">⚡</span><span>Consola</span></div>
+        <div class="bn-item" onclick="goPage('reportes',this);setBN(this)"><span class="bn-ico">▤</span><span>Reportes</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL AGREGAR — Config mínimo -->
+<div class="modal-overlay" id="add-modal">
+  <div class="modal">
+    <div class="modal-head"><h3>⚡ Ingresar solicitante</h3><button class="modal-close" onclick="closeModal('add-modal')">✕</button></div>
+    <div class="modal-body">
+      <div class="validate-card">
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px">🔐 Validar credenciales AIS</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Valida para autodetectar Schedule ID y tipo de visa</div>
+        <div class="form-row" style="margin-bottom:10px">
+          <div class="ff" style="margin-bottom:0"><label>Email AIS</label><input type="email" id="v-email" placeholder="usuario@email.com" autocomplete="off"></div>
+          <div class="ff" style="margin-bottom:0"><label>Contraseña AIS</label><input type="password" id="v-pass" placeholder="••••••••" autocomplete="new-password"></div>
+        </div>
+        <button class="btn blue ripple" id="v-btn" onclick="validateAIS()" style="width:100%;font-size:13px;margin-top:8px">⚡ Validar y obtener datos</button>
+        <div class="v-result" id="v-result"></div>
+      </div>
+      <div class="form-row">
+        <div class="ff"><label>Schedule ID *</label><input type="text" id="f-schedule" placeholder="Auto-detectado o manual"></div>
+        <div class="ff"><label>Tipo de visa</label><input type="text" id="f-visa" value="B1/B2"></div>
+      </div>
+      <div class="form-row">
+        <div class="ff"><label>Número IVR</label><input type="text" id="f-ivr" placeholder="Ej: 77479679"></div>
+        <div class="ff"></div>
+      </div>
+      <div class="form-row">
+        <div class="ff"><label>Fecha mínima *</label><input type="date" id="f-min"></div>
+        <div class="ff"><label>Fecha máxima</label><input type="date" id="f-max"></div>
+      </div>
+      <div class="form-row">
+        <div class="ff"><label>Segundos inicio (0-59)</label><input type="number" id="f-second" value="0" min="0" max="59" step="1"></div>
+        <div class="ff"><label>Proxy (opcional)</label><input type="text" id="f-proxies" placeholder="user:pass@host:port"></div>
+      </div>
+      <div class="toggle-row"><span>¿Requiere huella ASC/CAS?</span><button class="tog" id="f-asc" onclick="this.classList.toggle('on')"></button></div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:10px">¿Cómo agregar esta cuenta?</div>
+      <div class="mode-btns">
+        <div class="mode-btn" id="mode-pause" onclick="selectMode('pause')">⏸ Pausar<br><span style="font-size:11px;font-weight:400">Sin ejecutar aún</span></div>
+        <div class="mode-btn sel-run" id="mode-run" onclick="selectMode('run')">▶ Correr ya<br><span style="font-size:11px;font-weight:400">Empieza a buscar</span></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeModal('add-modal')">Cancelar</button>
+      <button class="btn blue ripple" onclick="saveSolicitante()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL USUARIO -->
+<div class="modal-overlay" id="user-modal">
+  <div class="modal">
+    <div class="modal-head"><h3>Crear usuario</h3><button class="modal-close" onclick="closeModal('user-modal')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="ff"><label>Nombre completo *</label><input type="text" id="u-nombre" placeholder="Juan Pérez"></div>
+        <div class="ff"><label>Correo electrónico *</label><input type="email" id="u-email" placeholder="juan@email.com"></div>
+      </div>
+      <div class="form-row">
+        <div class="ff"><label>Teléfono / WhatsApp</label><input type="tel" id="u-phone" placeholder="+1 809 000 0000"></div>
+        <div class="ff"><label>Rol</label>
+          <select id="u-rol">
+            <option value="gestor">Gestor — agregar y gestionar clientes</option>
+            <option value="administrador">Administrador — acceso completo</option>
+          </select>
+        </div>
+      </div>
+      <div class="toggle-row"><span>¿Cuenta demo? (5 días de acceso)</span><button class="tog" id="u-demo" onclick="this.classList.toggle('on')"></button></div>
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:9px;padding:12px;font-size:13px;color:#92400e">
+        ⚠️ Se enviará email automático al correo ingresado con la clave provisional y enlace de activación.
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeModal('user-modal')">Cancelar</button>
+      <button class="btn blue ripple" onclick="createUser()">Crear y enviar email</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-head"><h3>Editar solicitante</h3><button class="modal-close" onclick="closeModal('edit-modal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="e-id">
+      <div class="form-row">
+        <div class="ff"><label>Email AIS</label><input type="email" id="e-email"></div>
+        <div class="ff"><label>Schedule ID</label><input type="text" id="e-schedule"></div>
+      </div>
+      <div class="form-row">
+        <div class="ff"><label>Fecha mínima</label><input type="date" id="e-min"></div>
+        <div class="ff"><label>Fecha máxima</label><input type="date" id="e-max"></div>
+      </div>
+      <div class="form-row">
+        <div class="ff"><label>Tipo de visa</label><input type="text" id="e-visa"></div>
+        <div class="ff"><label>Segundos (0-59)</label><input type="number" id="e-second" min="0" max="59" step="1"></div>
+      </div>
+      <div class="form-row">
+        <div class="ff"><label>Número IVR</label><input type="text" id="e-ivr" placeholder="Ej: 77479679"></div>
+        <div class="ff"></div>
+      </div>
+      <div class="form-row">
+        <div class="ff"><label>Estado visa</label>
+          <select id="e-visa-status">
+            <option value="">Sin datos</option>
+            <option value="aprobada">Aprobada</option>
+            <option value="rechazada">Rechazada</option>
+            <option value="pendiente">Pendiente</option>
+          </select>
+        </div>
+        <div class="ff"><label>Proxy</label><input type="text" id="e-proxies" placeholder="user:pass@host:port"></div>
+      </div>
+      <div class="toggle-row"><span>¿Requiere huella ASC/CAS?</span><button class="tog" id="e-asc" onclick="this.classList.toggle('on')"></button></div>
+      <div class="form-row">
+        <div class="ff"><label>Tarifa ($)</label><input type="number" id="e-tarifa" placeholder="50" min="0"></div>
+        <div class="ff"><label>Asesor</label><input type="text" id="e-asesor" placeholder="Nombre del asesor"></div>
+      </div>
+      <div class="ff"><label>Contacto asesor</label><input type="text" id="e-contacto" placeholder="WhatsApp o email del asesor"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeModal('edit-modal')">Cancelar</button>
+      <button class="btn blue ripple" onclick="saveEdit()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SEGUNDOS MASIVO -->
+<div class="modal-overlay" id="seconds-modal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head"><h3>⏱ Cambiar segundos — En proceso</h3><button class="modal-close" onclick="closeModal('seconds-modal')">✕</button></div>
+    <div class="modal-body">
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:9px;padding:12px;font-size:13px;color:#92400e;margin-bottom:16px">
+        Solo aplica a cuentas <strong>en proceso</strong>. Distribuye el segundo de arranque para evitar saturación.
+      </div>
+      <div class="ff">
+        <label>Modo de distribución</label>
+        <select id="sec-mode" onchange="onSecModeChange()">
+          <option value="auto">Automático — distribuir equitativamente</option>
+          <option value="random">Aleatorio — segundo random por cuenta</option>
+          <option value="manual">Manual — mismo segundo para todas</option>
+        </select>
+      </div>
+      <div class="ff" id="sec-manual-wrap" style="display:none">
+        <label>Segundo específico (0-59)</label>
+        <input type="number" id="sec-value" min="0" max="59" step="1" placeholder="Ej: 30" oninput="updateSecPreview()">
+      </div>
+      <div id="sec-preview" style="background:var(--bg);border-radius:8px;padding:12px;font-size:13px;color:var(--muted);white-space:pre-line;min-height:48px"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeModal('seconds-modal')">Cancelar</button>
+      <button class="btn warn ripple" onclick="applySeconds()">Aplicar a cuentas en proceso</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL IMPORTAR CSV -->
+<div class="modal-overlay" id="import-modal">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-head"><h3>📥 Importar clientes desde CSV</h3><button class="modal-close" onclick="closeModal('import-modal')">✕</button></div>
+    <div class="modal-body">
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;padding:12px;font-size:13px;color:var(--blue);margin-bottom:14px">
+        <strong>Formato requerido:</strong> email, password, schedule_id, visa_type, min_date, max_date, need_asc, second, proxies<br>
+        <span style="font-size:12px">Las fechas deben ser YYYY-MM-DD. need_asc: true/false. proxies es opcional.</span>
+      </div>
+      <div class="ff">
+        <label>Selecciona el archivo CSV</label>
+        <input type="file" id="csv-file" accept=".csv" style="padding:8px;cursor:pointer">
+      </div>
+      <div id="csv-preview" style="display:none;background:var(--bg);border-radius:9px;padding:12px;font-size:13px;margin-top:8px"></div>
+      <div class="toggle-row" style="margin-top:14px">
+        <span>¿Correr cuentas al importar? <span style="font-size:11px;color:var(--muted)">(por defecto: pausado)</span></span>
+        <button class="tog" id="import-run" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div style="margin-top:4px;font-size:12px;color:var(--muted)">
+        <a href="#" onclick="downloadTemplate()" style="color:var(--blue)">⬇ Descargar plantilla CSV</a>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeModal('import-modal')">Cancelar</button>
+      <button class="btn blue ripple" onclick="importCSV()">Importar cuentas</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="change-pass-modal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head"><h3>Cambia tu contrasena</h3></div>
+    <div class="modal-body">
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:9px;padding:12px;font-size:13px;color:#92400e;margin-bottom:16px">
+        Por seguridad debes cambiar tu contrasena. La actual es <strong>12345678</strong>.
+      </div>
+      <div class="ff"><label>Nueva contrasena (min. 8)</label><input type="password" id="cp-new" placeholder="Nueva contrasena"></div>
+      <div class="ff"><label>Confirmar</label><input type="password" id="cp-confirm" placeholder="Repite la contrasena"></div>
+      <div id="cp-msg" style="font-size:13px;color:var(--red);min-height:18px"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn blue ripple" onclick="changePassword()">Cambiar contrasena</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="edit-user-modal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head"><h3>Editar usuario</h3><button class="modal-close" onclick="closeModal('edit-user-modal')">X</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="eu-id">
+      <div class="form-row">
+        <div class="ff"><label>Nombre</label><input type="text" id="eu-nombre"></div>
+        <div class="ff"><label>Email</label><input type="email" id="eu-email"></div>
+      </div>
+      <div class="form-row">
+        <div class="ff"><label>Telefono</label><input type="tel" id="eu-phone"></div>
+        <div class="ff"><label>Max. solicitantes</label><input type="number" id="eu-max" min="1" max="100" value="25"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeModal('edit-user-modal')">Cancelar</button>
+      <button class="btn blue ripple" onclick="saveEditUser()">Guardar</button>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+// ── ONESIGNAL ──
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+OneSignalDeferred.push(async function(OneSignal) {
+  await OneSignal.init({
+    appId: "0d99d09c-7cf5-4e39-90c9-5ba6e1054432",
+    safari_web_id: "web.onesignal.auto.01b883ce-5cfa-4aca-8569-bf08de600615",
+    notifyButton: { enable: false },
+    allowLocalhostAsSecureOrigin: true,
+  });
+});
+
+// ── CONFIG ──
+const API = 'https://vps.citaflash.com';
+
+// ── STATE ──
+let SESSION = null;
+let accounts = [];
+let users = [];
+let filterCurrent = 'todos';
+let searchVal = '';
+let addMode = 'run';
+let refreshTimer = null;
+let logTimer = null;
+let proxyCheckTimer = null;
+let notifications = [];
+let selectedClientId = null;
+
+// ── AUTH ──
+async function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pass  = document.getElementById('l-pass').value;
+  if (!email || !pass) { toast('Ingresa email y contraseña', 'err'); return; }
+  const btn = document.querySelector('.lf-btn');
+  btn.textContent = '⏳ Ingresando...';
+  try {
+    const r = await fetch(API + '/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+    if (!r.ok) throw new Error('auth_failed');
+    SESSION = await r.json();
+    localStorage.setItem('cf_s', JSON.stringify(SESSION));
+    showApp();
+  } catch {
+    document.getElementById('login-error').textContent = 'Credenciales incorrectas';
+    btn.textContent = 'Ingresar al panel';
+  }
+}
+
+document.getElementById('l-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+async function sendForgot() {
+  const email = document.getElementById('forgot-email').value.trim();
+  if (!email) { toast('Ingresa tu correo', 'err'); return; }
+  try { await fetch(API + '/auth/forgot', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) }); } catch {}
+  toast('Si el correo existe recibirás tu contraseña', 'info');
+  document.getElementById('forgot-box').classList.remove('show');
+}
+
+function logout() {
+  localStorage.removeItem('cf_s');
+  SESSION = null;
+  clearInterval(refreshTimer);
+  clearInterval(logTimer);
+  clearInterval(proxyCheckTimer);
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-page').style.display = 'flex';
+}
+
+async function showApp() {
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('user-name').textContent = SESSION.nombre;
+  document.getElementById('user-role').textContent = SESSION.rol === 'administrador' ? 'Administrador' : 'Gestor';
+  document.getElementById('user-av').textContent = SESSION.nombre.substring(0, 2).toUpperCase();
+  const isGestor = SESSION.rol !== 'administrador';
+  if (isGestor) {
+    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.ni').forEach(ni => {
+      const txt = ni.textContent.trim();
+      if (txt.includes('Consola') || txt.includes('Usuarios') || txt.includes('Reportes')) ni.style.display = 'none';
+    });
+    const gb = document.getElementById('gestor-bar');
+    if (gb) { gb.style.display = 'flex'; }
+    const gn = document.getElementById('gestor-nombre');
+    if (gn) gn.textContent = SESSION.nombre;
+  }
+  if(SESSION.must_change_password) openModal('change-pass-modal');
+  await loadAccounts();
+  refreshTimer = setInterval(loadAccounts, 5000);
+  proxyCheckTimer = setInterval(checkProxyHealth, 60000);
+}
+
+window.addEventListener('load', async () => {
+  const saved = localStorage.getItem('cf_s');
+  if (saved) {
+    try {
+      SESSION = JSON.parse(saved);
+      const r = await fetch(API + '/auth/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: SESSION.token })
+      });
+      if (r.ok) { showApp(); return; }
+    } catch {}
+    localStorage.removeItem('cf_s');
+  }
+});
+
+// ── API ──
+async function api(method, path, body = null) {
+  const opts = { method, headers: { 'Content-Type': 'application/json', 'x-api-key': 'CitaFast2026Bot2' } };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(API + path, opts);
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+
+// ── ACCOUNTS ──
+async function loadAccounts() {
+  try {
+    const prev = accounts.map(a => ({ id: a.id, status: a.status }));
+    const url = SESSION && SESSION.rol !== 'administrador' && SESSION.id
+      ? '/cuentas?usuario_id=' + SESSION.id
+      : '/cuentas';
+    accounts = await api('GET', url);
+    renderTable();
+    updateStats();
+    updatePie();
+    renderRecent();
+    checkOutsideBookings(prev);
+    if (selectedClientId) showClientDetail(selectedClientId);
+  } catch (e) { console.error('loadAccounts:', e); }
+}
+
+function checkOutsideBookings(prev) {
+  accounts.forEach(a => {
+    const old = prev.find(p => p.id === a.id);
+    if (!old) return;
+    if (a.status === 'Cita Agendada' && old.status !== 'Cita Agendada' && a.booked_outside) {
+      addNotification('⚠️ ' + a.email + ' tiene cita fuera de CitasFlash', 'outside');
+    }
+  });
+}
+
+function checkProxyHealth() {
+  accounts.filter(a => a.is_active && a.proxies && a.last_proxy_error).forEach(a => {
+    if (Date.now() - new Date(a.last_proxy_error).getTime() > 300000) {
+      addNotification('🔴 Proxy muerto: ' + a.email, 'proxy');
+    }
+  });
+}
+
+function addNotification(msg, type) {
+  notifications.unshift({ msg, type, time: new Date().toLocaleTimeString(), read: false });
+  const count = notifications.filter(n => !n.read).length;
+  document.getElementById('notif-count').textContent = count;
+  document.getElementById('bell-dot').classList.add('show');
+  document.getElementById('bell-btn').classList.add('ringing');
+  setTimeout(() => document.getElementById('bell-btn').classList.remove('ringing'), 500);
+  renderNotifs();
+  toast(msg, 'warn');
+}
+
+function renderNotifs() {
+  const list = document.getElementById('notif-list');
+  if (!notifications.length) { list.innerHTML = '<div style="padding:16px;text-align:center;color:var(--muted);font-size:13px">Sin notificaciones</div>'; return; }
+  list.innerHTML = notifications.slice(0, 10).map(n =>
+    `<div class="notif-item ${n.read ? '' : 'unread'}"><div class="nt">${n.msg}</div><div class="ns">${n.time}</div></div>`
+  ).join('');
+}
+
+function toggleNotifs() {
+  const p = document.getElementById('notif-panel');
+  p.classList.toggle('open');
+  if (p.classList.contains('open')) {
+    notifications.forEach(n => n.read = true);
+    document.getElementById('bell-dot').classList.remove('show');
+    document.getElementById('notif-count').textContent = '0';
+    renderNotifs();
+  }
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('#bell-btn') && !e.target.closest('#notif-panel')) {
+    document.getElementById('notif-panel').classList.remove('open');
+  }
+});
+
+function getEstado(a) {
+  if (a.status === 'Cancelado') return 'cancelado';
+  if (a.status === 'Cita Agendada') return 'agendado';
+  if (a.is_active) return 'proceso';
+  return 'pausado';
+}
+
+function updateStats() {
+  const total    = accounts.length;
+  const ok       = accounts.filter(a => a.status === 'Cita Agendada').length;
+  const proc     = accounts.filter(a => a.is_active && a.status === 'Activo').length;
+  const pause    = accounts.filter(a => !a.is_active && a.status !== 'Cita Agendada' && a.status !== 'Cancelado').length;
+  const cancelled= accounts.filter(a => a.status === 'Cancelado').length;
+  const err      = accounts.filter(a => a.status === 'Error').length;
+  const approved = accounts.filter(a => a.visa_status === 'aprobada').length;
+  const rejected = accounts.filter(a => a.visa_status === 'rechazada').length;
+  const s = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  s('st-total', total); s('st-ok', ok); s('st-proc', proc); s('st-pause', pause);
+  const gc = document.getElementById('gestor-count'); if (gc) gc.textContent = accounts.length;
+  s('st-approved', approved); s('st-rejected', rejected);
+  s('nb-total', total); s('nb-ok', ok); s('nb-proc', proc); s('nb-pause', pause); s('nb-cancel', cancelled);
+  s('bn-b', total); s('cons-active', proc); s('cons-total', ok); s('cons-err', err);
+  s('rep-total', ok); s('rep-week', ok); s('rep-err', err);
+  if (total > 0) {
+    const pf = (id, v) => { const e = document.getElementById(id); if (e) e.style.width = Math.round(v / total * 100) + '%'; };
+    pf('pf-ok', ok); pf('pf-proc', proc);
+  }
+}
+
+function updatePie() {
+  const total = accounts.length || 1;
+  const ok    = accounts.filter(a => a.status === 'Cita Agendada').length;
+  const proc  = accounts.filter(a => a.is_active && a.status === 'Activo').length;
+  const pause = accounts.filter(a => !a.is_active && a.status !== 'Cita Agendada').length;
+  const op = Math.round(ok / total * 100);
+  const pp = Math.round(proc / total * 100);
+  const pp2= Math.round(pause / total * 100);
+  const pie = (id, da, off) => {
+    const e = document.getElementById(id);
+    if (e) { e.setAttribute('stroke-dasharray', da + ' ' + (100 - da)); e.setAttribute('stroke-dashoffset', off); }
+  };
+  pie('pie-ok', op, 25);
+  pie('pie-proc', pp, 25 - op);
+  pie('pie-pause', pp2, 25 - op - pp);
+  const s = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+  s('pie-pct', op + '%');
+  s('leg-ok', 'Agendados ' + op + '%');
+  s('leg-proc', 'En proceso ' + pp + '%');
+  s('leg-pause', 'Pausados ' + pp2 + '%');
+}
+
+function renderRecent() {
+  const booked = accounts.filter(a => a.status === 'Cita Agendada').slice(-5).reverse();
+  const el = document.getElementById('recent-list');
+  if (!el) return;
+  if (!booked.length) { el.innerHTML = '<div style="color:var(--muted);font-size:14px;padding:8px 0">No hay citas agendadas aún</div>'; return; }
+  el.innerHTML = booked.map(a => `
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--bg);border-radius:9px;cursor:pointer;transition:background .15s"
+      onclick="showClientDetail(${a.id})"
+      onmouseover="this.style.background='#ecfdf5'" onmouseout="this.style.background='var(--bg)'">
+      <div style="width:36px;height:36px;border-radius:50%;background:#ecfdf5;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">✓</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.nombre || a.email.split('@')[0]}</div>
+        <div style="font-size:12px;color:var(--muted)">${a.email} · ${a.last_appointment_date || '—'}</div>
+      </div>
+      <span class="badge green">✓ Agendado</span>
+    </div>`).join('');
+}
+
+function showClientDetail(id) {
+  selectedClientId = id;
+  const a = accounts.find(x => x.id === id);
+  const cd = document.getElementById('client-detail');
+  if (!a || !cd) return;
+  cd.classList.add('show');
+  document.getElementById('cd-av').textContent = (a.nombre || a.email).substring(0, 2).toUpperCase();
+  document.getElementById('cd-nombre').textContent = a.nombre || 'Sin nombre';
+  document.getElementById('cd-email').textContent = a.email;
+  document.getElementById('cd-badge').innerHTML = getBadge(a);
+  document.getElementById('cd-grid').innerHTML = `
+    <div class="cd-field"><div class="cd-label">Código</div><div class="cd-value">${genCode(a.id)}</div></div>
+    <div class="cd-field"><div class="cd-label">Schedule ID</div><div class="cd-value">${a.schedule_id || '—'}</div></div>
+    <div class="cd-field"><div class="cd-label">IVR</div><div class="cd-value">${a.ivr_number || '—'}</div></div>
+    <div class="cd-field"><div class="cd-label">Nº Pasaporte</div><div class="cd-value">${a.passport_number || '—'}</div></div>
+    <div class="cd-field"><div class="cd-label">DS-160</div><div class="cd-value">${a.ds160_number || '—'}</div></div>
+    <div class="cd-field"><div class="cd-label">Tipo visa</div><div class="cd-value">${a.visa_type || 'B1/B2'}</div></div>
+    <div class="cd-field" style="grid-column:span 3"><div class="cd-label">🗓 Cita consular</div><div class="cd-value" style="color:var(--success);font-size:16px;font-weight:700">${a.last_appointment_date || 'Sin cita'}</div></div>
+    <div class="cd-field" style="grid-column:span 3"><div class="cd-label">🏢 Cita ASC/CAS</div><div class="cd-value" style="color:var(--blue);font-size:15px;font-weight:600">${a.asc_date || 'Sin cita ASC'}</div></div>
+    <div class="cd-field"><div class="cd-label">Fecha a buscar</div><div class="cd-value">${a.min_date || '—'} → ${a.max_date || '—'}</div></div>
+    <div class="cd-field"><div class="cd-label">ASC/CAS</div><div class="cd-value">${a.need_asc ? 'Sí' : 'No'}</div></div>
+    <div class="cd-field"><div class="cd-label">Estado visa</div><div class="cd-value">${a.visa_status ? '<span class="badge ' + (a.visa_status==='aprobada'?'green':a.visa_status==='rechazada'?'red':'amber') + '">' + a.visa_status + '</span>' : '—'}</div></div>
+    <div class="cd-field"><div class="cd-label">Tarifa</div><div class="cd-value" style="color:var(--success);font-weight:700">$${a.tarifa || 50}</div></div>
+    <div class="cd-field"><div class="cd-label">Asesor</div><div class="cd-value">${a.asesor || '—'}</div></div>
+    <div class="cd-field"><div class="cd-label">Contacto asesor</div><div class="cd-value">${a.contacto_asesor || '—'}</div></div>
+    <div class="cd-field"><div class="cd-label">👥 Solicitantes en perfil</div><div class="cd-value" style="font-size:18px;font-weight:700;color:var(--blue)">${a.solicitantes_count || '—'}</div></div>`;
+}
+
+function getBadge(a) {
+  if (a.status === 'Cancelado')        return '<span class="badge purple">✗ Cancelado</span>';
+  if (a.booked_outside)                return '<span class="badge outside">⚠ Fuera de sistema</span>';
+  if (a.status === 'Cita Agendada') {
+    if (a.visa_status === 'aprobada') return '<span class="badge green" style="animation:pulse-green 2s infinite">✅ Visa aprobada</span>';
+    if (a.visa_status === 'rechazada') return '<span class="badge" style="background:#fff7ed;color:#c2410c">📈 Rechazada</span>';
+    return '<span class="badge green">✓ Agendado</span>';
+  }
+  if (a.status === 'Error')            return '<span class="badge red">⚠ Error</span>';
+  if (a.is_active)                     return '<span class="badge amber">↻ En proceso</span><span style="font-size:10px;color:var(--muted);margin-left:4px">s:'+a.second+'</span>';
+  return '<span class="badge gray">⏸ Pausado</span>';
+}
+
+function genCode(id) { return 'CF-' + String(id).padStart(3, '0'); }
+
+function renderRow(a) {
+  const cancelled = a.status === 'Cancelado';
+  return `<tr class="${a.booked_outside ? 'outside-booking' : cancelled ? 'cancelled' : ''}"
+    onclick="showClientDetail(${a.id})" style="cursor:pointer">
+    <td data-label="Código"><span class="code-tag sensitive">${genCode(a.id)}</span></td>
+    <td data-label="Cliente">
+      <div style="font-weight:600">${a.nombre || '—'}</div>
+      <div style="font-size:11px;color:var(--muted)" class="sensitive">${a.email}</div>
+    </td>
+    <td data-label="Visa">${a.visa_type || 'B1/B2'}</td>
+    <td data-label="Fecha buscar" style="font-size:12px">
+      <div>${a.min_date || '—'}</div>
+      <div style="color:var(--muted)">${a.max_date || '—'}</div>
+    </td>
+    <td data-label="ASC" style="text-align:center">${a.need_asc ? '<span style="color:var(--success)">✓</span>' : '—'}</td>
+    <td data-label="Estado">${getBadge(a)}</td>
+    <td data-label="Cita AIS" style="font-size:12px">${a.last_appointment_date || '<span style="color:var(--muted)">Sin cita</span>'}</td>
+    <td onclick="event.stopPropagation()">
+      <div class="act-btns">
+        <button class="abt edit" onclick="openEdit(${a.id})" title="Editar">✎</button>
+        ${cancelled
+          ? `<button class="abt reactivate" onclick="reactivateAcc(${a.id})" title="Reactivar">↺</button>`
+          : `<button class="abt ${a.is_active ? 'pause' : 'play'}" onclick="toggleAcc(${a.id},${a.is_active})" title="${a.is_active ? 'Pausar' : 'Activar'}">${a.is_active ? '⏸' : '▶'}</button>`
+        }
+        <button class="abt sync" onclick="syncAccount(${a.id},event)" title="Sincronizar con AIS" style="color:var(--info)">↻</button>
+        ${a.status === 'Cita Agendada' ? `<button class="abt reactivate" onclick="reagendarAcc(${a.id})" title="Reagendar — buscar mejor fecha">📅</button>` : ''}
+        <button class="abt cancel" onclick="cancelAcc(${a.id})" title="Cancelar">✗</button>
+        <button class="abt del" onclick="deleteAcc(${a.id})" title="Eliminar">🗑</button>
+        ${a.status === 'Cita Agendada' ? `<button class="abt print" onclick="printCita(${a.id})" title="Imprimir">⎙</button>` : ''}
+      </div>
+    </td>
+  </tr>`;
+}
+
+function renderTable() {
+  const filtered = accounts.filter(a => {
+    const mf = filterCurrent === 'todos' || getEstado(a) === filterCurrent;
+    const ms = !searchVal ||
+      (a.email || '').toLowerCase().includes(searchVal.toLowerCase()) ||
+      (a.nombre || '').toLowerCase().includes(searchVal.toLowerCase()) ||
+      (a.schedule_id || '').includes(searchVal) ||
+      genCode(a.id).toLowerCase().includes(searchVal.toLowerCase());
+    return mf && ms;
+  });
+  const html = filtered.length ? filtered.map(renderRow).join('') :
+    `<tr><td colspan="8" style="text-align:center;padding:28px;color:var(--muted)">Sin resultados</td></tr>`;
+  ['main-tbody', 'clientes-tbody'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  });
+  renderReports();
+}
+
+function renderReports() {
+  const rs  = (document.getElementById('rep-search')   || { value: '' }).value.toLowerCase();
+  const rc  = (document.getElementById('rep-codigo')   || { value: '' }).value.toLowerCase();
+  const rn  = (document.getElementById('rep-nombre')   || { value: '' }).value.toLowerCase();
+  const rp  = (document.getElementById('rep-pasaporte')|| { value: '' }).value.toLowerCase();
+  const booked = accounts.filter(a => {
+    if (a.status !== 'Cita Agendada') return false;
+    if (rs && !(a.email || '').toLowerCase().includes(rs)) return false;
+    if (rc && !genCode(a.id).toLowerCase().includes(rc)) return false;
+    if (rn && !(a.nombre || '').toLowerCase().includes(rn)) return false;
+    if (rp && !(a.passport_number || '').toLowerCase().includes(rp)) return false;
+    return true;
+  });
+  const tbody = document.getElementById('rep-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = booked.map(a => `
+    <tr>
+      <td><span class="code-tag">${genCode(a.id)}</span></td>
+      <td style="font-size:12px">${a.email}</td>
+      <td style="font-weight:500">${a.nombre || '—'}</td>
+      <td style="font-family:monospace;font-size:12px">${a.passport_number || '—'}</td>
+      <td style="font-family:monospace;font-size:12px">${a.ds160_number || '—'}</td>
+      <td style="font-size:12px">${a.last_appointment_date || '—'}</td>
+      <td>${(a.country || '').toUpperCase()}</td>
+      <td>${a.visa_status ? `<span class="badge ${a.visa_status === 'aprobada' ? 'green' : a.visa_status === 'rechazada' ? 'red' : 'amber'}">${a.visa_status}</span>` : '—'}</td>
+    </tr>`).join('') || `<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">Sin citas agendadas</td></tr>`;
+  const cnt = document.getElementById('rep-count');
+  if (cnt) cnt.textContent = booked.length;
+}
+
+function exportCSV() {
+  const b = accounts.filter(a => a.status === 'Cita Agendada');
+  if (!b.length) { toast('No hay citas', 'err'); return; }
+  const rows = [
+    ['Código', 'Email', 'Nombre', 'Pasaporte', 'DS-160', 'Fecha cita', 'País', 'Estado visa'],
+    ...b.map(a => [genCode(a.id), a.email, a.nombre || '', a.passport_number || '', a.ds160_number || '',
+      a.last_appointment_date || '', (a.country || '').toUpperCase(), a.visa_status || ''])
+  ];
+  const a2 = document.createElement('a');
+  a2.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(rows.map(r => r.join(',')).join('\n'));
+  a2.download = 'citasflash_reporte.csv';
+  a2.click();
+  toast('CSV exportado', 'ok');
+}
+
+function filterTab(f, el) {
+  filterCurrent = f;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  renderTable();
+}
+
+let srchTimer;
+function handleSearch(inp) {
+  clearTimeout(srchTimer);
+  document.getElementById('srch-wrap').classList.add('loading');
+  srchTimer = setTimeout(() => {
+    searchVal = inp.value;
+    renderTable();
+    document.getElementById('srch-wrap').classList.remove('loading');
+  }, 350);
+}
+
+async function toggleAcc(id, cur) {
+  try { await api('PATCH', '/cuentas/' + id + '/toggle'); toast('Cuenta ' + (cur ? 'pausada' : 'activada'), 'ok'); loadAccounts(); }
+  catch { toast('Error', 'err'); }
+}
+async function cancelAcc(id) {
+  if (!confirm('¿Cancelar esta cuenta?')) return;
+  try { await api('PUT', '/cuentas/' + id, { status: 'Cancelado', is_active: false }); toast('Cancelada', 'ok'); loadAccounts(); }
+  catch { toast('Error', 'err'); }
+}
+async function reactivateAcc(id) {
+  try { await api('PUT', '/cuentas/' + id, { status: 'Pausado', is_active: false }); toast('Reactivada', 'ok'); loadAccounts(); }
+  catch { toast('Error', 'err'); }
+}
+
+async function reagendarAcc(id) {
+  const a = accounts.find(x => x.id === id);
+  if (!a) return;
+  if (!confirm('¿Reagendar ' + (a.nombre || a.email) + '? El bot buscará una fecha mejor.')) return;
+  try {
+    await api('POST', '/cuentas/' + id + '/reagendar');
+    toast('Reagendando ' + (a.nombre || a.email) + '...', 'ok');
+    loadAccounts();
+  } catch(e) { toast('Error: ' + e.message, 'err'); }
+}
+async function deleteAcc(id) {
+  if (!confirm('¿Eliminar esta cuenta?')) return;
+  try { await api('DELETE', '/cuentas/' + id); toast('Eliminada', 'ok'); loadAccounts(); }
+  catch { toast('Error', 'err'); }
+}
+
+function printCita(id) {
+  const a = accounts.find(x => x.id === id);
+  if (!a || !a.schedule_id) return;
+  window.open('https://ais.usvisa-info.com/es-do/niv/schedule/' + a.schedule_id + '/appointment/print_instructions', '_blank');
+}
+
+// ── VALIDATE AIS ──
+async function validateAIS() {
+  const email = document.getElementById('v-email').value.trim();
+  const pass  = document.getElementById('v-pass').value;
+  if (!email || !pass) { toast('Ingresa email y contraseña AIS', 'err'); return; }
+  const btn = document.getElementById('v-btn');
+  btn.textContent = '⏳ Validando...';
+  btn.disabled = true;
+  try {
+    const proxy = document.getElementById('f-proxies').value.trim();
+    const body  = { email, password: pass, country: 'do' };
+    if (proxy) body.proxy = proxy.split(',')[0].trim();
+    const data = await api('POST', '/validate-ais', body);
+    if (data.success && data.data && data.data.length > 0) {
+      const f = data.data[0];
+      document.getElementById('f-schedule').value = f.schedule_id || '';
+      document.getElementById('f-visa').value = f.visa_type || 'B1/B2';
+      const fivr2 = document.getElementById('f-ivr'); if(fivr2) fivr2.value = f.ivr_number || '';
+      const res = document.getElementById('v-result');
+      res.style.display = 'block';
+      res.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="color:var(--success);font-size:18px">✓</span>
+          <strong>Credenciales válidas</strong>
+        </div>
+        <div style="font-size:13px;color:var(--muted);display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          <div>📋 Schedule: <strong style="color:var(--text)">${f.schedule_id}</strong></div>
+          <div>🛂 Visa: <strong style="color:var(--text)">${f.visa_type || 'B1/B2'}</strong></div>
+          <div style="grid-column:1/-1">📅 Cita actual: <strong style="color:var(--text)">${f.cita_actual || 'Sin cita'}</strong></div>
+        </div>`;
+      toast('Datos obtenidos', 'ok');
+    } else {
+      toast('Credenciales inválidas o sin aplicación', 'err');
+    }
+  } catch (e) {
+    toast('Error al validar: ' + e.message, 'err');
+  } finally {
+    btn.textContent = '⚡ Validar y obtener datos';
+    btn.disabled = false;
+  }
+}
+
+function selectMode(mode) {
+  addMode = mode;
+  document.getElementById('mode-pause').className = 'mode-btn' + (mode === 'pause' ? ' sel-pause' : '');
+  document.getElementById('mode-run').className   = 'mode-btn' + (mode === 'run'   ? ' sel-run'   : '');
+}
+
+async function saveSolicitante() {
+  const email    = document.getElementById('v-email').value.trim();
+  const password = document.getElementById('v-pass').value;
+  const schedule = document.getElementById('f-schedule').value.trim();
+  const min_date = document.getElementById('f-min').value;
+  const max_date = document.getElementById('f-max').value;
+  const need_asc = document.getElementById('f-asc').classList.contains('on');
+  const proxies  = document.getElementById('f-proxies').value.trim();
+  const secondRaw= parseInt(document.getElementById('f-second').value);
+  const second   = isNaN(secondRaw) ? 0 : Math.min(59, Math.max(0, secondRaw));
+  const visa_type= document.getElementById('f-visa').value.trim() || 'B1/B2';
+
+  if (!email)    { toast('Email AIS es requerido', 'err'); return; }
+  if (!password) { toast('Contraseña AIS es requerida', 'err'); return; }
+  if (!schedule) { toast('Schedule ID es requerido. Valida primero con AIS.', 'err'); return; }
+  if (!min_date) { toast('Fecha mínima es requerida', 'err'); return; }
+  // Check duplicate locally before sending
+  const dupCheck = accounts.find(a => a.schedule_id === schedule);
+  if (dupCheck) { toast('Schedule ID ya existe para ' + dupCheck.email, 'err'); return; }
+
+  const is_active = addMode === 'run';
+  try {
+    const ivrVal = document.getElementById('f-ivr') ? document.getElementById('f-ivr').value.trim() : '';
+    const cuerpoNuevo = {
+      email, password, schedule_id: schedule, min_date,
+      max_date: max_date || null, need_asc,
+      proxies: proxies || null, second, visa_type,
+      is_active, status: is_active ? 'Activo' : 'Pausado',
+      ivr_number: ivrVal || null
+    };
+    if (SESSION && SESSION.id) cuerpoNuevo.usuario_id = SESSION.id;
+    await api('POST', '/cuentas', cuerpoNuevo);
+    toast('Solicitante ' + (is_active ? 'agregado y ejecutando' : 'agregado en pausa'), 'ok');
+    closeModal('add-modal');
+    ['v-email','v-pass','f-schedule','f-min','f-max','f-proxies'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-visa').value = 'B1/B2';
+    document.getElementById('f-second').value = '0';
+    document.getElementById('f-asc').classList.remove('on');
+    const fivr = document.getElementById('f-ivr'); if(fivr) fivr.value = '';
+    document.getElementById('v-result').style.display = 'none';
+    loadAccounts();
+  } catch (e) { toast('Error al guardar: ' + e.message, 'err'); }
+}
+
+// ── EDIT ──
+function openEdit(id) {
+  const a = accounts.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById('e-id').value        = a.id;
+  document.getElementById('e-email').value     = a.email || '';
+  document.getElementById('e-schedule').value  = a.schedule_id || '';
+  document.getElementById('e-min').value       = a.min_date || '';
+  document.getElementById('e-max').value       = a.max_date || '';
+  document.getElementById('e-proxies').value   = a.proxies || '';
+  document.getElementById('e-second').value    = a.second || 0;
+  document.getElementById('e-visa').value      = a.visa_type || 'B1/B2';
+  document.getElementById('e-visa-status').value = a.visa_status || '';
+  const asc = document.getElementById('e-asc');
+  a.need_asc ? asc.classList.add('on') : asc.classList.remove('on');
+  const eivr = document.getElementById('e-ivr'); if(eivr) eivr.value = a.ivr_number || '';
+  const et = document.getElementById('e-tarifa'); if(et) et.value = a.tarifa || 50;
+  const ea = document.getElementById('e-asesor'); if(ea) ea.value = a.asesor || '';
+  const ec = document.getElementById('e-contacto'); if(ec) ec.value = a.contacto_asesor || '';
+  openModal('edit-modal');
+}
+
+async function saveEdit() {
+  const id = document.getElementById('e-id').value;
+  const secondRaw = parseInt(document.getElementById('e-second').value);
+  const second    = isNaN(secondRaw) ? 0 : Math.min(59, Math.max(0, secondRaw));
+  try {
+    await api('PUT', '/cuentas/' + id, {
+      email:       document.getElementById('e-email').value.trim(),
+      schedule_id: document.getElementById('e-schedule').value.trim(),
+      min_date:    document.getElementById('e-min').value || null,
+      max_date:    document.getElementById('e-max').value || null,
+      need_asc:    document.getElementById('e-asc').classList.contains('on'),
+      proxies:     document.getElementById('e-proxies').value.trim() || null,
+      second,
+      visa_type:   document.getElementById('e-visa').value.trim() || 'B1/B2',
+      visa_status: document.getElementById('e-visa-status').value || null,
+      ivr_number: document.getElementById('e-ivr') && document.getElementById('e-ivr').value.trim() || null,
+      tarifa: parseFloat(document.getElementById('e-tarifa') && document.getElementById('e-tarifa').value) || 50,
+      asesor: document.getElementById('e-asesor') && document.getElementById('e-asesor').value.trim() || null,
+      contacto_asesor: document.getElementById('e-contacto') && document.getElementById('e-contacto').value.trim() || null,
+    });
+    toast('Actualizado', 'ok');
+    closeModal('edit-modal');
+    loadAccounts();
+  } catch (e) { toast('Error: ' + e.message, 'err'); }
+}
+
+// ── USUARIOS ──
+async function loadUsers() {
+  try { users = await api('GET', '/usuarios'); renderUsers(); }
+  catch (e) { console.error('loadUsers:', e); }
+}
+
+function renderUsers() {
+  const tbody = document.getElementById('users-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = users.map(u => `
+    <tr>
+      <td style="font-weight:600">${u.nombre}</td>
+      <td style="font-size:13px">${u.email}</td>
+      <td style="font-size:13px">${u.phone || '—'}</td>
+      <td><span class="badge ${u.rol === 'administrador' ? 'blue' : 'cyan'}">${u.rol === 'administrador' ? 'Administrador' : 'Gestor'}</span></td>
+      <td><span class="badge ${u.is_active ? 'green' : 'gray'}">${u.is_active ? 'Activo' : 'Inactivo'}</span></td>
+      <td>${u.is_demo ? '<span class="badge amber">Demo</span>' : '—'}</td>
+      <td style="font-size:12px;color:var(--muted)">${u.last_login ? u.last_login.substring(0, 16) : 'Nunca'}</td>
+      <td>
+        <div class="act-btns">
+          <button class="abt ${u.is_active ? 'pause' : 'play'}" onclick="toggleUser(${u.id})" title="${u.is_active ? 'Suspender' : 'Activar'}">${u.is_active ? '⏸' : '▶'}</button>
+          <button class="abt edit" onclick="openEditUser(${u.id})" title="Editar">✎</button>
+          <button class="abt edit" onclick="resetPass(${u.id})" title="Resetear clave">🔑</button>
+          <button class="abt del" onclick="deleteUser(${u.id})" title="Eliminar">🗑</button>
+        </div>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">Sin usuarios</td></tr>';
+}
+
+async function createUser() {
+  const nombre  = document.getElementById('u-nombre').value.trim();
+  const email   = document.getElementById('u-email').value.trim();
+  const phone   = document.getElementById('u-phone').value.trim();
+  const rol     = document.getElementById('u-rol').value;
+  const is_demo = document.getElementById('u-demo').classList.contains('on');
+  if (!nombre || !email) { toast('Nombre y email son requeridos', 'err'); return; }
+  try {
+    await api('POST', '/usuarios', { nombre, email, phone, rol, is_demo });
+    toast('Usuario creado — email enviado con clave provisional', 'ok');
+    closeModal('user-modal');
+    ['u-nombre', 'u-email', 'u-phone'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('u-demo').classList.remove('on');
+    loadUsers();
+  } catch (e) { toast('Error: ' + e.message, 'err'); }
+}
+
+async function toggleUser(id) {
+  try { await api('PATCH', '/usuarios/' + id + '/toggle'); toast('Estado actualizado', 'ok'); loadUsers(); }
+  catch { toast('Error', 'err'); }
+}
+async function resetPass(id) {
+  if (!confirm('¿Enviar email de restablecimiento de contraseña?')) return;
+  try { await api('POST', '/usuarios/' + id + '/reset-password'); toast('Email enviado', 'ok'); }
+  catch { toast('Error', 'err'); }
+}
+async function deleteUser(id) {
+  if (!confirm('¿Eliminar este usuario?')) return;
+  try { await api('DELETE', '/usuarios/' + id); toast('Usuario eliminado', 'ok'); loadUsers(); }
+  catch { toast('Error', 'err'); }
+}
+
+// ── CONSOLA ──
+async function checkBotStatus() {
+  try {
+    const d = await api('GET', '/bot/status');
+    const dot = document.getElementById('sdot');
+    const txt = document.getElementById('stext');
+    if (d.status === 'active') { dot.className = 'sdot on'; txt.textContent = 'Proceso activo'; }
+    else { dot.className = 'sdot off'; txt.textContent = 'Proceso detenido'; }
+  } catch {}
+}
+
+async function botCmd(cmd) {
+  try {
+    await api('POST', '/bot/' + cmd);
+    toast('Proceso ' + (cmd === 'start' ? 'iniciado' : cmd === 'stop' ? 'detenido' : 'reiniciado'), 'ok');
+    setTimeout(checkBotStatus, 2000);
+  } catch { toast('Error', 'err'); }
+}
+
+// LOG — cols: Fecha | Cuenta (email) | Mensaje
+async function loadLogs() {
+  try {
+    const data = await api('GET', '/bot/logs');
+    const lines = (data.logs || '').split('\n').filter(Boolean).slice(-120);
+    document.getElementById('log-tbody').innerHTML = lines.reverse().map(line => {
+      // Extraer fecha/hora completa
+      const dtMatch = line.match(/(\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2})/);
+      const fecha = dtMatch ? dtMatch[1].substring(5) : (line.match(/\d{2}:\d{2}:\d{2}/) ? line.match(/\d{2}:\d{2}:\d{2}/)[0] : '—');
+      // Extraer email
+      const emMatch = line.match(/\[([^\]]+@[^\]]+)\]/);
+      const email = emMatch ? emMatch[1] : 'Sistema';
+      // Mensaje limpio: quitar timestamp y email
+      let msg = line
+        .replace(/\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}[,\.]?\d*\s*/g, '')
+        .replace(/\[[^\]]+@[^\]]+\]\s*/g, '')
+        .replace(/vmi\d+\s+python3\[\d+\]:\s*/g, '')
+        .replace(/\[CF-\d+\]\s*/g, '')
+        .trim();
+      if (msg.length > 80) msg = msg.substring(0, 80) + '…';
+      // Clase de color
+      let cls = 'lt-info';
+      if (line.includes('✅') || line.includes('AGENDADA')) cls = 'lt-ok';
+      else if (line.includes('❌') || line.includes('Error')) cls = 'lt-err';
+      else if (line.includes('⚠️') || line.includes('Sin cuentas')) cls = 'lt-warn';
+      return `<tr>
+        <td class="${cls}" style="white-space:nowrap;font-size:11px">${fecha}</td>
+        <td class="lt-email" title="${email}">${email}</td>
+        <td class="${cls} lt-msg">${msg || '—'}</td>
+      </tr>`;
+    }).join('');
+    if (!logTimer) logTimer = setInterval(loadLogs, 2000);
+  } catch {
+    document.getElementById('log-tbody').innerHTML = '<tr><td colspan="3" style="color:#f87171;padding:12px">Error al cargar logs</td></tr>';
+  }
+}
+
+// ── SEGUNDOS MASIVO ──
+function onSecModeChange() {
+  const mode = document.getElementById('sec-mode').value;
+  document.getElementById('sec-manual-wrap').style.display = mode === 'manual' ? 'block' : 'none';
+  updateSecPreview();
+}
+
+function updateSecPreview() {
+  const proc = accounts.filter(a => a.is_active && a.status === 'Activo');
+  const mode = document.getElementById('sec-mode').value;
+  let txt = 'Cuentas en proceso: ' + proc.length + '\n';
+  if (mode === 'auto') {
+    const ejemplos = proc.slice(0, 6).map((_, i) => Math.floor(i * (60 / Math.max(proc.length, 1))));
+    txt += 'Distribución ejemplo: ' + ejemplos.join(', ') + (proc.length > 6 ? '...' : '');
+  } else if (mode === 'random') {
+    txt += 'Segundo aleatorio 0-59 por cuenta';
+  } else {
+    const v = document.getElementById('sec-value').value;
+    txt += 'Segundo ' + (v || '0') + ' para todas las cuentas en proceso';
+  }
+  document.getElementById('sec-preview').textContent = txt;
+}
+
+async function applySeconds() {
+  const proc = accounts.filter(a => a.is_active && a.status === 'Activo');
+  if (!proc.length) { toast('No hay cuentas en proceso', 'err'); return; }
+  const mode = document.getElementById('sec-mode').value;
+  const manualVal = parseInt(document.getElementById('sec-value').value);
+  if (mode === 'manual' && (isNaN(manualVal) || manualVal < 0 || manualVal > 59)) {
+    toast('Ingresa un segundo válido entre 0 y 59', 'err'); return;
+  }
+  try {
+    for (let i = 0; i < proc.length; i++) {
+      let sec;
+      if (mode === 'auto') sec = Math.floor(i * (60 / proc.length));
+      else if (mode === 'random') sec = Math.floor(Math.random() * 60);
+      else sec = manualVal;
+      await api('PUT', '/cuentas/' + proc[i].id, { second: sec });
+    }
+    toast('Segundos actualizados en ' + proc.length + ' cuentas', 'ok');
+    closeModal('seconds-modal');
+    loadAccounts();
+  } catch (e) { toast('Error: ' + e.message, 'err'); }
+}
+
+// ── SYNC ACCOUNT ──
+async function syncAccount(id, event) {
+  if (event) event.stopPropagation();
+  const a = accounts.find(x => x.id === id);
+  if (!a) return;
+  toast('Sincronizando ' + a.email + '...', 'info');
+  try {
+    const data = await api('POST', '/cuentas/' + id + '/sync');
+    if (data.success) {
+      const d = data.data;
+      toast('Sincronizado: ' + (d.nombre || a.email), 'ok');
+      // Count by IVR number
+      if (a.ivr_number) {
+        const sameIVR = accounts.filter(x => x.ivr_number === a.ivr_number).length;
+        await api('PUT', '/cuentas/' + id, { solicitantes_count: sameIVR });
+      } else if (data.total_solicitantes !== undefined) {
+        await api('PUT', '/cuentas/' + id, { solicitantes_count: data.total_solicitantes });
+      }
+      loadAccounts();
+    } else {
+      toast('No se pudo sincronizar: ' + (data.error || 'error'), 'err');
+    }
+  } catch (e) { toast('Error al sincronizar: ' + e.message, 'err'); }
+}
+
+async function syncAllAccounts() {
+  const proc = accounts.filter(a => a.status !== 'Cancelado');
+  if (!proc.length) { toast('No hay cuentas para sincronizar', 'err'); return; }
+  toast('Sincronizando ' + proc.length + ' cuentas...', 'info');
+  let ok = 0, err = 0;
+  for (const a of proc) {
+    try {
+      const data = await api('POST', '/cuentas/' + a.id + '/sync');
+      if (data.success) ok++; else err++;
+    } catch { err++; }
+    await new Promise(r => setTimeout(r, 500));
+  }
+  toast('Sync masivo: ' + ok + ' OK' + (err > 0 ? ' | ' + err + ' errores' : ''), ok > 0 ? 'ok' : 'err');
+  loadAccounts();
+}
+
+// ── IMPORT CSV ──
+document.addEventListener('DOMContentLoaded', function() {
+  var cf = document.getElementById('csv-file');
+  if (!cf) return;
+  cf.addEventListener('change', function() {
+    var file = this.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var lines = e.target.result.split('\n').filter(function(l){ return l.trim() && !l.startsWith('email'); });
+      var preview = document.getElementById('csv-preview');
+      if (!preview) return;
+      preview.style.display = 'block';
+      preview.innerHTML = '<strong>' + lines.length + ' cuentas detectadas</strong><br>' +
+        lines.slice(0, 3).map(function(l){ return '<span style="color:var(--muted);font-size:12px">' + l.substring(0, 60) + (l.length > 60 ? '...' : '') + '</span>'; }).join('<br>') +
+        (lines.length > 3 ? '<br><span style="color:var(--muted);font-size:12px">... y ' + (lines.length - 3) + ' mas</span>' : '');
+    };
+    reader.readAsText(file);
+  });
+});
+
+async function importCSV() {
+  var fileInput = document.getElementById('csv-file');
+  if (!fileInput || !fileInput.files[0]) { toast('Selecciona un archivo CSV', 'err'); return; }
+  var isActive = document.getElementById('import-run').classList.contains('on');
+  var reader = new FileReader();
+  reader.onload = async function(e) {
+    var lines = e.target.result.split('\n').filter(function(l){ return l.trim() && !l.startsWith('email'); });
+    if (!lines.length) { toast('El archivo esta vacio o no tiene datos validos', 'err'); return; }
+    toast('Importando ' + lines.length + ' cuentas...', 'info');
+    var ok = 0, err = 0;
+    for (var i = 0; i < lines.length; i++) {
+      var parts = lines[i].split(',').map(function(p){ return p.trim().replace(/^"|"$/g, ''); });
+      var email = parts[0], password = parts[1], schedule_id = parts[2];
+      var visa_type = parts[3], min_date = parts[4], max_date = parts[5];
+      var need_asc_raw = parts[6], second_raw = parts[7], proxies = parts[8];
+      if (!email || !password || !schedule_id || !min_date) { err++; continue; }
+      try {
+        await api('POST', '/cuentas', {
+          email: email, password: password, schedule_id: schedule_id,
+          visa_type: visa_type || 'B1/B2',
+          min_date: min_date, max_date: max_date || null,
+          need_asc: need_asc_raw === 'true' || need_asc_raw === '1',
+          second: parseInt(second_raw) || 0,
+          proxies: proxies || null,
+          is_active: isActive,
+          status: isActive ? 'Activo' : 'Pausado'
+        });
+        ok++;
+      } catch(e2) { err++; }
+      await new Promise(function(r){ setTimeout(r, 200); });
+    }
+    toast('Importadas: ' + ok + ' OK | Errores: ' + err, ok > 0 ? 'ok' : 'err');
+    closeModal('import-modal');
+    fileInput.value = '';
+    var prev = document.getElementById('csv-preview');
+    if (prev) prev.style.display = 'none';
+    loadAccounts();
+  };
+  reader.readAsText(fileInput.files[0]);
+}
+
+// ── DOWNLOAD TEMPLATE ──
+function downloadTemplate() {
+  const rows = [
+    'email,password,schedule_id,visa_type,min_date,max_date,need_asc,second,proxies',
+    'ejemplo1@gmail.com,ClaveAIS123,73289464,B1/B2,2026-04-01,2026-12-31,false,0,',
+    'ejemplo2@hotmail.com,ClaveAIS456,73289465,B1/B2,2026-05-01,2026-12-31,true,5,user:pass@host:port'
+  ];
+  const csv = rows.join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'plantilla_citasflash.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── CLIENTES FULL ──
+function renderClientesFull() {
+  const search = (document.getElementById('cf-search') || {value:''}).value.toLowerCase();
+  const filter = (document.getElementById('cf-filter') || {value:'todos'}).value;
+  const filtered = accounts.filter(a => {
+    const mf = filter === 'todos' || getEstado(a) === filter;
+    const ms = !search ||
+      (a.nombre || '').toLowerCase().includes(search) ||
+      (a.email || '').toLowerCase().includes(search) ||
+      (a.passport_number || '').toLowerCase().includes(search) ||
+      (a.schedule_id || '').includes(search) ||
+      genCode(a.id).toLowerCase().includes(search) ||
+      (a.asesor || '').toLowerCase().includes(search);
+    return mf && ms;
+  });
+  // Update mini stats
+  const s = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
+  s('cf-total', accounts.length);
+  s('cf-ok', accounts.filter(a => a.status === 'Cita Agendada').length);
+  s('cf-proc', accounts.filter(a => a.is_active && a.status === 'Activo').length);
+  s('cf-pause', accounts.filter(a => !a.is_active && a.status !== 'Cita Agendada' && a.status !== 'Cancelado').length);
+  s('cf-approved', accounts.filter(a => a.visa_status === 'aprobada').length);
+  s('cf-cancelled', accounts.filter(a => a.status === 'Cancelado').length);
+  const tbody = document.getElementById('clientes-full-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = filtered.map(a => `
+    <tr class="${a.booked_outside ? 'outside-booking' : a.status === 'Cancelado' ? 'cancelled' : ''}"
+      onclick="showClientDetail(${a.id})" style="cursor:pointer">
+      <td data-label="Código"><span class="code-tag">${genCode(a.id)}</span></td>
+      <td data-label="Nombre" style="font-weight:600">${a.nombre || '<span style="color:var(--muted)">Sin sync</span>'}</td>
+      <td data-label="Email" style="font-size:12px">${a.email}</td>
+      <td data-label="Pasaporte" style="font-family:monospace;font-size:12px">${a.passport_number || '—'}</td>
+      <td data-label="DS-160" style="font-family:monospace;font-size:12px">${a.ds160_number || '—'}</td>
+      <td data-label="Visa" style="font-size:12px">${a.visa_type || 'B1/B2'}</td>
+      <td data-label="Cita consular" style="font-size:12px;color:var(--success);font-weight:600">${a.last_appointment_date || '—'}</td>
+      <td data-label="Cita ASC" style="font-size:12px;color:var(--blue)">${a.asc_date || '—'}</td>
+      <td data-label="Fecha buscar" style="font-size:11px"><div>${a.min_date || '—'}</div><div style="color:var(--muted)">${a.max_date || ''}</div></td>
+      <td data-label="Estado">${getBadge(a)}</td>
+      <td data-label="Asesor" style="font-size:12px">${a.asesor || '—'}</td>
+      <td data-label="Tarifa" style="font-size:13px;font-weight:700;color:var(--success)">$${a.tarifa || 50}</td>
+      <td onclick="event.stopPropagation()">
+        <div class="act-btns">
+          <button class="abt edit" onclick="openEdit(${a.id})" title="Editar">✎</button>
+          <button class="abt sync" onclick="syncAccount(${a.id},event)" title="Sincronizar">↻</button>
+          ${a.status === 'Cita Agendada' ? `<button class="abt reactivate" onclick="reagendarAcc(${a.id})" title="Reagendar">📅</button>` : ''}
+          ${a.status === 'Cancelado'
+            ? `<button class="abt reactivate" onclick="reactivateAcc(${a.id})" title="Reactivar">↺</button>`
+            : `<button class="abt ${a.is_active ? 'pause' : 'play'}" onclick="toggleAcc(${a.id},${a.is_active})" title="${a.is_active ? 'Pausar' : 'Activar'}">${a.is_active ? '⏸' : '▶'}</button>`
+          }
+          ${SESSION && SESSION.rol === 'administrador' ? `<button class="abt del" onclick="deleteAcc(${a.id})" title="Eliminar">🗑</button>` : ''}
+        </div>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="13" style="text-align:center;padding:28px;color:var(--muted)">Sin clientes</td></tr>';
+}
+
+// ── CEAC CHECKER ──
+function openCEAC(id) {
+  const a = accounts.find(x => x.id === id);
+  if (!a) return;
+  if (!a.passport_number || !a.ds160_number) {
+    toast('Sincroniza primero para obtener pasaporte y DS-160', 'warn');
+    return;
+  }
+  // Open CEAC with instructions
+  const ceacUrl = 'https://ceac.state.gov/CEACStatTracker/Status.aspx';
+  const w = window.open(ceacUrl, '_blank');
+  toast('Ingresa: Pasaporte ' + a.passport_number + ' | DS-160: ' + a.ds160_number, 'info');
+}
+
+async function updateVisaStatus(id, status) {
+  try {
+    await api('PUT', '/cuentas/' + id, { visa_status: status });
+    toast('Estado visa actualizado: ' + status, 'ok');
+    loadAccounts();
+    showClientDetail(id);
+  } catch(e) { toast('Error', 'err'); }
+}
+
+// ── PUSH NOTIFICATIONS ──
+async function subscribeToNotifications() {
+  try {
+    if (window.OneSignal && window.OneSignal.Notifications) {
+      await window.OneSignal.Notifications.requestPermission();
+      toast('Notificaciones activadas', 'ok');
+    }
+  } catch(e) { console.log('Push:', e.message); }
+}
+
+async function sendPush(title, msg) {
+  try {
+    await api('POST', '/notify', { title, message: msg });
+  } catch(e) {}
+}
+
+let notifPrefs = {};
+try {
+  notifPrefs = JSON.parse(localStorage.getItem('cf_notif_prefs') || 'null') || {
+    cita_agendada: true, servicio_caido: true, proxy_muerto: true, fuera_sistema: true
+  };
+} catch(e) {
+  notifPrefs = { cita_agendada: true, servicio_caido: true, proxy_muerto: true, fuera_sistema: true };
+}
+
+function saveNotifPrefs() {
+  localStorage.setItem('cf_notif_prefs', JSON.stringify(notifPrefs));
+  toast('Preferencias guardadas', 'ok');
+}
+
+// ── DARK MODE ──
+function toggleDark() {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  localStorage.setItem('cf_dark', isDark ? '1' : '0');
+  document.getElementById('dark-btn').textContent = isDark ? '☀️' : '🌙';
+}
+// Apply saved preference on load
+window.addEventListener('load', () => {
+  if (localStorage.getItem('cf_dark') === '1') {
+    document.body.classList.add('dark');
+    const btn = document.getElementById('dark-btn');
+    if (btn) btn.textContent = '☀️';
+  }
+});
+
+// ── NAV ──
+const pageMap = {
+  dashboard: 'page-dashboard',
+  clientes: 'page-clientes-full',
+  todos: 'page-clientes', agendados: 'page-clientes',
+  proceso: 'page-clientes', pausados: 'page-clientes', cancelados: 'page-clientes',
+  consola: 'page-consola', usuarios: 'page-usuarios', reportes: 'page-reportes', gestores: 'page-gestores', ti: 'page-ti'
+};
+const pageTitles = {
+  dashboard: 'Dashboard', clientes: 'Clientes',
+  todos: 'Todos los clientes', agendados: 'Agendados',
+  proceso: 'En proceso', pausados: 'Pausados', cancelados: 'Cancelados',
+  consola: 'Consola', usuarios: 'Usuarios', reportes: 'Reportes', gestores: 'Gestores', ti: 'Panel TI'
+};
+
+function goPage(p, el) {
+  // Ocultar todas las páginas
+  Object.values(pageMap).forEach(id => {
+    const e = document.getElementById(id);
+    if (e) e.style.display = 'none';
+  });
+  // Mostrar la página destino
+  const show = document.getElementById(pageMap[p]);
+  if (show) show.style.display = 'block';
+  // Actualizar sidebar activo
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('on'));
+  if (el && el.classList && el.classList.contains('ni')) el.classList.add('on');
+  // Título topbar
+  document.getElementById('page-title').textContent = pageTitles[p] || p;
+  // Lógica por página
+  if (['todos', 'agendados', 'proceso', 'pausados', 'cancelados'].includes(p)) {
+    filterCurrent = p === 'todos' ? 'todos'
+                  : p === 'agendados' ? 'agendado'
+                  : p === 'cancelados' ? 'cancelado' : p;
+    const ct = document.getElementById('clientes-title');
+    if (ct) ct.textContent = pageTitles[p];
+    const sw = document.getElementById('sec-btn-wrap');
+    if (sw) sw.style.display = p === 'proceso' ? 'block' : 'none';
+    renderTable();
+  }
+  if (p === 'clientes') { renderClientesFull(); }
+  if (p === 'consola') { checkBotStatus(); }
+  if (p === 'gestores') { loadGestores(); }
+  if (p === 'ti') { loadTI(); if(!tiTimer) tiTimer=setInterval(loadTI,15000); }
+  if (p === 'usuarios') { loadUsers(); }
+  if (p === 'reportes') { renderReports(); }
+  closeSB();
+}
+
+function setBN(el) { document.querySelectorAll('.bn-item').forEach(n => n.classList.remove('on')); el.classList.add('on'); }
+function openSB()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('sb-overlay').classList.add('open'); }
+function closeSB() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sb-overlay').classList.remove('open'); }
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
+function toast(msg, type = 'ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  setTimeout(() => el.className = '', 3500);
+}
+// ── PWA SERVICE WORKER ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/panel/sw.js').catch(() => {});
+  });
+}
+
+// ── FACE ID / WEBAUTHN ──
+async function checkBiometric() {
+  if (!window.PublicKeyCredential) return;
+  const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(() => false);
+  const saved = localStorage.getItem('cf_webauthn_id');
+  if (available && saved) {
+    document.getElementById('biometric-btn').style.display = 'block';
+  }
+}
+
+async function loginBiometric() {
+  try {
+    const savedId = localStorage.getItem('cf_webauthn_id');
+    if (!savedId) { toast('Registra primero tu Face ID', 'err'); return; }
+    const challenge = new Uint8Array(32);
+    crypto.getRandomValues(challenge);
+    const assertion = await navigator.credentials.get({
+      publicKey: {
+        challenge,
+        allowCredentials: [{ type: 'public-key', id: Uint8Array.from(atob(savedId), c => c.charCodeAt(0)) }],
+        userVerification: 'required',
+        timeout: 30000
+      }
+    });
+    if (assertion) {
+      const savedSession = localStorage.getItem('cf_biometric_session');
+      if (savedSession) {
+        SESSION = JSON.parse(savedSession);
+        localStorage.setItem('cf_s', savedSession);
+        showApp();
+        toast('Sesion iniciada con biometria', 'ok');
+      }
+    }
+  } catch(e) {
+    toast('Biometria cancelada o no disponible', 'warn');
+  }
+}
+
+async function registerBiometric() {
+  if (!window.PublicKeyCredential) { toast('Tu dispositivo no soporta Face ID', 'err'); return; }
+  try {
+    const challenge = new Uint8Array(32);
+    crypto.getRandomValues(challenge);
+    const userId = new Uint8Array(16);
+    crypto.getRandomValues(userId);
+    const credential = await navigator.credentials.create({
+      publicKey: {
+        challenge,
+        rp: { name: 'CitasFlash', id: window.location.hostname },
+        user: { id: userId, name: SESSION.email, displayName: SESSION.nombre },
+        pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
+        authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required' },
+        timeout: 30000
+      }
+    });
+    if (credential) {
+      const idB64 = btoa(String.fromCharCode(...new Uint8Array(credential.rawId)));
+      localStorage.setItem('cf_webauthn_id', idB64);
+      localStorage.setItem('cf_biometric_session', JSON.stringify(SESSION));
+      toast('Face ID / Huella registrado exitosamente', 'ok');
+    }
+  } catch(e) {
+    toast('No se pudo registrar: ' + e.message, 'err');
+  }
+}
+
+// Check biometric on page load
+window.addEventListener('load', checkBiometric);
+
+// ── PANEL TI ──
+let tiTimer = null;
+async function loadTI() {
+  try {
+    const d = await api('GET', '/monitor');
+    document.getElementById('ti-last').textContent = new Date().toLocaleTimeString();
+    const items = [
+      {k:'bot_citafast',l:'Bot CitaFast',d:'Bot de busqueda principal'},
+      {k:'bot_botvps',l:'Bot VPS',d:'Bot secundario'},
+      {k:'api_vps',l:'API VPS',d:'Backend FastAPI'},
+      {k:'nginx',l:'Nginx',d:'Servidor web SSL'},
+      {k:'supabase',l:'Supabase BD',d:'Base de datos'},
+      {k:'cpu',l:'CPU',d:'Procesador',metric:true,unit:'%',warn:80},
+      {k:'ram',l:'RAM',d:'Memoria',metric:true,unit:'%',warn:85},
+      {k:'disk',l:'Disco',d:'Almacenamiento',metric:true,unit:'%',warn:85},
+      {k:'uptime',l:'Uptime',d:'Tiempo encendido',uptime:true},
+    ];
+    document.getElementById('ti-grid').innerHTML = items.map(s => {
+      const v = d[s.k]; if(!v) return '';
+      let st,color,icon,det='';
+      if(s.uptime){st='Activo';color='var(--success)';icon='✅';det=v.value||'';}
+      else if(s.metric){const ok=v.value<s.warn;st=v.value+s.unit;color=ok?'var(--success)':'var(--red)';icon=ok?'✅':'⚠️';det=s.k==='ram'?v.total_gb+'GB':s.k==='disk'?v.free_gb+'GB libre':'';}
+      else{const ok=v.ok;st=ok?'Running':'CAIDO';color=ok?'var(--success)':'var(--red)';icon=ok?'✅':'🔴';det=v.status||'';}
+      return '<div style="background:var(--card);border:2px solid '+color+'40;border-radius:12px;padding:18px;text-align:center">'
+        +'<div style="font-size:26px;margin-bottom:8px">'+icon+'</div>'
+        +'<div style="font-weight:700;font-size:14px;margin-bottom:3px">'+s.l+'</div>'
+        +'<div style="font-size:11px;color:var(--muted);margin-bottom:8px">'+s.d+'</div>'
+        +'<div style="font-size:17px;font-weight:700;color:'+color+'">'+st+'</div>'
+        +(det?'<div style="font-size:11px;color:var(--muted);margin-top:3px">'+det+'</div>':'')
+        +'</div>';
+    }).join('');
+    if(!d.all_ok) addNotification('Componente caido en Panel TI','ti');
+  } catch(e){document.getElementById('ti-grid').innerHTML='<div style="color:var(--red);padding:20px">Error: '+e.message+'</div>';}
+}
+
+// ── GESTORES ──
+async function loadGestores() {
+  try {
+    const data = await api('GET', '/gestores/resumen');
+    const tbody = document.getElementById('gestores-tbody');
+    if(!tbody) return;
+    tbody.innerHTML = data.map(g =>
+      '<tr>'
+      +'<td style="font-weight:600">'+g.nombre+'</td>'
+      +'<td style="font-size:12px">'+g.email+'</td>'
+      +'<td><span class="badge '+(g.rol==='administrador'?'blue':'cyan')+'">'+g.rol+'</span></td>'
+      +'<td><span class="badge '+(g.is_active?'green':'gray')+'">'+(g.is_active?'Activo':'Inactivo')+'</span></td>'
+      +'<td style="text-align:center;font-weight:700">'+g.total_clientes+' / '+g.max_solicitantes+'</td>'
+      +'<td style="text-align:center"><span class="badge green">'+g.agendados+'</span></td>'
+      +'<td style="font-weight:700;color:var(--success)">$'+g.balance_pendiente+'</td>'
+      +'<td style="text-align:center">'+g.max_solicitantes+'</td>'
+      +'<td><div class="act-btns">'
+      +'<button class="abt edit" onclick="openEditUser('+g.id+')" title="Editar">&#9998;</button>'
+      +'<button class="abt play" onclick="masterLogin('+g.id+')" title="Entrar como gestor">&#128065;</button>'
+      +'<button class="abt '+(g.is_active?'pause':'play')+'" onclick="toggleUser('+g.id+')" title="'+(g.is_active?'Suspender':'Activar')+'">'+(g.is_active?'&#9208;':'&#9654;')+'</button>'
+      +'</div></td></tr>'
+    ).join('') || '<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted)">Sin gestores</td></tr>';
+  } catch(e) { console.error('loadGestores:',e); }
+}
+
+async function masterLogin(id) {
+  if(!confirm('Entrar como este gestor en nueva pestana?')) return;
+  try {
+    const data = await api('POST', '/auth/master-login', {usuario_id:id});
+    const masterSess = JSON.stringify(SESSION);
+    localStorage.setItem('cf_s', JSON.stringify(data));
+    window.open('/panel/', '_blank');
+    setTimeout(() => { localStorage.setItem('cf_s', masterSess); SESSION=JSON.parse(masterSess); }, 100);
+    toast('Abriendo sesion del gestor...', 'info');
+  } catch(e) { toast('Error: '+e.message,'err'); }
+}
+
+function openEditUser(id) {
+  const g = users.find(u=>u.id===id)||{};
+  document.getElementById('eu-id').value = id;
+  document.getElementById('eu-nombre').value = g.nombre||'';
+  document.getElementById('eu-email').value = g.email||'';
+  document.getElementById('eu-phone').value = g.phone||'';
+  document.getElementById('eu-max').value = g.max_solicitantes||25;
+  openModal('edit-user-modal');
+}
+
+async function saveEditUser() {
+  const id = document.getElementById('eu-id').value;
+  try {
+    await api('PUT', '/usuarios/'+id, {
+      nombre: document.getElementById('eu-nombre').value.trim(),
+      email: document.getElementById('eu-email').value.trim(),
+      phone: document.getElementById('eu-phone').value.trim(),
+      max_solicitantes: parseInt(document.getElementById('eu-max').value)||25
+    });
+    toast('Usuario actualizado','ok');
+    closeModal('edit-user-modal');
+    loadGestores(); loadUsers();
+  } catch(e) { toast('Error: '+e.message,'err'); }
+}
+
+async function changePassword() {
+  const np = document.getElementById('cp-new').value;
+  const nc = document.getElementById('cp-confirm').value;
+  const msg = document.getElementById('cp-msg');
+  if(np.length<8){msg.textContent='Minimo 8 caracteres';return;}
+  if(np!==nc){msg.textContent='Las contrasenas no coinciden';return;}
+  if(np==='12345678'){msg.textContent='No puedes usar la clave por defecto';return;}
+  try {
+    await api('POST','/auth/change-password',{token:SESSION.token,new_password:np});
+    toast('Contrasena cambiada','ok');
+    closeModal('change-pass-modal');
+    SESSION.must_change_password=false;
+    localStorage.setItem('cf_s',JSON.stringify(SESSION));
+  } catch(e){msg.textContent='Error: '+e.message;}
+}
+</script>
+</body>
+</html>

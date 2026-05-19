@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/icons/logo_tengovisa.png">
+<link rel="apple-touch-icon" href="/icons/logo_tengovisa.png">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#001F73">
+<meta name="description" content="Evalúa tus probabilidades reales de obtener la visa B1/B2 para EE.UU. Análisis experto basado en criterios reales del consulado.">
+<title>Evaluación Migratoria B1/B2 — TengoVisaRD</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F2F8;color:#0F172A;min-height:100vh}
+::placeholder{color:#C8D0DC;opacity:.5;font-size:13px;font-style:italic}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#001F73 0%,#0D47A1 100%);color:#fff;padding:20px 20px 24px;text-align:center;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.05)}
+.hdr::after{content:'';position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.05)}
+.hdr-logo{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:8px 16px;margin-bottom:14px}
+.hdr-logo-ico{width:32px;height:32px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.hdr-logo-txt{font-size:14px;font-weight:800;letter-spacing:-.3px}
+.hdr h1{font-size:22px;font-weight:800;line-height:1.2;margin-bottom:6px;position:relative}
+.hdr p{font-size:12px;opacity:.8;position:relative}
+.hdr-badge{display:inline-block;background:#FF1117;color:#fff;font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;margin-bottom:10px;letter-spacing:.05em}
+
+/* STEPS */
+.steps-wrap{background:#fff;border-bottom:1px solid #E2E8F0;padding:12px 20px;position:sticky;top:0;z-index:90}
+.steps{display:flex;align-items:center;justify-content:center;gap:0;max-width:400px;margin:0 auto}
+.st{display:flex;align-items:center;gap:5px}
+.st-n{width:26px;height:26px;border-radius:50%;border:2px solid #D8E1F0;background:#fff;font-size:10px;font-weight:800;color:#94A3B8;display:flex;align-items:center;justify-content:center;transition:.3s;flex-shrink:0}
+.st-n.act{background:#001F73;border-color:#001F73;color:#fff;box-shadow:0 0 0 3px rgba(0,31,115,.15)}
+.st-n.done{background:#16A34A;border-color:#16A34A;color:#fff}
+.st-lbl{font-size:10px;font-weight:700;color:#94A3B8;white-space:nowrap}
+.st-lbl.act{color:#001F73}
+.st-line{flex:1;height:2px;background:#D8E1F0;min-width:16px;max-width:40px}
+.st-line.done{background:#16A34A}
+
+.wrap{max-width:640px;margin:0 auto;padding:16px 14px 100px}
+.sc{display:none}.sc.active{display:block}
+.card{background:#fff;border-radius:16px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);border:1px solid #E2E8F0}
+.card-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #F1F5F9}
+.card-ico{width:38px;height:38px;border-radius:10px;background:#EAF0FF;color:#001F73;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.card-title{font-size:15px;font-weight:800;color:#001F73}
+.card-sub{font-size:11px;color:#64748B;margin-top:1px}
+
+/* PLANES */
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.plan{border:2px solid #E2E8F0;border-radius:16px;padding:16px;cursor:pointer;transition:.2s;position:relative;background:#fff;overflow:hidden}
+.plan::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:#E2E8F0;transition:.2s}
+.plan.basico.sel{border-color:#001F73;background:#F8FAFF}
+.plan.basico.sel::before{background:#001F73}
+.plan.full.sel{border-color:#001F73;background:#FAF8FF}
+.plan.full.sel::before{background:linear-gradient(90deg,#001F73,#A855F7)}
+.plan-top-badge{position:absolute;top:10px;right:10px;font-size:9px;font-weight:800;padding:2px 8px;border-radius:10px}
+.badge-pop{background:#001F73;color:#fff}
+.badge-eco{background:#EAF0FF;color:#001F73}
+.plan-ico{font-size:30px;margin-bottom:8px;display:block}
+.plan-name{font-size:13px;font-weight:800;color:#0F172A;margin-bottom:2px}
+.plan-price{font-size:26px;font-weight:800;margin:6px 0;line-height:1}
+.plan-price.azul{color:#001F73}
+.plan-price.morado{color:#001F73}
+.plan-period{font-size:10px;color:#94A3B8;margin-bottom:10px}
+.plan-divider{height:1px;background:#F1F5F9;margin:8px 0}
+.pi{display:flex;align-items:flex-start;gap:6px;margin-bottom:5px}
+.pi-ico{font-size:12px;flex-shrink:0;margin-top:1px}
+.pi-txt{font-size:11px;color:#475569;line-height:1.4}
+.pi.green .pi-txt{color:#15803d;font-weight:600}
+.pi.gray .pi-txt{color:#94A3B8}
+
+/* CAMPO GENERO */
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11px;font-weight:700;color:#64748B;margin-bottom:5px;text-transform:uppercase;letter-spacing:.03em}
+.req{color:#FF1117}
+.inp{width:100%;padding:12px 14px;border:1.5px solid #D8E1F0;border-radius:10px;font-size:15px;font-family:inherit;outline:none;-webkit-appearance:none;background:#fff;color:#0F172A;transition:.2s}
+.inp:focus{border-color:#001F73;box-shadow:0 0 0 3px rgba(0,31,115,.07)}
+textarea.inp{resize:none;min-height:80px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* OTP */
+.otp-wrap{display:flex;gap:8px;justify-content:center;margin:12px 0}
+.otp-b{width:44px;height:52px;border:2px solid #D8E1F0;border-radius:10px;text-align:center;font-size:22px;font-weight:800;color:#001F73;outline:none;font-family:inherit;transition:.2s;background:#fff}
+.otp-b:focus{border-color:#001F73;box-shadow:0 0 0 3px rgba(0,31,115,.1)}
+
+/* PAGO */
+.pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.pay-m{border:2px solid #E2E8F0;border-radius:12px;padding:14px 10px;cursor:pointer;text-align:center;transition:.2s;background:#fff}
+.pay-m:hover{border-color:#001F73}
+.pay-m.sel{border-color:#001F73;background:#EAF0FF}
+.pay-m-ico{font-size:26px;margin-bottom:4px}
+.pay-m-name{font-size:12px;font-weight:700;color:#0F172A}
+.pay-m-sub{font-size:10px;color:#64748B;margin-top:2px}
+.pay-box{background:#F8FAFF;border:1px solid #D8E1F0;border-radius:12px;padding:14px;margin-bottom:12px;font-size:13px;line-height:1.8;color:#0F172A}
+.pay-box strong{color:#001F73}
+.ref-box{background:#001F73;border-radius:10px;padding:14px;margin-bottom:12px;text-align:center}
+.ref-lbl{font-size:10px;color:rgba(255,255,255,.7);margin-bottom:4px;font-weight:700;text-transform:uppercase}
+.ref-val{font-size:22px;font-weight:800;color:#fff;letter-spacing:3px;margin-bottom:6px}
+.btn-copy{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:5px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+.upload-box{border:2px dashed #D8E1F0;border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:.2s;margin-bottom:12px}
+.upload-box:hover,.upload-box.has{border-color:#16A34A;background:#EAF8EE}
+.upload-ico{font-size:32px;margin-bottom:6px}
+.upload-lbl{font-size:12px;color:#64748B}
+
+/* RESUMEN PLAN */
+.plan-resumen{border-radius:12px;padding:14px;margin-bottom:14px}
+.plan-resumen.basico{background:#EAF0FF;border:1px solid #B5D4F4}
+.plan-resumen.full{background:#F3E8FF;border:1px solid #C4B5FD}
+.pr-name{font-size:15px;font-weight:800}
+.pr-name.azul{color:#001F73}
+.pr-name.morado{color:#001F73}
+.pr-precio{font-size:20px;font-weight:800;margin-top:2px}
+.pr-items{margin-top:8px;font-size:12px;line-height:1.8;color:#475569}
+
+/* INFO BOXES */
+.info-box{border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;line-height:1.7}
+.info-blue{background:#EAF0FF;border-left:3px solid #001F73;color:#001F73}
+.info-green{background:#EAF8EE;border-left:3px solid #16A34A;color:#15803d}
+.info-purple{background:#F3E8FF;border-left:3px solid #001F73;color:#6D28D9}
+.info-warn{background:#FFF4DE;border-left:3px solid #CC1A1A;color:#92400e}
+
+/* SUCCESS */
+.success-card{text-align:center;padding:28px 20px}
+.success-ico-wrap{width:80px;height:80px;border-radius:50%;background:#EAF8EE;display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 16px}
+.success-title{font-size:20px;font-weight:800;color:#001F73;margin-bottom:8px}
+.success-sub{font-size:13px;color:#475569;line-height:1.6;margin-bottom:16px}
+
+/* BOTTOM BAR */
+.bar{position:fixed;bottom:0;left:0;right:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0));background:#fff;border-top:1px solid #E2E8F0;display:flex;gap:10px;align-items:center;justify-content:space-between;box-shadow:0 -4px 16px rgba(0,0,0,.08);z-index:80}
+.btn-back{padding:11px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid #E2E8F0;background:#fff;color:#475569;font-family:inherit;white-space:nowrap}
+.btn-next{padding:12px 24px;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;border:none;background:#001F73;color:#fff;font-family:inherit;flex:1;transition:.2s}
+.btn-next.morado{background:#001F73}
+.btn-next:disabled{background:#CBD5E1;cursor:not-allowed}
+.btn-wa-main{padding:12px 16px;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;border:none;background:#25D366;color:#fff;font-family:inherit;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.st-counter{font-size:10px;font-weight:700;color:#94A3B8;white-space:nowrap}
+
+.toast{position:fixed;bottom:calc(80px + env(safe-area-inset-bottom,0));left:50%;transform:translateX(-50%) translateY(10px);background:#001F73;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{background:#16A34A}
+.toast.err{background:#E24B4A}
+@media(max-width:480px){.plan-grid,.grid2,.pay-methods{grid-template-columns:1fr}}
+</style>
+<style id="tvrd-palette">
+:root{
+  --tv-blue:#001F73;
+  --tv-red:#CC1A1A;
+  --tv-white:#FFFFFF;
+  --tv-blue2:#0A2A8B;
+  --tv-red2:#E02424;
+  --tv-gray-l:#F5F7FA;
+  --tv-gray-d:#1A1A1A;
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-logo">
+    <div class="hdr-logo-ico">🛂</div>
+    <div class="hdr-logo-txt">TengoVisaRD</div>
+  </div>
+  <div class="hdr-badge">⚡ ANÁLISIS PROFESIONAL DE VISA</div>
+  <h1>¿Cuántas probabilidades tienes de obtener tu visa?</h1>
+  <p style="margin-top:6px">Evaluación real basada en criterios del Consulado de EE.UU. en Santo Domingo</p>
+</div>
+
+<div class="steps-wrap">
+  <div class="steps">
+    <div class="st"><div class="st-n act" id="sn1">1</div><span class="st-lbl act" id="sl1">Plan</span></div>
+    <div class="st-line" id="sl12"></div>
+    <div class="st"><div class="st-n" id="sn2">2</div><span class="st-lbl" id="sl2">Contacto</span></div>
+    <div class="st-line" id="sl23"></div>
+    <div class="st"><div class="st-n" id="sn3">3</div><span class="st-lbl" id="sl3">Pago</span></div>
+    <div class="st-line" id="sl34"></div>
+    <div class="st"><div class="st-n" id="sn4">4</div><span class="st-lbl" id="sl4">Perfil</span></div>
+    <div class="st-line" id="sl45"></div>
+    <div class="st"><div class="st-n" id="sn5">5</div><span class="st-lbl" id="sl5">Listo</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- S1: PLANES -->
+<div class="sc active" id="s1">
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-ico">🎯</div>
+      <div><div class="card-title">Selecciona tu evaluación</div><div class="card-sub">Conoce tus probabilidades reales antes de aplicar</div></div>
+    </div>
+    <div class="plan-grid">
+      <div class="plan basico" id="p-basico" onclick="selPlan('basico')">
+        <span class="plan-top-badge badge-eco">Esencial</span>
+        <span class="plan-ico">📋</span>
+        <div class="plan-name">Plan Básico</div>
+        <div class="plan-price azul">RD$1,490</div>
+        <div class="plan-period">Resultado en 24h · Por email</div>
+        <div class="plan-divider"></div>
+        <div class="pi"><span class="pi-ico">✅</span><span class="pi-txt">Veredicto inmediato + probabilidad %</span></div>
+        <div class="pi"><span class="pi-ico">✅</span><span class="pi-txt">Scoring 4 pilares con gráfico</span></div>
+        <div class="pi"><span class="pi-ico">✅</span><span class="pi-txt">3 riesgos principales detectados</span></div>
+        <div class="pi"><span class="pi-ico">✅</span><span class="pi-txt">Lista de documentos requeridos</span></div>
+        <div class="pi"><span class="pi-ico">✅</span><span class="pi-txt">Reporte PDF por correo</span></div>
+        <div class="pi gray"><span class="pi-ico">➖</span><span class="pi-txt">Sin respuestas de entrevista</span></div>
+        <div class="pi gray"><span class="pi-ico">➖</span><span class="pi-txt">Sin pre-entrevista virtual</span></div>
+      </div>
+      <div class="plan full" id="p-full" onclick="selPlan('full')">
+        <span class="plan-top-badge badge-pop">⭐ PREMIUM</span>
+        <span class="plan-ico">🏆</span>
+        <div class="plan-name">Plan Full</div>
+        <div class="plan-price morado">RD$2,490</div>
+        <div class="plan-period">Resultado en 12h · Por WhatsApp</div>
+        <div class="plan-divider"></div>
+        <div class="pi green"><span class="pi-ico">✅</span><span class="pi-txt">Todo lo del Plan Básico</span></div>
+        <div class="pi green"><span class="pi-ico">✅</span><span class="pi-txt">Análisis IA experto completo</span></div>
+        <div class="pi green"><span class="pi-ico">✅</span><span class="pi-txt">Respuestas exactas de entrevista</span></div>
+        <div class="pi green"><span class="pi-ico">✅</span><span class="pi-txt">Playbook estratégico personalizado</span></div>
+        <div class="pi green"><span class="pi-ico">✅</span><span class="pi-txt">Cargo óptimo para DS-160</span></div>
+        <div class="pi green"><span class="pi-ico">🎁</span><span class="pi-txt">Pre-entrevista virtual 30 min</span></div>
+        <div class="pi green"><span class="pi-ico">🎁</span><span class="pi-txt">10% desc. si haces el proceso</span></div>
+        <div class="pi green"><span class="pi-ico">🎁</span><span class="pi-txt">Prioridad en cita + revisión DS-160</span></div>
+      </div>
+    </div>
+    <div class="info-warn" style="font-size:11px;text-align:center">
+      🔒 Pago 100% seguro · Tu información es completamente confidencial
+    </div>
+  </div>
+</div>
+
+<!-- S2: CONTACTO + OTP -->
+<div class="sc" id="s2">
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-ico">👤</div>
+      <div><div class="card-title">Tus datos de contacto</div><div class="card-sub">Verificaremos tu email antes de continuar</div></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Nombre <span class="req">*</span></label><input class="inp" id="c_nombre" placeholder="Tu nombre" autocomplete="given-name"></div>
+      <div class="field"><label>Apellido <span class="req">*</span></label><input class="inp" id="c_apellido" placeholder="Tu apellido" autocomplete="family-name"></div>
+    </div>
+    <div class="field"><label>WhatsApp <span class="req">*</span></label><input class="inp" id="c_wa" type="tel" inputmode="tel" placeholder="+1 809 000 0000"></div>
+    <div class="field">
+      <label>Email <span class="req">*</span></label>
+      <div style="display:flex;gap:8px">
+        <input class="inp" id="c_email" type="email" inputmode="email" placeholder="correo@ejemplo.com" style="flex:1">
+        <button style="padding:0 14px;background:#001F73;color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap" onclick="enviarOTP()">Verificar</button>
+      </div>
+    </div>
+    <div id="otp-section" style="display:none">
+      <div class="info-blue" style="margin-bottom:10px">📧 Código enviado a tu email. Revisa spam si no aparece.</div>
+      <div class="otp-wrap">
+        <input class="otp-b" id="o1" maxlength="1" inputmode="numeric">
+        <input class="otp-b" id="o2" maxlength="1" inputmode="numeric">
+        <input class="otp-b" id="o3" maxlength="1" inputmode="numeric">
+        <input class="otp-b" id="o4" maxlength="1" inputmode="numeric">
+        <input class="otp-b" id="o5" maxlength="1" inputmode="numeric">
+        <input class="otp-b" id="o6" maxlength="1" inputmode="numeric">
+      </div>
+      <div id="otp-status"></div>
+    </div>
+  </div>
+</div>
+
+<!-- S3: PAGO -->
+<div class="sc" id="s3">
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-ico">💳</div>
+      <div><div class="card-title">Realizar pago</div><div class="card-sub" id="s3-sub">Plan seleccionado</div></div>
+    </div>
+    <div class="plan-resumen" id="plan-resumen-box"></div>
+    <div class="pay-methods">
+      <div class="pay-m" id="pm-wa" onclick="selPago('wa')">
+        <div class="pay-m-ico">💬</div>
+        <div class="pay-m-name">WhatsApp</div>
+        <div class="pay-m-sub">Pago móvil</div>
+      </div>
+      <div class="pay-m" id="pm-pp" onclick="selPago('pp')">
+        <div class="pay-m-ico">🅿️</div>
+        <div class="pay-m-name">PayPal</div>
+        <div class="pay-m-sub">Tarjeta/cuenta</div>
+      </div>
+      <div class="pay-m" id="pm-tr" onclick="selPago('tr')">
+        <div class="pay-m-ico">🏦</div>
+        <div class="pay-m-name">Transferencia</div>
+        <div class="pay-m-sub">Banco local</div>
+      </div>
+      <div class="pay-m" id="pm-ef" onclick="selPago('ef')">
+        <div class="pay-m-ico">💵</div>
+        <div class="pay-m-name">Efectivo</div>
+        <div class="pay-m-sub">Oficina TengoVisaRD</div>
+      </div>
+    </div>
+    <div class="ref-box">
+      <div class="ref-lbl">Código de tu evaluación</div>
+      <div class="ref-val" id="ref-code">EVAL-000000</div>
+      <button class="btn-copy" onclick="copiarRef()">📋 Copiar código</button>
+    </div>
+    <div id="pay-detail"></div>
+    <div class="upload-box" id="upload-box" onclick="document.getElementById('f-comp').click()">
+      <div class="upload-ico">📸</div>
+      <div class="upload-lbl" id="upload-lbl">Toca aquí para subir tu comprobante de pago</div>
+      <input type="file" id="f-comp" accept="image/*,application/pdf" style="display:none" onchange="archivoSel(this)">
+    </div>
+  </div>
+</div>
+
+<!-- S4: PERFIL -->
+<div class="sc" id="s4">
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-ico">📝</div>
+      <div><div class="card-title">Tu perfil migratorio</div><div class="card-sub">Mientras más detalle, mejor tu evaluación</div></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Edad <span class="req">*</span></label><input class="inp" id="f_edad" type="number" inputmode="numeric" placeholder="Ej: 32" min="18" max="80"></div>
+      <div class="field"><label>Estado civil <span class="req">*</span></label>
+        <select class="inp" id="f_civil"><option value="">—</option><option>Soltero/a</option><option>Casado/a</option><option>Unión libre</option><option>Divorciado/a</option><option>Viudo/a</option></select>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Hijos dependientes</label><input class="inp" id="f_hijos" type="number" inputmode="numeric" placeholder="0" min="0"></div>
+      <div class="field"><label>Ciudad de residencia <span class="req">*</span></label><input class="inp" id="f_ciudad" placeholder="Ej: Santo Domingo"></div>
+    </div>
+    <div class="field"><label>Ocupación / Cargo <span class="req">*</span></label><input class="inp" id="f_cargo" placeholder="Ej: Ingeniero, Maestra, Empresario..."></div>
+    <div class="field"><label>Empleador / Empresa <span class="req">*</span></label><input class="inp" id="f_empresa" placeholder="Nombre de empresa o negocio propio"></div>
+    <div class="grid2">
+      <div class="field"><label>Antigüedad laboral <span class="req">*</span></label><input class="inp" id="f_antiguedad" placeholder="Ej: 5 años"></div>
+      <div class="field"><label>Ingresos mensuales RD$ <span class="req">*</span></label><input class="inp" id="f_ingresos" type="number" inputmode="numeric" placeholder="Ej: 45000"></div>
+    </div>
+    <div class="field"><label>Bienes (casa, vehículo, terreno...)</label><input class="inp" id="f_bienes" placeholder="Ej: casa propia, vehículo 2022, local comercial"></div>
+    <div class="field"><label>Nivel educativo</label>
+      <select class="inp" id="f_edu"><option value="">—</option><option>Bachiller</option><option>Técnico</option><option>Universitario</option><option>Postgrado/Maestría</option></select>
+    </div>
+    <div class="field"><label>Historial migratorio <span class="req">*</span></label>
+      <select class="inp" id="f_migratorio"><option value="">—</option><option>Sin visas previas ni viajes</option><option>He viajado pero sin visa EE.UU.</option><option>Tuve visa EE.UU. — venció</option><option>Tuve una negación</option><option>Más de una negación</option></select>
+    </div>
+    <div class="field"><label>Familiares en EE.UU.</label><input class="inp" id="f_fam" placeholder="Ej: 1 hermana ciudadana, 2 primos sin papeles, ninguno"></div>
+    <div class="field"><label>Propósito del viaje <span class="req">*</span></label>
+      <select class="inp" id="f_proposito"><option value="">—</option><option>Turismo / Vacaciones</option><option>Visita familiar</option><option>Negocios</option><option>Congreso / Evento</option><option>Tratamiento médico</option><option>Compras</option></select>
+    </div>
+    <div class="field"><label>Destino y duración estimada</label><input class="inp" id="f_destino" placeholder="Ej: New York, 2 semanas"></div>
+    <div class="field"><label>Cuéntanos más (opcional pero útil)</label>
+      <textarea class="inp" id="f_extra" placeholder="Cualquier detalle adicional: deudas, propiedades, situación familiar, contexto de negaciones anteriores..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- S5: ÉXITO -->
+<div class="sc" id="s5">
+  <div class="card">
+    <div class="success-card">
+      <div class="success-ico-wrap">🎉</div>
+      <div class="success-title">¡Evaluación Solicitada!</div>
+      <div class="success-sub">Tu perfil está en manos de nuestro equipo experto. Te contactaremos pronto.</div>
+      <div id="success-plan-box" class="plan-resumen" style="margin-bottom:14px;text-align:left"></div>
+      <div id="success-delivery" class="info-box" style="text-align:left;margin-bottom:14px"></div>
+      <button class="btn-wa-main" style="width:100%;justify-content:center;font-size:14px;padding:14px" onclick="contactarWA()">
+        💬 Escribir a TengoVisaRD
+      </button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<div class="bar" id="bar">
+  <button class="btn-back" id="btn-back" style="display:none" onclick="goBack()">← Atrás</button>
+  <span class="st-counter" id="st-counter">Paso 1 de 4</span>
+  <button class="btn-next" id="btn-next" onclick="next()" disabled>Continuar →</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API='https://crm.tengovisard.com/api',KEY='TVPublic2026';
+let curS=1,planSel='',pagoSel='',otpOk=false,compFile=null;
+const refCode='EVAL-'+Date.now().toString(36).toUpperCase().slice(-6);
+document.getElementById('ref-code').textContent=refCode;
+
+const PLANES={
+  basico:{nombre:'Plan Básico',precio:'RD$1,490',monto:1490,color:'azul',cls:'basico',delivery:'📧 Reporte PDF enviado a tu email en máximo 24 horas hábiles'},
+  full:{nombre:'Plan Full ⭐',precio:'RD$2,490',monto:2490,color:'morado',cls:'full',delivery:'💬 Análisis completo enviado por WhatsApp en máximo 12 horas + Pre-entrevista virtual agendada'}
+};
+
+function selPlan(p){
+  planSel=p;
+  document.querySelectorAll('.plan').forEach(el=>el.classList.remove('sel'));
+  document.getElementById('p-'+p).classList.add('sel');
+  document.getElementById('btn-next').disabled=false;
+  document.getElementById('btn-next').className='btn-next'+(p==='full'?' morado':'');
+}
+
+function buildPlanResumen(container){
+  const pl=PLANES[planSel];
+  document.getElementById(container).className='plan-resumen '+pl.cls;
+  document.getElementById(container).innerHTML=`
+    <div class="pr-name ${pl.color}">${pl.nombre}</div>
+    <div class="pr-precio" style="color:${pl.color==='morado'?'#001F73':'#001F73'}">${pl.precio}</div>
+    <div class="pr-items">Ref: <strong>${refCode}</strong></div>`;
+}
+
+// OTP
+async function enviarOTP(){
+  const nombre=document.getElementById('c_nombre').value.trim();
+  const apellido=document.getElementById('c_apellido').value.trim();
+  const wa=document.getElementById('c_wa').value.trim();
+  const email=document.getElementById('c_email').value.trim();
+  if(!nombre||!email){toast('Completa nombre y email','err');return;}
+  if(!email.includes('@')){toast('Email inválido','err');return;}
+  try{
+    const r=await fetch(`${API}/evaluacion/send-otp`,{method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':KEY},
+      body:JSON.stringify({nombre,apellido,whatsapp:wa,email})});
+    const d=await r.json();
+    if(d.ok){
+      document.getElementById('otp-section').style.display='block';
+      toast('✓ Código enviado a tu email','ok');
+      setupOTP();
+    } else toast('Error enviando código','err');
+  }catch(e){toast('Error de conexión','err');}
+}
+
+function setupOTP(){
+  ['o1','o2','o3','o4','o5','o6'].forEach((id,i,arr)=>{
+    const el=document.getElementById(id);
+    el.addEventListener('input',()=>{
+      if(el.value.length===1&&i<arr.length-1) document.getElementById(arr[i+1]).focus();
+      if(i===arr.length-1) verificarOTP();
+    });
+    el.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!el.value&&i>0) document.getElementById(arr[i-1]).focus();});
+  });
+  document.getElementById('o1').focus();
+}
+
+async function verificarOTP(){
+  const code=['o1','o2','o3','o4','o5','o6'].map(id=>document.getElementById(id).value).join('');
+  if(code.length!==6) return;
+  const email=document.getElementById('c_email').value.trim();
+  try{
+    const r=await fetch(`${API}/evaluacion/verify-otp`,{method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':KEY},
+      body:JSON.stringify({email,otp:code})});
+    const d=await r.json();
+    if(d.ok){
+      otpOk=true;
+      document.getElementById('otp-status').innerHTML='<div class="info-green">✅ Email verificado correctamente</div>';
+      document.getElementById('btn-next').disabled=false;
+      toast('✓ Email verificado','ok');
+    } else {
+      document.getElementById('otp-status').innerHTML='<div class="info-warn">❌ Código incorrecto — intenta de nuevo</div>';
+    }
+  }catch(e){toast('Error de conexión','err');}
+}
+
+// PAGO
+function selPago(m){
+  pagoSel=m;
+  document.querySelectorAll('.pay-m').forEach(el=>el.classList.remove('sel'));
+  document.getElementById('pm-'+m).classList.add('sel');
+  const pl=PLANES[planSel];
+  const detalle={
+    wa:`<div class="pay-box">💬 <strong>Pago por WhatsApp / Pago Móvil</strong><br>
+        Envía <strong>${pl.precio}</strong> a: <strong>+1 (829) 559-9999</strong><br>
+        Concepto: <strong>${refCode}</strong><br>
+        Luego sube tu comprobante aquí abajo</div>`,
+    pp:`<div class="pay-box">🅿️ <strong>PayPal</strong><br>
+        Envía <strong>${pl.precio}</strong> a: <strong>tengovisa@gmail.com</strong><br>
+        Nota: <strong>${refCode} — Evaluación Migratoria</strong><br>
+        <a href="https://paypal.me/tengovisard" target="_blank" style="color:#001F73;font-weight:700">→ Abrir PayPal</a></div>`,
+    tr:`<div class="pay-box">🏦 <strong>Transferencia Bancaria</strong><br>
+        Banco Popular Dominicano<br>
+        Cuenta corriente: <strong>809-654321-0</strong><br>
+        A nombre de: <strong>TengoVisaRD SRL</strong><br>
+        Monto: <strong>${pl.precio}</strong> · Ref: <strong>${refCode}</strong></div>`,
+    ef:`<div class="pay-box">💵 <strong>Pago en Efectivo</strong><br>
+        Visítanos en nuestra oficina:<br>
+        <strong>Santo Domingo, Rep. Dom.</strong><br>
+        WhatsApp para confirmar dirección: <strong>+1 (829) 559-9999</strong></div>`
+  };
+  document.getElementById('pay-detail').innerHTML=detalle[m]||'';
+  document.getElementById('btn-next').disabled=false;
+}
+
+function copiarRef(){
+  navigator.clipboard.writeText(refCode).then(()=>toast('✓ Código copiado','ok')).catch(()=>{});
+}
+function archivoSel(inp){
+  compFile=inp.files[0];
+  document.getElementById('upload-box').classList.add('has');
+  document.getElementById('upload-lbl').textContent='✓ '+compFile.name;
+}
+
+// NAVEGACIÓN
+function next(){
+  if(curS===1){if(!planSel){toast('Selecciona un plan','err');return;}goS(2);return;}
+  if(curS===2){
+    const n=document.getElementById('c_nombre').value.trim();
+    const e=document.getElementById('c_email').value.trim();
+    const w=document.getElementById('c_wa').value.trim();
+    if(!n||!e||!w){toast('Completa todos los datos','err');return;}
+    if(!otpOk){toast('Verifica tu email primero','err');return;}
+    buildPlanResumen('plan-resumen-box');
+    document.getElementById('s3-sub').textContent=PLANES[planSel].nombre+' — '+PLANES[planSel].precio;
+    goS(3);return;
+  }
+  if(curS===3){
+    if(!pagoSel){toast('Selecciona método de pago','err');return;}
+    goS(4);return;
+  }
+  if(curS===4){
+    const req=['f_edad','f_civil','f_cargo','f_empresa','f_antiguedad','f_ingresos','f_migratorio','f_proposito'];
+    for(const id of req){
+      if(!document.getElementById(id).value.trim()){
+        toast('Completa los campos requeridos','err');
+        document.getElementById(id).focus();return;
+      }
+    }
+    submitEval();
+  }
+}
+
+function goBack(){
+  if(curS>1&&curS<5) goS(curS-1);
+}
+
+function goS(n){
+  document.querySelectorAll('.sc').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  curS=n;
+  [1,2,3,4,5].forEach(i=>{
+    const sn=document.getElementById('sn'+i),sl=document.getElementById('sl'+i);
+    sn.classList.remove('act','done');sl.classList.remove('act');
+    if(i<n) sn.classList.add('done');
+    else if(i===n){sn.classList.add('act');sl.classList.add('act');}
+  });
+  [['sl12',1],['sl23',2],['sl34',3],['sl45',4]].forEach(([id,t])=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.toggle('done',n>t);
+  });
+  const bar=document.getElementById('bar');
+  const btn=document.getElementById('btn-next');
+  const back=document.getElementById('btn-back');
+  const ctr=document.getElementById('st-counter');
+  if(n===5){bar.style.display='none';return;}
+  bar.style.display='flex';
+  back.style.display=n>1?'block':'none';
+  ctr.textContent='Paso '+n+' de 4';
+  btn.className='btn-next'+(planSel==='full'?' morado':'');
+  btn.disabled=n===1||n===2;
+  btn.textContent=n===4?'📤 Enviar evaluación':'Continuar →';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function submitEval(){
+  const btn=document.getElementById('btn-next');
+  btn.textContent='⏳ Enviando...';btn.disabled=true;
+  const datos={
+    nombre:document.getElementById('c_nombre').value.trim(),
+    apellido:document.getElementById('c_apellido').value.trim(),
+    whatsapp:document.getElementById('c_wa').value.trim(),
+    email:document.getElementById('c_email').value.trim(),
+    edad:document.getElementById('f_edad').value,
+    estado_civil:document.getElementById('f_civil').value,
+    hijos:document.getElementById('f_hijos').value||'0',
+    ciudad:document.getElementById('f_ciudad').value.trim(),
+    cargo:document.getElementById('f_cargo').value.trim(),
+    empresa:document.getElementById('f_empresa').value.trim(),
+    antiguedad:document.getElementById('f_antiguedad').value.trim(),
+    ingresos:document.getElementById('f_ingresos').value,
+    bienes:document.getElementById('f_bienes').value.trim(),
+    educacion:document.getElementById('f_edu').value,
+    historial_migratorio:document.getElementById('f_migratorio').value,
+    familia_eeuu:document.getElementById('f_fam').value.trim(),
+    proposito:document.getElementById('f_proposito').value,
+    destino:document.getElementById('f_destino').value.trim(),
+    notas:document.getElementById('f_extra').value.trim(),
+    plan:planSel,
+    metodo_pago:pagoSel,
+    ref_code:refCode,
+    fuente:'rrss',
+    otp_verificado:otpOk
+  };
+  try{
+    const r=await fetch(`${API}/evaluacion/save`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':KEY},
+      body:JSON.stringify(datos)
+    });
+    const d=await r.json();
+    if(d.ok){
+      const pl=PLANES[planSel];
+      document.getElementById('success-plan-box').className='plan-resumen '+pl.cls;
+      document.getElementById('success-plan-box').innerHTML=`
+        <div class="pr-name ${pl.color}">${pl.nombre}</div>
+        <div style="font-size:13px;color:#475569;margin-top:4px">Código: <strong>${refCode}</strong><br>Método: ${pagoSel}</div>`;
+      document.getElementById('success-delivery').className='info-box '+(planSel==='full'?'info-purple':'info-blue');
+      document.getElementById('success-delivery').innerHTML=pl.delivery;
+      goS(5);
+    } else {
+      toast('Error — intenta de nuevo','err');
+      btn.textContent='📤 Enviar evaluación';btn.disabled=false;
+    }
+  }catch(e){
+    toast('Error de conexión','err');
+    btn.textContent='📤 Enviar evaluación';btn.disabled=false;
+  }
+}
+
+function contactarWA(){
+  const pl=PLANES[planSel]||{};
+  const msg=`Hola TengoVisaRD, acabo de solicitar mi evaluación.\nPlan: ${pl.nombre}\nCódigo: ${refCode}`;
+  window.open('https://wa.me/18499189998?text='+encodeURIComponent(msg),'_blank');
+}
+
+function toast(msg,t=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='toast'+(t?' '+t:'');el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2200);
+}
+goS(1);
+</script>
+</body>
+</html>

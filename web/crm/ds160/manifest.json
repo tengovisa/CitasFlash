@@ -1,0 +1,20 @@
+{
+  "name": "DS-160 Admin — TengoVisaRD",
+  "short_name": "DS-160 Admin",
+  "description": "Panel asesor DS-160 — TengoVisaRD CRM",
+  "start_url": "/ds160/admin.html",
+  "scope": "/ds160/",
+  "display": "standalone",
+  "background_color": "#F5F7FB",
+  "theme_color": "#001F73",
+  "orientation": "portrait-primary",
+  "icons": [
+    {"src": "/icons/icon-192.png","sizes": "192x192","type": "image/png"},
+    {"src": "/icons/icon-512.png","sizes": "512x512","type": "image/png"}
+  ],
+  "shortcuts": [
+    {"name": "Nuevo DS-160","url": "/ds160/","description": "Formulario cliente"},
+    {"name": "Links","url": "/links/","description": "Portal de links"},
+    {"name": "Evaluaciones","url": "/evaluacion/admin.html","description": "Panel evaluaciones"}
+  ]
+}

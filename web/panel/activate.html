@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activar cuenta — CitasFlash</title>
+<link rel="icon" type="image/png" href="citasflash_icon_192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="citasflash_icon_180.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Poppins',sans-serif;background:linear-gradient(145deg,#0a1628 0%,#1a2d5a 50%,#0a1628 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fff;border-radius:20px;padding:40px 36px;width:100%;max-width:420px;box-shadow:0 24px 64px rgba(0,0,0,0.35)}
+.logo{text-align:center;margin-bottom:24px}
+.logo img{height:70px;filter:drop-shadow(0 4px 16px rgba(229,9,20,0.4))}
+.logo-txt{font-size:28px;font-weight:700;color:#E50914;display:none}
+h2{font-size:22px;font-weight:700;color:#2E2E2E;margin-bottom:6px;text-align:center}
+.sub{font-size:14px;color:#64748b;text-align:center;margin-bottom:28px}
+.ff{margin-bottom:16px}
+.ff label{display:block;font-size:11px;font-weight:600;color:#2E2E2E;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+.ff input{width:100%;padding:13px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:15px;font-family:'Poppins',sans-serif;outline:none;transition:border .2s;color:#2E2E2E}
+.ff input:focus{border-color:#1565C0;box-shadow:0 0 0 3px rgba(21,101,192,0.1)}
+.hint{font-size:12px;color:#64748b;margin-top:5px}
+.hint.err{color:#E50914}
+.strength{height:4px;border-radius:2px;background:#e2e8f0;margin-top:6px;overflow:hidden}
+.strength-bar{height:100%;border-radius:2px;transition:width .3s,background .3s;width:0}
+.btn{width:100%;padding:15px;background:#1565C0;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;transition:background .2s;margin-top:8px}
+.btn:hover{background:#1976D2}
+.btn:disabled{background:#94a3b8;cursor:not-allowed}
+.success-box{display:none;text-align:center;padding:20px}
+.success-box .ico{font-size:64px;margin-bottom:16px}
+.success-box h3{font-size:20px;font-weight:700;color:#166534;margin-bottom:8px}
+.success-box p{color:#64748b;font-size:14px;margin-bottom:20px}
+.err-box{background:#fff0f0;border:1px solid #fca5a5;border-radius:10px;padding:14px;font-size:13px;color:#991b1b;margin-bottom:16px;display:none}
+#msg{font-size:13px;text-align:center;margin-top:10px;min-height:18px;font-weight:500}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <img src="citasflash_logo_hd_pngd.png" alt="CitasFlash" onerror="this.style.display='none';document.getElementById('ltxt').style.display='block'">
+    <div id="ltxt" class="logo-txt">CitasFlash</div>
+  </div>
+  
+  <div id="form-section">
+    <h2>Activar cuenta</h2>
+    <div class="sub">Crea tu contraseña para acceder al panel</div>
+    <div class="err-box" id="err-box"></div>
+    <div class="ff">
+      <label>Nueva contraseña</label>
+      <input type="password" id="pass1" placeholder="Mínimo 8 caracteres" oninput="checkStrength()">
+      <div class="strength"><div class="strength-bar" id="strength-bar"></div></div>
+      <div class="hint" id="strength-hint">Ingresa tu nueva contraseña</div>
+    </div>
+    <div class="ff">
+      <label>Confirmar contraseña</label>
+      <input type="password" id="pass2" placeholder="Repite tu contraseña" oninput="checkMatch()">
+      <div class="hint" id="match-hint"></div>
+    </div>
+    <button class="btn" id="act-btn" onclick="activar()" disabled>Activar mi cuenta</button>
+    <div id="msg"></div>
+  </div>
+
+  <div class="success-box" id="success-section">
+    <div class="ico">✅</div>
+    <h3>¡Cuenta activada!</h3>
+    <p>Tu cuenta está lista. Serás redirigido al panel en <span id="countdown">5</span> segundos...</p>
+    <button class="btn" onclick="window.location.href='/'">Ir al panel ahora</button>
+  </div>
+</div>
+
+<script>
+const API = 'https://vps.citaflash.com';
+const params = new URLSearchParams(window.location.search);
+const token = params.get('token');
+
+if (!token) {
+  document.getElementById('err-box').style.display = 'block';
+  document.getElementById('err-box').textContent = 'Token de activación inválido. Solicita un nuevo enlace.';
+  document.getElementById('act-btn').disabled = true;
+}
+
+function checkStrength() {
+  const p = document.getElementById('pass1').value;
+  const bar = document.getElementById('strength-bar');
+  const hint = document.getElementById('strength-hint');
+  let score = 0;
+  if (p.length >= 8) score++;
+  if (p.length >= 12) score++;
+  if (/[A-Z]/.test(p)) score++;
+  if (/[0-9]/.test(p)) score++;
+  if (/[^A-Za-z0-9]/.test(p)) score++;
+  const colors = ['#E50914','#f97316','#eab308','#22c55e','#16a34a'];
+  const labels = ['Muy débil','Débil','Regular','Buena','Excelente'];
+  bar.style.width = (score * 20) + '%';
+  bar.style.background = colors[score-1] || '#e2e8f0';
+  hint.textContent = p.length === 0 ? 'Ingresa tu nueva contraseña' : labels[score-1] || 'Muy débil';
+  hint.className = 'hint' + (score < 2 && p.length > 0 ? ' err' : '');
+  checkMatch();
+}
+
+function checkMatch() {
+  const p1 = document.getElementById('pass1').value;
+  const p2 = document.getElementById('pass2').value;
+  const hint = document.getElementById('match-hint');
+  const btn = document.getElementById('act-btn');
+  if (p1.length < 8) { hint.textContent = ''; btn.disabled = true; return; }
+  if (p2.length === 0) { hint.textContent = ''; btn.disabled = true; return; }
+  if (p1 === p2) {
+    hint.textContent = '✓ Las contraseñas coinciden';
+    hint.className = 'hint';
+    btn.disabled = false;
+  } else {
+    hint.textContent = '✗ Las contraseñas no coinciden';
+    hint.className = 'hint err';
+    btn.disabled = true;
+  }
+}
+
+async function activar() {
+  const pass = document.getElementById('pass1').value;
+  if (pass.length < 8) { document.getElementById('msg').textContent = 'Mínimo 8 caracteres'; return; }
+  const btn = document.getElementById('act-btn');
+  btn.disabled = true;
+  btn.textContent = 'Activando...';
+  try {
+    const r = await fetch(API + '/auth/activate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token, password: pass })
+    });
+    if (r.ok) {
+      document.getElementById('form-section').style.display = 'none';
+      document.getElementById('success-section').style.display = 'block';
+      let n = 5;
+      const timer = setInterval(() => {
+        n--;
+        document.getElementById('countdown').textContent = n;
+        if (n <= 0) { clearInterval(timer); window.location.href = '/panel/'; }
+      }, 1000);
+    } else {
+      const d = await r.json();
+      document.getElementById('err-box').style.display = 'block';
+      document.getElementById('err-box').textContent = d.detail || 'Error al activar. El enlace puede haber expirado.';
+      btn.disabled = false;
+      btn.textContent = 'Activar mi cuenta';
+    }
+  } catch(e) {
+    document.getElementById('msg').textContent = 'Error de conexión';
+    btn.disabled = false;
+    btn.textContent = 'Activar mi cuenta';
+  }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') activar(); });
+</script>
+</body>
+</html>

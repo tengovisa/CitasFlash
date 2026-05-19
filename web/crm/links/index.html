@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TV Links">
+<meta name="theme-color" content="#001F73">
+<link rel="manifest" href="/links/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<title>TengoVisaRD | Links</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F2F8;color:#0F172A;min-height:100vh;overscroll-behavior:none}
+.hdr{background:#001F73;color:#fff;padding:env(safe-area-inset-top,0) 16px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
+.hdr-l{display:flex;align-items:center;gap:10px}
+.hdr-ico{width:34px;height:34px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.hdr h1{font-size:15px;font-weight:800}
+.hdr .sub{font-size:10px;opacity:.7;margin-top:1px}
+.hdr-btns{display:flex;align-items:center;gap:8px}
+.btn-inst{display:none;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;align-items:center;gap:4px}
+.search-wrap{padding:12px 16px;background:#001F73;padding-bottom:14px}
+.search{width:100%;padding:11px 16px;border:none;border-radius:12px;font-size:15px;background:#fff;color:#0F172A;outline:none;-webkit-appearance:none}
+.cats-wrap{padding:8px 16px 4px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-ms-overflow-style:none}
+.cats-wrap::-webkit-scrollbar{display:none}
+.cat{display:inline-block;padding:7px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid #D8E1F0;background:#fff;color:#64748B;margin-right:6px;transition:.15s;white-space:nowrap}
+.cat.active{background:#001F73;color:#fff;border-color:#001F73}
+.grid{padding:10px 12px 100px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:#fff;border-radius:14px;padding:14px 12px;cursor:pointer;transition:.1s;position:relative;box-shadow:0 1px 4px rgba(0,0,0,.06);-webkit-user-select:none;user-select:none;overflow:hidden}
+.card:active{transform:scale(.97);background:#f8faff}
+.card-ico{font-size:26px;margin-bottom:8px;display:block}
+.card-name{font-size:13px;font-weight:800;color:#0F172A;margin-bottom:3px;line-height:1.3}
+.card-url{font-size:10px;color:#94A3B8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:6px}
+.card-desc{font-size:11px;color:#64748B;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:8px}
+.card-tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:800;background:#EAF0FF;color:#001F73;margin-bottom:8px}
+.card-btns{display:flex;gap:5px}
+.btn-s{flex:1;padding:7px 4px;border-radius:8px;font-size:10px;font-weight:700;cursor:pointer;border:none;font-family:inherit;text-align:center;transition:.1s}
+.btn-s:active{opacity:.7}
+.bc{background:#EAF0FF;color:#001F73}
+.bo{background:#f1f5f9;color:#475569}
+.bw{background:#dcfce7;color:#15803d}
+.card-del{position:absolute;top:8px;right:8px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.06);border:none;font-size:12px;cursor:pointer;color:#94A3B8;display:none;align-items:center;justify-content:center}
+.card:active .card-del{display:flex}
+/* FULL CARD — una columna para descripciones largas */
+.card.full{grid-column:span 2}
+.empty{grid-column:span 2;text-align:center;padding:50px 20px;color:#94A3B8}
+.empty-ico{font-size:48px;margin-bottom:12px}
+/* MODAL AGREGAR */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center}
+.ov.open{display:flex}
+.sheet{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:500px;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0));max-height:90vh;overflow-y:auto}
+.sheet h2{font-size:16px;font-weight:800;color:#001F73;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11px;font-weight:700;color:#64748B;margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.inp{width:100%;padding:12px 14px;border:1.5px solid #D8E1F0;border-radius:10px;font-size:15px;font-family:inherit;outline:none;-webkit-appearance:none}
+.inp:focus{border-color:#001F73}
+.cat-sel{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px}
+.cat-opt{padding:8px 10px;border-radius:8px;border:1.5px solid #D8E1F0;background:#fff;font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:.1s}
+.cat-opt.sel{background:#001F73;color:#fff;border-color:#001F73}
+.btn-save{width:100%;padding:14px;background:#001F73;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px;font-family:inherit}
+/* MODAL WA */
+.wa-sheet{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:500px;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0))}
+.wa-link{background:#EAF0FF;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:700;color:#001F73;margin-bottom:12px;word-break:break-all}
+.wa-inp{width:100%;padding:13px 14px;border:1.5px solid #D8E1F0;border-radius:10px;font-size:16px;font-family:inherit;outline:none;margin-bottom:8px;-webkit-appearance:none}
+.wa-inp:focus{border-color:#25D366}
+.btn-wa{width:100%;padding:14px;background:#25D366;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px}
+/* TOAST */
+.toast{position:fixed;bottom:calc(80px + env(safe-area-inset-bottom,0));left:50%;transform:translateX(-50%) translateY(10px);background:#001F73;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{background:#16A34A}
+/* FAB */
+.fab{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0));right:20px;width:56px;height:56px;border-radius:50%;background:#001F73;color:#fff;font-size:26px;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(0,31,115,.4);display:flex;align-items:center;justify-content:center;z-index:50}
+.fab:active{transform:scale(.93)}
+@media(min-width:600px){.grid{grid-template-columns:1fr 1fr 1fr;max-width:900px;margin:0 auto}}
+@media(min-width:900px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+<style id="tvrd-palette">
+:root{
+  --tv-blue-primary:#001F73;
+  --tv-red-primary:#CC1A1A;
+  --tv-white:#FFFFFF;
+  --tv-blue-secondary:#0A2A8B;
+  --tv-red-secondary:#E24B4A;
+  --tv-text:#0F172A;
+  --tv-muted:#64748B;
+  --tv-border:#E2E8F0;
+}
+</style>
+<style id="tv-p">
+:root{
+  --tv-blue:#001F73;--tv-red:#CC1A1A;--tv-white:#FFFFFF;
+  --tv-blue2:#0A2A8B;--tv-red2:#E02424;
+  --tv-gray-l:#F5F7FA;--tv-gray-d:#1A1A1A
+}
+</style>
+
+<style id="tv-brand-fix">
+.tv-brand-top{position:fixed;top:16px;left:16px;z-index:9999;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.96);border:1px solid var(--tv-border);border-radius:14px;padding:10px 14px;box-shadow:0 10px 25px rgba(0,31,115,.10);backdrop-filter:blur(6px)}
+.tv-brand-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--tv-blue-primary),var(--tv-red-primary));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-family:Arial,sans-serif;font-size:16px}
+.tv-brand-text{line-height:1}
+.tv-brand-title{font:800 16px/1 Arial,sans-serif;color:var(--tv-blue-primary);margin:0}
+.tv-brand-sub{font:600 10px/1.2 Arial,sans-serif;color:var(--tv-muted);margin-top:2px}
+body{color:var(--tv-text)!important}
+a,.btn,.card a{transition:.2s}
+.btn-primary,.primary,.cta,.nav-cta{background:linear-gradient(135deg,var(--tv-blue-primary),var(--tv-blue-secondary))!important;color:#fff!important;border-color:var(--tv-blue-primary)!important}
+.btn-secondary,.secondary,.danger,.accent{background:var(--tv-red-primary)!important;color:#fff!important;border-color:var(--tv-red-primary)!important}
+.card,.box,.panel,.link-card,.service-card{border-color:var(--tv-border)!important}
+</style>
+</head>
+<body>
+
+<div class="tv-brand-top">
+  <div class="tv-brand-mark">TV</div>
+  <div class="tv-brand-text">
+    <div class="tv-brand-title">TengoVisaRD</div>
+    <div class="tv-brand-sub">Asesoría Migratoria</div>
+  </div>
+</div>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="hdr-l">
+      <div class="hdr-ico">🔗</div>
+      <div><div class="hdr h1" style="font-size:15px;font-weight:800">TengoVisaRD Links</div><div class="sub">Acceso rápido a todos los servicios</div></div>
+    </div>
+    <div class="hdr-btns">
+      <button class="btn-inst" id="btn-inst" onclick="installPWA()">📲 Instalar</button>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <input class="search" id="srch" type="search" placeholder="🔍 Buscar link..." oninput="render()" autocomplete="off" autocorrect="off" spellcheck="false">
+  </div>
+</header>
+
+<div class="cats-wrap" id="cats"></div>
+<div class="grid" id="grid"></div>
+<button class="fab" onclick="openAdd()" title="Agregar link">+</button>
+
+<!-- MODAL AGREGAR -->
+<div class="ov" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="sheet">
+    <h2>➕ Agregar Link <span onclick="closeModal()" style="font-size:20px;cursor:pointer;color:#94A3B8">✕</span></h2>
+    <div class="field"><label>Nombre *</label><input class="inp" id="m-nombre" placeholder="Ej: CEAC DS-160" autocomplete="off"></div>
+    <div class="field"><label>URL *</label><input class="inp" id="m-url" type="url" placeholder="https://..." autocomplete="off" autocorrect="off"></div>
+    <div class="field"><label>Descripción</label><input class="inp" id="m-desc" placeholder="Breve descripción"></div>
+    <div class="field"><label>Categoría</label>
+      <div class="cat-sel" id="cat-sel">
+        <div class="cat-opt sel" data-v="Gobierno" onclick="selCat(this)">🏛️ Gobierno</div>
+        <div class="cat-opt" data-v="CRM" onclick="selCat(this)">📋 CRM</div>
+        <div class="cat-opt" data-v="Clientes" onclick="selCat(this)">👤 Clientes</div>
+        <div class="cat-opt" data-v="Tecnología" onclick="selCat(this)">💻 Tecnología</div>
+        <div class="cat-opt" data-v="Pagos" onclick="selCat(this)">💳 Pagos</div>
+        <div class="cat-opt" data-v="Comunicación" onclick="selCat(this)">💬 Comunicación</div>
+        <div class="cat-opt" data-v="Citas" onclick="selCat(this)">📅 Citas</div>
+        <div class="cat-opt" data-v="Otro" onclick="selCat(this)">🔗 Otro</div>
+      </div>
+    </div>
+    <div class="field"><label>Emoji</label><input class="inp" id="m-ico" placeholder="🔗 🛂 📋 💳" maxlength="4"></div>
+    <button class="btn-save" onclick="saveLink()">💾 Guardar</button>
+  </div>
+</div>
+
+<!-- MODAL WHATSAPP -->
+<div class="ov" id="wa-modal" onclick="if(event.target===this)closeWA()">
+  <div class="wa-sheet">
+    <h2 style="font-size:16px;font-weight:800;margin-bottom:8px;display:flex;justify-content:space-between">💬 Enviar por WhatsApp <span onclick="closeWA()" style="font-size:20px;cursor:pointer;color:#94A3B8">✕</span></h2>
+    <div class="wa-link" id="wa-prev"></div>
+    <input class="wa-inp" id="wa-tel" type="tel" placeholder="+1 809 000 0000" inputmode="tel">
+    <textarea class="wa-inp" id="wa-msg" style="min-height:80px;resize:none;margin-bottom:12px" placeholder="Mensaje personalizado..."></textarea>
+    <button class="btn-wa" onclick="enviarWA()">💬 Abrir WhatsApp</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY='tvrd_links_v3';
+let links=[], activeCat='Todos', waUrl='', editId=null, selCatVal='Gobierno';
+let deferredPrompt=null;
+
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  document.getElementById('btn-inst').style.display='flex';
+});
+function installPWA(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;}}
+
+const DEFAULTS=[
+  {nombre:'CEAC DS-160',url:'https://ceac.state.gov/GenNIV/Default.aspx',desc:'Formulario oficial DS-160 — Embajada EE.UU.',cat:'Gobierno',ico:'🛂'},
+  {nombre:'DS-160 Formulario',url:'https://crm.tengovisard.com/ds160/',desc:'Formulario DS-160 para clientes',cat:'CRM',ico:'📋'},
+  {nombre:'DS-160 Admin',url:'https://crm.tengovisard.com/ds160/admin.html',desc:'Panel asesor DS-160',cat:'CRM',ico:'👁'},
+  {nombre:'Evaluación B1/B2',url:'https://crm.tengovisard.com/evaluacion/',desc:'Evaluación migratoria para clientes',cat:'CRM',ico:'🧠'},
+  {nombre:'Evaluación Admin',url:'https://crm.tengovisard.com/evaluacion/admin.html',desc:'Panel evaluaciones + IA scoring',cat:'CRM',ico:'📊'},
+  {nombre:'Global Entry',url:'https://crm.tengovisard.com/globalentry/',desc:'Formulario Global Entry',cat:'CRM',ico:'🌐'},
+  {nombre:'Global Entry Admin',url:'https://crm.tengovisard.com/globalentry/',desc:'Panel Global Entry',cat:'CRM',ico:'✅'},
+  {nombre:'CitasFlash Login',url:'https://www.citasflash.com/login.php',desc:'Panel de citas — acceso principal',cat:'Citas',ico:'📅'},
+  {nombre:'CitasFlash VPS',url:'https://vps.citaflash.com/panel/',desc:'Panel de control VPS CitasFlash',cat:'Tecnología',ico:'🖥️'},
+  {nombre:'CitasFlash Alt',url:'https://citaflash.com/login',desc:'Login alternativo CitasFlash',cat:'Citas',ico:'🔗'},
+  {nombre:'Extensión Chrome',url:'https://crm.tengovisard.com/ds160/exports/ceac_autofill_tvrd.zip',desc:'AutoFill DS-160 para CEAC',cat:'Tecnología',ico:'⚡'},
+  {nombre:'Supabase',url:'https://supabase.com/dashboard/project/lbttnpcpqdjmpktuoegs',desc:'Base de datos CRM',cat:'Tecnología',ico:'🗄️'},
+  {nombre:'Contabo VPS',url:'https://my.contabo.com',desc:'Panel servidor VPS',cat:'Tecnología',ico:'🖥️'},
+  {nombre:'Twilio',url:'https://console.twilio.com',desc:'WhatsApp y SMS',cat:'Comunicación',ico:'📱'},
+  {nombre:'Gmail TengoVisaRD',url:'https://mail.google.com',desc:'tengovisa@gmail.com',cat:'Comunicación',ico:'📧'},
+  {nombre:'Citas DS-160 SDQ',url:'https://ais.usvisa-info.com/es-do/niv',desc:'Sistema de citas visa Santo Domingo',cat:'Gobierno',ico:'📅'},
+  {nombre:'Consulado EE.UU.',url:'https://do.usembassy.gov/es/visas-es/',desc:'Embajada americana en Santo Domingo',cat:'Gobierno',ico:'🏛️'},
+  {nombre:'MIREX RD',url:'https://www.mirex.gob.do',desc:'Ministerio de Relaciones Exteriores RD',cat:'Gobierno',ico:'🇩🇴'},
+  {nombre:'Renovar Pasaporte',url:'https://crm.tengovisard.com/pasaporte/',desc:'JCE — Pasaportes República Dominicana',cat:'Gobierno',ico:'🛂'},
+  {nombre:'CRM Principal',url:'https://crm.tengovisard.com',desc:'Panel principal TengoVisaRD',cat:'CRM',ico:'🏠'},
+];
+
+function load(){
+  const s=localStorage.getItem(KEY);
+  if(s){links=JSON.parse(s);}
+  else{links=DEFAULTS.map((l,i)=>({...l,id:Date.now()+i}));save();}
+  render();
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(links));}
+
+function render(){
+  const q=document.getElementById('srch').value.toLowerCase().trim();
+  const cats=['Todos',...new Set(links.map(l=>l.cat))];
+  document.getElementById('cats').innerHTML=cats.map(c=>`<span class="cat${c===activeCat?' active':''}" onclick="setCat('${c}')">${c}</span>`).join('');
+  const filtered=links.filter(l=>{
+    const mq=!q||l.nombre.toLowerCase().includes(q)||l.url.toLowerCase().includes(q)||(l.desc||'').toLowerCase().includes(q)||(l.cat||'').toLowerCase().includes(q);
+    const mc=activeCat==='Todos'||l.cat===activeCat;
+    return mq&&mc;
+  });
+  const cols={'Gobierno':'#EAF0FF','CRM':'#EAF8EE','Citas':'#FFF4DE','Tecnología':'#F3E8FF','Pagos':'#FEF9EE','Comunicación':'#E0F2FE','Otro':'#F5F7FB','Clientes':'#FFF4DE'};
+  const grid=document.getElementById('grid');
+  if(!filtered.length){
+    grid.innerHTML='<div class="empty"><div class="empty-ico">🔍</div>Sin resultados</div>';
+    return;
+  }
+  grid.innerHTML=filtered.map(l=>`
+    <div class="card" style="border-top:3px solid ${l.cat==='Gobierno'?'#001F73':l.cat==='CRM'?'#16A34A':l.cat==='Citas'?'#CC1A1A':l.cat==='Tecnología'?'#001F73':'#64748B'}">
+      <span class="card-ico">${l.ico||'🔗'}</span>
+      <div class="card-name">${l.nombre}</div>
+      <div class="card-url">${l.url.replace('https://','').split('/')[0]}</div>
+      ${l.desc?`<div class="card-desc">${l.desc}</div>`:''}
+      <span class="card-tag">${l.cat}</span>
+      <div class="card-btns">
+        <button class="btn-s bc" onclick="event.stopPropagation();copyL('${l.url}',this)">📋</button>
+        <button class="btn-s bo" onclick="event.stopPropagation();window.open('${l.url}','_blank')">↗</button>
+        <button class="btn-s bw" onclick="event.stopPropagation();openWA('${l.url}','${l.nombre.replace(/'/g,'')}}')">💬</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function setCat(c){activeCat=c;render();}
+
+function copyL(url,btn){
+  navigator.clipboard.writeText(url).then(()=>{
+    btn.textContent='✓';
+    setTimeout(()=>btn.textContent='📋',1200);
+    toast('✓ Copiado','ok');
+  }).catch(()=>{
+    // fallback
+    const el=document.createElement('input');
+    el.value=url;document.body.appendChild(el);el.select();
+    document.execCommand('copy');document.body.removeChild(el);
+    toast('✓ Copiado','ok');
+  });
+}
+
+function openWA(url,nombre){
+  waUrl=url;
+  document.getElementById('wa-prev').textContent=url;
+  document.getElementById('wa-msg').value=`Hola, aquí está el link para ${nombre}:\n${url}`;
+  document.getElementById('wa-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('wa-tel').focus(),300);
+}
+function enviarWA(){
+  const tel=document.getElementById('wa-tel').value.replace(/\D/g,'');
+  const msg=document.getElementById('wa-msg').value||waUrl;
+  if(!tel){toast('Ingresa el número');return;}
+  window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`,'_blank');
+  closeWA();
+}
+function closeWA(){document.getElementById('wa-modal').classList.remove('open');}
+
+function selCat(el){
+  document.querySelectorAll('.cat-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  selCatVal=el.getAttribute('data-v');
+}
+function openAdd(){
+  editId=null;
+  document.getElementById('m-nombre').value='';
+  document.getElementById('m-url').value='';
+  document.getElementById('m-desc').value='';
+  document.getElementById('m-ico').value='🔗';
+  document.querySelectorAll('.cat-opt').forEach(e=>e.classList.remove('sel'));
+  document.querySelector('.cat-opt').classList.add('sel');
+  selCatVal='Gobierno';
+  document.getElementById('modal').classList.add('open');
+  setTimeout(()=>document.getElementById('m-nombre').focus(),300);
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+function saveLink(){
+  const n=document.getElementById('m-nombre').value.trim();
+  const u=document.getElementById('m-url').value.trim();
+  if(!n||!u){toast('Nombre y URL requeridos');return;}
+  links.unshift({id:Date.now(),nombre:n,url:u,desc:document.getElementById('m-desc').value.trim(),cat:selCatVal,ico:document.getElementById('m-ico').value||'🔗'});
+  save();closeModal();render();toast('✓ Guardado','ok');
+}
+
+function toast(msg,t=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='toast'+(t?' '+t:'');el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2000);
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeWA();}});
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
+load();
+</script>
+</body>
+</html>

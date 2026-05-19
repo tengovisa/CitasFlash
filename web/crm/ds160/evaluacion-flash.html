@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ Evaluación Flash Asesor · TengoVisa RD</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  --navy:   #001F73;
+  --navy2:  #0B4F8A;
+  --red:    #CC1A1A;
+  --red2:   #E31837;
+  --green:  #2e9e4f;
+  --yellow: #d4a017;
+  --orange: #E07B00;
+  --bg:     #EEF2FA;
+  --card:   #FFFFFF;
+  --border: #D1D9EC;
+  --text:   #0D1B3E;
+  --muted:  #6B7A9E;
+  --sw:     260px;
+  --hh:     62px;
+  --r:      10px;
+  --sh:     0 2px 14px rgba(0,31,115,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);font-size:13.5px;min-height:100vh}
+
+/* ─── HEADER ─── */
+.hdr{position:fixed;top:0;left:0;right:0;height:var(--hh);background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:1000;box-shadow:0 2px 18px rgba(0,0,0,.3)}
+.hdr-left{display:flex;align-items:center;gap:14px}
+.hdr-logo img{height:38px;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
+.hdr-sep{width:1px;height:32px;background:rgba(255,255,255,.18)}
+.hdr-info{line-height:1.3}
+.hdr-title{color:#fff;font-size:14px;font-weight:700;letter-spacing:-.2px}
+.hdr-sub{color:rgba(255,255,255,.5);font-size:10.5px}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.badge-flash{background:linear-gradient(135deg,#CC1A1A,#8b0000);color:#FFD700;font-size:10px;font-weight:800;padding:4px 12px;border-radius:20px;letter-spacing:.8px;text-transform:uppercase;border:1px solid rgba(255,215,0,.3)}
+.badge-ina{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.7);font-size:10px;padding:4px 11px;border-radius:20px}
+
+/* ─── LAYOUT ─── */
+.layout{display:flex;padding-top:var(--hh);min-height:100vh}
+
+/* ─── SIDEBAR ─── */
+.sidebar{width:var(--sw);position:fixed;top:var(--hh);left:0;bottom:0;background:var(--navy);overflow-y:auto;padding:16px 12px 32px;z-index:900;display:flex;flex-direction:column;gap:4px}
+.sb-score-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:var(--r);padding:16px;margin-bottom:10px;text-align:center}
+.sb-score-num{font-size:58px;font-weight:900;color:#fff;line-height:1;font-family:'JetBrains Mono',monospace;transition:all .4s}
+.sb-score-lbl{color:rgba(255,255,255,.5);font-size:10.5px;margin-top:3px}
+.sb-cat{font-size:11.5px;font-weight:700;margin-top:9px;padding:5px 14px;border-radius:20px;display:inline-block;transition:all .4s}
+.sb-prob{color:rgba(255,255,255,.6);font-size:11px;margin-top:6px}
+.sb-title{color:rgba(255,255,255,.35);font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:10px 8px 3px}
+.sb-mod{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .15s;text-decoration:none;margin-bottom:2px}
+.sb-mod:hover{background:rgba(255,255,255,.11)}
+.sb-mod-name{color:rgba(255,255,255,.78);font-size:11.5px;font-weight:500}
+.sb-mod-val{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#fff;min-width:34px;text-align:right}
+.sb-bar{height:3px;background:rgba(255,255,255,.12);border-radius:2px;margin:2px 0 4px;overflow:hidden}
+.sb-bar-fill{height:100%;border-radius:2px;transition:width .4s}
+
+/* ─── MAIN ─── */
+.main{margin-left:var(--sw);flex:1;padding:20px 24px 70px;max-width:940px}
+
+/* ─── PROGRESS ─── */
+.prog-wrap{background:var(--card);border-radius:var(--r);padding:13px 18px;margin-bottom:16px;box-shadow:var(--sh);display:flex;align-items:center;gap:14px}
+.prog-lbl{font-size:11px;font-weight:600;color:var(--muted);min-width:80px}
+.prog-outer{flex:1;height:7px;background:var(--border);border-radius:4px;overflow:hidden}
+.prog-inner{height:100%;background:linear-gradient(90deg,var(--red),var(--navy2));border-radius:4px;transition:width .5s}
+.prog-pct{font-size:11px;font-weight:700;color:var(--navy);min-width:34px;text-align:right}
+
+/* ─── LEGAL ─── */
+.legal{background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:10px 15px;font-size:11px;color:#5d4037;line-height:1.5;margin-bottom:16px}
+
+/* ─── SECTION CARD ─── */
+.sc{background:var(--card);border-radius:var(--r);border:1px solid var(--border);margin-bottom:16px;box-shadow:var(--sh);overflow:hidden}
+.sc-hdr{background:var(--navy);color:#fff;padding:12px 18px;display:flex;align-items:center;justify-content:space-between}
+.sc-hdr-l{display:flex;align-items:center;gap:10px}
+.sc-num{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;flex-shrink:0}
+.sc-name{font-size:13.5px;font-weight:700}
+.sc-sub{font-size:10.5px;color:rgba(255,255,255,.55);font-style:italic}
+.sc-total{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);color:#fff;font-size:14px;font-weight:700;padding:3px 14px;border-radius:20px;font-family:'JetBrains Mono',monospace}
+
+/* ─── DATOS GRID ─── */
+.datos-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.fg input,.fg select{border:1px solid var(--border);border-radius:7px;padding:8px 11px;font-size:13px;font-family:'Sora',sans-serif;background:#f8faff;color:var(--text);outline:none;transition:border .2s,box-shadow .2s}
+.fg input:focus,.fg select:focus{border-color:var(--navy2);box-shadow:0 0 0 3px rgba(11,79,138,.1)}
+
+/* ─── PRIMERA VEZ STRIP ─── */
+.pv-strip{padding:14px 18px;border-bottom:1px solid var(--border);background:#f8faff;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.pv-lbl{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;min-width:160px}
+.pv-opts{display:flex;gap:8px;flex-wrap:wrap}
+.pv-opt{display:flex;align-items:center;gap:6px;cursor:pointer;padding:7px 16px;border:1.5px solid var(--border);border-radius:22px;font-size:12.5px;font-weight:600;color:var(--muted);transition:all .15s;user-select:none}
+.pv-opt input{display:none}
+.pv-opt.sel-primera{border-color:var(--navy2);background:#e8f0fe;color:var(--navy)}
+.pv-opt.sel-renovacion{border-color:var(--green);background:#e8f8ee;color:#1a5e35}
+.pv-opt.sel-negacion{border-color:var(--red);background:#fff0f0;color:var(--red)}
+
+/* ─── SCORE TABLE ─── */
+.tbl{width:100%;border-collapse:collapse}
+.tbl thead tr{background:#f2f5fc}
+.tbl th{padding:8px 13px;text-align:left;font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border)}
+.tbl th:last-child,.tbl th:nth-last-child(2){text-align:center}
+.tbl td{padding:7px 13px;border-bottom:1px solid #ecf0f9;vertical-align:middle;font-size:13px}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .sub td{background:#f5f8ff;font-size:10.5px;font-weight:800;color:var(--navy2);text-transform:uppercase;letter-spacing:.5px;padding:6px 13px}
+.tbl .tot td{background:#ebf0fc;font-weight:800;font-size:13px;color:var(--navy);border-top:2px solid var(--border)}
+.tbl .tot td:last-child{font-family:'JetBrains Mono',monospace;font-size:15px;text-align:center}
+.sc-col{text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--navy2)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dg{background:var(--green)}.dy{background:var(--yellow)}.do{background:var(--orange)}.dr{background:var(--red)}
+
+/* ─── RADIO OPTS ─── */
+.rg{display:flex;gap:5px;flex-wrap:wrap}
+.ro{display:flex;align-items:center;gap:4px;cursor:pointer;padding:4px 10px;border:1px solid var(--border);border-radius:18px;font-size:11.5px;font-weight:600;color:var(--muted);transition:all .15s;white-space:nowrap;user-select:none}
+.ro input{display:none}
+.ro.sel{background:var(--navy);border-color:var(--navy);color:#fff}
+
+/* ─── QTY ─── */
+.qty{display:flex;align-items:center;gap:5px;justify-content:center}
+.qb{width:23px;height:23px;border:1px solid var(--border);border-radius:5px;background:#f0f4fc;cursor:pointer;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--navy);transition:background .15s;border:none}
+.qb:hover{background:var(--border)}
+.qv{width:30px;text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;color:var(--navy);border:none;background:transparent}
+
+/* ─── ALERTS ─── */
+.al-wrap{padding:14px 18px;display:flex;flex-direction:column;gap:7px}
+.al{display:flex;align-items:flex-start;gap:9px;padding:9px 13px;border-radius:8px;font-size:12px;line-height:1.5}
+.al-r{background:#fff0f0;border:1px solid #ffc5c5;color:#8b1a1a}
+.al-y{background:#fffbea;border:1px solid #ffe27a;color:#7a5c00}
+.al-g{background:#f0fff4;border:1px solid #a3e8b8;color:#1a5e35}
+.al-i{font-size:15px;flex-shrink:0;margin-top:1px}
+
+/* ─── CHART SECTION ─── */
+.chart-section{background:var(--card);border-radius:var(--r);border:1px solid var(--border);margin-bottom:16px;box-shadow:var(--sh);padding:20px}
+.chart-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.chart-wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+.chart-canvas-wrap{display:flex;justify-content:center;align-items:center;position:relative}
+#donut-canvas{max-width:220px;max-height:220px}
+.donut-center{position:absolute;text-align:center;pointer-events:none}
+.donut-center-num{font-size:32px;font-weight:900;color:var(--navy);font-family:'JetBrains Mono',monospace;line-height:1}
+.donut-center-lbl{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.chart-legend{display:flex;flex-direction:column;gap:8px}
+.cl-item{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cl-left{display:flex;align-items:center;gap:8px}
+.cl-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.cl-name{font-size:12px;color:var(--text);font-weight:500}
+.cl-val{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--navy)}
+.cl-bar-wrap{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden;min-width:60px}
+.cl-bar-fill{height:100%;border-radius:3px;transition:width .5s}
+
+/* ─── IA SECTION ─── */
+.ia-section{background:var(--card);border-radius:var(--r);border:1px solid var(--border);margin-bottom:16px;box-shadow:var(--sh);overflow:hidden}
+.ia-hdr{background:linear-gradient(135deg,#001F73,#0B4F8A);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.ia-hdr-l{display:flex;align-items:center;gap:10px}
+.ia-hdr-title{color:#fff;font-size:14px;font-weight:700}
+.ia-hdr-sub{color:rgba(255,255,255,.55);font-size:10.5px}
+.ia-key-wrap{padding:16px 20px 14px;border-bottom:1px solid var(--border);background:#f8faff}
+.ia-key-row{display:flex;gap:10px;align-items:flex-end}
+.ia-key-group{flex:1;display:flex;flex-direction:column;gap:4px}
+.ia-key-group label{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.ia-key-inp{border:1px solid var(--border);border-radius:7px;padding:8px 12px;font-size:13px;font-family:'Sora',sans-serif;background:#fff;color:var(--text);outline:none;width:100%;transition:border .2s}
+.ia-key-inp:focus{border-color:var(--navy2);box-shadow:0 0 0 3px rgba(11,79,138,.1)}
+.ia-body{padding:18px 20px}
+.ia-btn-row{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.btn{padding:9px 18px;border-radius:8px;font-family:'Sora',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;border:none;transition:all .18s;display:flex;align-items:center;gap:6px}
+.btn-navy{background:var(--navy);color:#fff}
+.btn-navy:hover{background:var(--navy2)}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{filter:brightness(1.1)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{filter:brightness(1.1)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text)}
+.btn-outline:hover{background:#f0f4fc}
+.btn-gold{background:linear-gradient(135deg,#d4a017,#b8860b);color:#fff}
+.btn-gold:hover{filter:brightness(1.1)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.ia-output{background:#0d1b3e;border-radius:8px;padding:18px;min-height:80px;font-size:13px;line-height:1.7;color:rgba(255,255,255,.88);font-family:'Sora',sans-serif;white-space:pre-wrap;display:none}
+.ia-output.visible{display:block}
+.ia-typing{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.5);font-size:12px}
+.ia-typing span{display:flex;gap:3px}
+.ia-typing span b{width:6px;height:6px;background:rgba(255,255,255,.5);border-radius:50%;animation:bounce 1.2s infinite}
+.ia-typing span b:nth-child(2){animation-delay:.2s}
+.ia-typing span b:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+
+/* ─── RESULT PANEL ─── */
+.result-panel{background:var(--navy);border-radius:var(--r);padding:24px;margin-bottom:16px;color:#fff;box-shadow:var(--sh)}
+.result-panel h2{font-size:14px;font-weight:700;margin-bottom:16px;opacity:.88}
+.result-big{text-align:center;margin-bottom:20px}
+.result-num{font-size:82px;font-weight:900;line-height:1;font-family:'JetBrains Mono',monospace;transition:all .4s}
+.result-cat{font-size:15px;font-weight:700;margin-top:7px;padding:6px 20px;border-radius:28px;display:inline-block}
+.result-prob{color:rgba(255,255,255,.55);font-size:12px;margin-top:5px}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rm{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:8px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between}
+.rm-name{font-size:11.5px;color:rgba(255,255,255,.65)}
+.rm-val{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700}
+.diag-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.11);border-radius:8px;padding:14px 16px;margin-top:14px;font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.82)}
+.diag-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.38);margin-bottom:4px}
+.diag-sec{margin-bottom:10px}
+.diag-sec:last-child{margin-bottom:0}
+.tag{display:inline-block;padding:2px 8px;border-radius:11px;font-size:11px;font-weight:600;margin:2px}
+.tg{background:rgba(46,158,79,.22);color:#6dde97;border:1px solid rgba(46,158,79,.28)}
+.tr{background:rgba(204,26,26,.22);color:#ff8888;border:1px solid rgba(204,26,26,.28)}
+
+/* ─── BTNS BOTTOM ─── */
+.btn-row-bottom{display:flex;gap:9px;flex-wrap:wrap;padding:18px;border-top:1px solid var(--border);background:var(--card);border-radius:var(--r);box-shadow:var(--sh)}
+
+/* ─── PRINT ─── */
+@media print{
+  .sidebar,.hdr,.btn-row-bottom,.ia-key-wrap,.prog-wrap,.ia-btn-row{display:none!important}
+  .main{margin-left:0!important;padding:0!important}
+  .sc{break-inside:avoid}
+  body{background:#fff}
+  .ia-output{color:#000!important;background:#f5f5f5!important}
+}
+
+/* ─── MOBILE ─── */
+@media(max-width:768px){
+  .sidebar{display:none}
+  .main{margin-left:0;padding:14px}
+  .datos-grid{grid-template-columns:1fr}
+  .result-grid{grid-template-columns:1fr}
+  .chart-wrap{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-left">
+    <div class="hdr-logo">
+      <img src="https://crm.tengovisard.com/icons/logo_tengovisa.png" alt="TengoVisa RD"
+           onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'">
+      <div id="logo-fallback" style="display:none;width:38px;height:38px;border-radius:8px;background:var(--red);align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:14px">TV</div>
+    </div>
+    <div class="hdr-sep"></div>
+    <div class="hdr-info">
+      <div class="hdr-title">Evaluación Flash Asesor</div>
+      <div class="hdr-sub">Perfil Migratorio B1/B2 · INA §214(b)</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <span class="badge-flash">⚡ ASESOR</span>
+    <span class="badge-ina">INA §214(b)</span>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-score-card">
+    <div class="sb-score-num" id="sb-n">0</div>
+    <div class="sb-score-lbl">Score Final / 100</div>
+    <div class="sb-cat" id="sb-cat" style="background:rgba(204,26,26,.28);color:#ff9090">Sin datos</div>
+    <div class="sb-prob" id="sb-prob">Probabilidad: —</div>
+  </div>
+
+  <div class="sb-title">Módulos</div>
+  <a class="sb-mod" href="#sec-fam"><span class="sb-mod-name">👨‍👩‍👧 Familiar</span><span class="sb-mod-val" id="sbv-fam">0</span></a>
+  <div class="sb-bar"><div class="sb-bar-fill" id="sbp-fam" style="width:0%;background:#2e9e4f"></div></div>
+  <a class="sb-mod" href="#sec-eco"><span class="sb-mod-name">💼 Económico</span><span class="sb-mod-val" id="sbv-eco">0</span></a>
+  <div class="sb-bar"><div class="sb-bar-fill" id="sbp-eco" style="width:0%;background:#0B4F8A"></div></div>
+  <a class="sb-mod" href="#sec-soc"><span class="sb-mod-name">🎓 Social</span><span class="sb-mod-val" id="sbv-soc">0</span></a>
+  <div class="sb-bar"><div class="sb-bar-fill" id="sbp-soc" style="width:0%;background:#d4a017"></div></div>
+  <a class="sb-mod" href="#sec-mig"><span class="sb-mod-name">🛂 Migratorio</span><span class="sb-mod-val" id="sbv-mig">0</span></a>
+  <div class="sb-bar"><div class="sb-bar-fill" id="sbp-mig" style="width:0%;background:#E07B00"></div></div>
+  <a class="sb-mod" href="#sec-prop"><span class="sb-mod-name">✈️ Propósito</span><span class="sb-mod-val" id="sbv-prop">0</span></a>
+  <div class="sb-bar"><div class="sb-bar-fill" id="sbp-prop" style="width:0%;background:#CC1A1A"></div></div>
+  <a class="sb-mod" href="#sec-coh"><span class="sb-mod-name">🔍 Coherencia</span><span class="sb-mod-val" id="sbv-coh">0</span></a>
+  <div class="sb-bar"><div class="sb-bar-fill" id="sbp-coh" style="width:0%;background:#6B7A9E"></div></div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- PROGRESS -->
+  <div class="prog-wrap">
+    <span class="prog-lbl">Completado</span>
+    <div class="prog-outer"><div class="prog-inner" id="main-prog" style="width:0%"></div></div>
+    <span class="prog-pct" id="main-pct">0%</span>
+  </div>
+
+  <!-- LEGAL -->
+  <div class="legal">⚠️ <strong>Aviso Legal:</strong> Estimación orientativa bajo INA §214(b). No garantiza aprobación ni denegación. La decisión final es potestad exclusiva del Oficial Consular de la Embajada de EE.UU. en Santo Domingo. Uso exclusivo de asesores TengoVisa RD.</div>
+
+  <!-- SECCIÓN 0: DATOS -->
+  <div class="sc" id="sec-datos">
+    <div class="sc-hdr">
+      <div class="sc-hdr-l"><div class="sc-num">0</div><div><div class="sc-name">Datos del Solicitante</div><div class="sc-sub">Información general del caso</div></div></div>
+    </div>
+    <!-- PRIMERA VEZ / RENOVACIÓN / NEGACIÓN -->
+    <div class="pv-strip">
+      <span class="pv-lbl">🔄 Tipo de Solicitud:</span>
+      <div class="pv-opts">
+        <label class="pv-opt" id="lbl-primera"><input type="radio" name="tipo-sol" value="primera" onchange="recalc()"> 🆕 Primera Vez</label>
+        <label class="pv-opt" id="lbl-renovacion"><input type="radio" name="tipo-sol" value="renovacion" onchange="recalc()"> ✅ Renovación</label>
+        <label class="pv-opt" id="lbl-negacion"><input type="radio" name="tipo-sol" value="negacion" onchange="recalc()"> ❌ Ya con Negación</label>
+      </div>
+    </div>
+    <div class="datos-grid">
+      <div class="fg"><label>Nombre Completo</label><input type="text" id="d-nombre" placeholder="Nombre y apellidos" oninput="recalc()"></div>
+      <div class="fg"><label>Edad</label><input type="number" id="d-edad" placeholder="Años" min="18" max="90" oninput="recalc()"></div>
+      <div class="fg"><label>Ciudad / Provincia</label><input type="text" id="d-ciudad" placeholder="Santo Domingo, etc." oninput="recalc()"></div>
+      <div class="fg"><label>Tipo de Visa</label>
+        <select id="d-tipo" onchange="recalc()">
+          <option value="">Seleccionar</option>
+          <option>B1/B2 Turismo</option>
+          <option>B1 Negocios</option>
+          <option>B2 Visita Familiar</option>
+          <option>Congreso / Capacitación</option>
+        </select>
+      </div>
+      <div class="fg"><label>Motivo del Viaje</label><input type="text" id="d-motivo" placeholder="Describir brevemente" oninput="recalc()"></div>
+      <div class="fg"><label>Duración del Viaje (días)</label><input type="number" id="d-duracion" placeholder="Días" min="1" max="180" oninput="recalc()"></div>
+      <div class="fg"><label>Quién Paga</label>
+        <select id="d-pagador" onchange="recalc()">
+          <option value="">Seleccionar</option>
+          <option>El solicitante</option>
+          <option>Familiar en EE.UU.</option>
+          <option>Empresa / Empleador</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="fg"><label>Ocupación / Cargo</label><input type="text" id="d-cargo" placeholder="Gerente, Médico, etc." oninput="recalc()"></div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 1: FAMILIAR -->
+  <div class="sc" id="sec-fam">
+    <div class="sc-hdr">
+      <div class="sc-hdr-l"><div class="sc-num">1</div><div><div class="sc-name">Arraigo Familiar</div><div class="sc-sub">Cónyuge / Hijos / Vínculos RD vs EE.UU.</div></div></div>
+      <div class="sc-total" id="tot-fam">0</div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Criterio</th><th>Rango</th><th style="text-align:center">Selección / Qty</th><th style="text-align:center">Score</th><th style="text-align:center">▲</th></tr></thead>
+      <tbody>
+        <tr class="sub"><td colspan="5">Estado Civil</td></tr>
+        <tr>
+          <td>Estado civil</td><td>Cas +25 / Unión +10 / Sol 0 / Div +3 / Viu +5</td>
+          <td><div class="rg" id="rg-civil">
+            <label class="ro"><input type="radio" name="civil" value="25" onclick="recalc()">Casado</label>
+            <label class="ro"><input type="radio" name="civil" value="10" onclick="recalc()">Unión libre</label>
+            <label class="ro"><input type="radio" name="civil" value="0" onclick="recalc()">Soltero</label>
+            <label class="ro"><input type="radio" name="civil" value="3" onclick="recalc()">Divorciado</label>
+            <label class="ro"><input type="radio" name="civil" value="5" onclick="recalc()">Viudo</label>
+          </div></td>
+          <td class="sc-col" id="sc-civil">0</td><td style="text-align:center"><span class="dot dr" id="d-civil"></span></td>
+        </tr>
+        <tr>
+          <td>Cónyuge en RD</td><td>+15</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="conyuge" value="15" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="conyuge" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-con">0</td><td style="text-align:center"><span class="dot dr" id="d-con"></span></td>
+        </tr>
+        <tr class="sub"><td colspan="5">Hijos</td></tr>
+        <tr>
+          <td>Hijos menores dependientes en RD</td><td>+15 c/u</td>
+          <td><div class="qty"><button class="qb" onclick="adj('q-hm',-1)">−</button><input class="qv" id="q-hm" type="number" value="0" min="0" max="10" oninput="recalc()"><button class="qb" onclick="adj('q-hm',1)">+</button></div></td>
+          <td class="sc-col" id="sc-hm">0</td><td style="text-align:center"><span class="dot dr" id="d-hm"></span></td>
+        </tr>
+        <tr>
+          <td>Hijos mayores en RD</td><td>+5 c/u</td>
+          <td><div class="qty"><button class="qb" onclick="adj('q-hmy',-1)">−</button><input class="qv" id="q-hmy" type="number" value="0" min="0" max="10" oninput="recalc()"><button class="qb" onclick="adj('q-hmy',1)">+</button></div></td>
+          <td class="sc-col" id="sc-hmy">0</td><td style="text-align:center"><span class="dot dy" id="d-hmy"></span></td>
+        </tr>
+        <tr>
+          <td>Hijos en EE.UU.</td><td>−10 c/u</td>
+          <td><div class="qty"><button class="qb" onclick="adj('q-hu',-1)">−</button><input class="qv" id="q-hu" type="number" value="0" min="0" max="10" oninput="recalc()"><button class="qb" onclick="adj('q-hu',1)">+</button></div></td>
+          <td class="sc-col" id="sc-hu">0</td><td style="text-align:center"><span class="dot dr" id="d-hu"></span></td>
+        </tr>
+        <tr class="sub"><td colspan="5">Otros Vínculos</td></tr>
+        <tr>
+          <td>Padres dependientes en RD</td><td>+10</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="padres" value="10" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="padres" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-pad">0</td><td style="text-align:center"><span class="dot dr" id="d-pad"></span></td>
+        </tr>
+        <tr>
+          <td>Familia principal en EE.UU.</td><td>−20</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="fam-usa" value="-20" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="fam-usa" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-fu">0</td><td style="text-align:center"><span class="dot dg" id="d-fu"></span></td>
+        </tr>
+        <tr class="tot"><td colspan="3">Total Arraigo Familiar</td><td colspan="2" id="tot-fam2" class="sc-col">0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECCIÓN 2: ECONÓMICO -->
+  <div class="sc" id="sec-eco">
+    <div class="sc-hdr">
+      <div class="sc-hdr-l"><div class="sc-num">2</div><div><div class="sc-name">Arraigo Económico</div><div class="sc-sub">Empresa / Empleo / Bienes / Ingresos</div></div></div>
+      <div class="sc-total" id="tot-eco">0</div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Criterio</th><th>Rango</th><th style="text-align:center">Selección</th><th style="text-align:center">Score</th><th style="text-align:center">▲</th></tr></thead>
+      <tbody>
+        <tr class="sub"><td colspan="5">Empresa</td></tr>
+        <tr>
+          <td>Tipo de empresa</td><td>Formal +15 / Informal +5 / Ninguna 0</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="empresa" value="15" onclick="recalc()">Formalizada</label><label class="ro"><input type="radio" name="empresa" value="5" onclick="recalc()">Informal</label><label class="ro"><input type="radio" name="empresa" value="0" onclick="recalc()">Sin empresa</label></div></td>
+          <td class="sc-col" id="sc-emp">0</td><td style="text-align:center"><span class="dot dr" id="d-emp"></span></td>
+        </tr>
+        <tr class="sub"><td colspan="5">Empleo</td></tr>
+        <tr>
+          <td>Tiempo laboral estable</td><td>+3</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="tlab" value="3" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="tlab" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-tl">0</td><td style="text-align:center"><span class="dot dr" id="d-tl"></span></td>
+        </tr>
+        <tr>
+          <td>Salario comprobable</td><td>+4</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="salcomp" value="4" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="salcomp" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-sc">0</td><td style="text-align:center"><span class="dot dr" id="d-sc"></span></td>
+        </tr>
+        <tr>
+          <td>Puesto definido</td><td>+3</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="puesto" value="3" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="puesto" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-pu">0</td><td style="text-align:center"><span class="dot dr" id="d-pu"></span></td>
+        </tr>
+        <tr>
+          <td>Desempleado</td><td>−20</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="desempl" value="-20" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="desempl" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-de">0</td><td style="text-align:center"><span class="dot dg" id="d-de"></span></td>
+        </tr>
+        <tr class="sub"><td colspan="5">Bienes Inmuebles</td></tr>
+        <tr>
+          <td>Propiedad inmueble</td><td>Titulada +5 / No titulada +2 / Ninguna 0</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="inmueble" value="5" onclick="recalc()">Titulada</label><label class="ro"><input type="radio" name="inmueble" value="2" onclick="recalc()">No titulada</label><label class="ro"><input type="radio" name="inmueble" value="0" onclick="recalc()">Ninguna</label></div></td>
+          <td class="sc-col" id="sc-in">0</td><td style="text-align:center"><span class="dot dr" id="d-in"></span></td>
+        </tr>
+        <tr class="sub"><td colspan="5">Bienes Muebles</td></tr>
+        <tr>
+          <td>Cuenta bancaria</td><td>Activa +10 / No activa +3 / Ninguna 0</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="cuenta" value="10" onclick="recalc()">Activa</label><label class="ro"><input type="radio" name="cuenta" value="3" onclick="recalc()">No activa</label><label class="ro"><input type="radio" name="cuenta" value="0" onclick="recalc()">Ninguna</label></div></td>
+          <td class="sc-col" id="sc-cu">0</td><td style="text-align:center"><span class="dot dr" id="d-cu"></span></td>
+        </tr>
+        <tr>
+          <td>Vehículo activo</td><td>+10</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="vehiculo" value="10" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="vehiculo" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-ve">0</td><td style="text-align:center"><span class="dot dr" id="d-ve"></span></td>
+        </tr>
+        <tr class="sub"><td colspan="5">Ingresos Mensuales (USD)</td></tr>
+        <tr>
+          <td>Nivel de ingresos</td><td>+$3k +25 / $1.5k–$3k +18 / $800–$1499 +10 / &lt;$800 +3 / Sin ingresos −25</td>
+          <td><div class="rg">
+            <label class="ro"><input type="radio" name="ingresos" value="25" onclick="recalc()">+$3,000</label>
+            <label class="ro"><input type="radio" name="ingresos" value="18" onclick="recalc()">$1,500–$3k</label>
+            <label class="ro"><input type="radio" name="ingresos" value="10" onclick="recalc()">$800–$1,499</label>
+            <label class="ro"><input type="radio" name="ingresos" value="3" onclick="recalc()">&lt;$800</label>
+            <label class="ro"><input type="radio" name="ingresos" value="-25" onclick="recalc()">Sin ingresos</label>
+          </div></td>
+          <td class="sc-col" id="sc-ig">0</td><td style="text-align:center"><span class="dot dr" id="d-ig"></span></td>
+        </tr>
+        <tr class="tot"><td colspan="3">Total Arraigo Económico</td><td colspan="2" id="tot-eco2" class="sc-col">0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECCIÓN 3: SOCIAL -->
+  <div class="sc" id="sec-soc">
+    <div class="sc-hdr">
+      <div class="sc-hdr-l"><div class="sc-num">3</div><div><div class="sc-name">Arraigo Social</div><div class="sc-sub">Académico / Gremial / Legal</div></div></div>
+      <div class="sc-total" id="tot-soc">0</div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Criterio</th><th>Rango</th><th style="text-align:center">Selección</th><th style="text-align:center">Score</th><th style="text-align:center">▲</th></tr></thead>
+      <tbody>
+        <tr class="sub"><td colspan="5">Académico / Profesional</td></tr>
+        <tr>
+          <td>Nivel profesional</td><td>Ejerciendo +15 / No ejerciendo +5 / Estudiante +5 / Ninguno 0</td>
+          <td><div class="rg">
+            <label class="ro"><input type="radio" name="prof" value="15" onclick="recalc()">Profesional ejerciendo</label>
+            <label class="ro"><input type="radio" name="prof" value="5" onclick="recalc()">No ejerciendo</label>
+            <label class="ro"><input type="radio" name="prof" value="5" onclick="recalc()">Estudiante activo</label>
+            <label class="ro"><input type="radio" name="prof" value="0" onclick="recalc()">Ninguno</label>
+          </div></td>
+          <td class="sc-col" id="sc-pr">0</td><td style="text-align:center"><span class="dot dr" id="d-pr"></span></td>
+        </tr>
+        <tr class="sub"><td colspan="5">Gremial o Asociativo</td></tr>
+        <tr>
+          <td>Membresía gremial</td><td>Directivo +3 / Miembro +2 / No afiliado 0</td>
+          <td><div class="rg">
+            <label class="ro"><input type="radio" name="gremial" value="3" onclick="recalc()">Directivo</label>
+            <label class="ro"><input type="radio" name="gremial" value="2" onclick="recalc()">Miembro</label>
+            <label class="ro"><input type="radio" name="gremial" value="0" onclick="recalc()">No afiliado</label>
+          </div></td>
+          <td class="sc-col" id="sc-gr">0</td><td style="text-align:center"><span class="dot dr" id="d-gr"></span></td>
+        </tr>
+        <tr class="sub"><td colspan="5">Legal</td></tr>
+        <tr>
+          <td>Situación legal</td><td>Sin antecedentes +2 / Con antecedentes −25</td>
+          <td><div class="rg">
+            <label class="ro"><input type="radio" name="legal" value="2" onclick="recalc()">Sin antecedentes</label>
+            <label class="ro"><input type="radio" name="legal" value="-25" onclick="recalc()">Con antecedentes</label>
+          </div></td>
+          <td class="sc-col" id="sc-le">0</td><td style="text-align:center"><span class="dot dg" id="d-le"></span></td>
+        </tr>
+        <tr class="tot"><td colspan="3">Total Arraigo Social: Académico / Gremial / Legal</td><td colspan="2" id="tot-soc2" class="sc-col">0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECCIÓN 4: MIGRATORIO -->
+  <div class="sc" id="sec-mig">
+    <div class="sc-hdr">
+      <div class="sc-hdr-l"><div class="sc-num">4</div><div><div class="sc-name">Historial Migratorio</div><div class="sc-sub">Viajes, Visas, Cumplimiento</div></div></div>
+      <div class="sc-total" id="tot-mig">0</div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Criterio</th><th>Rango</th><th style="text-align:center">Selección</th><th style="text-align:center">Score</th><th style="text-align:center">▲</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Visa EE.UU. previa aprobada</td><td>+25</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="visa-prev" value="25" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="visa-prev" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-vp">0</td><td style="text-align:center"><span class="dot dr" id="d-vp"></span></td>
+        </tr>
+        <tr>
+          <td>Renovación sin violaciones</td><td>+25</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="renov-ok" value="25" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="renov-ok" value="0" onclick="recalc()">No aplica</label></div></td>
+          <td class="sc-col" id="sc-ro">0</td><td style="text-align:center"><span class="dot dr" id="d-ro"></span></td>
+        </tr>
+        <tr>
+          <td>Viajes a EE.UU. con retorno correcto</td><td>+20</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="viajes-usa" value="20" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="viajes-usa" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-vu">0</td><td style="text-align:center"><span class="dot dr" id="d-vu"></span></td>
+        </tr>
+        <tr>
+          <td>Viajes a Europa / Canadá / UK</td><td>+15</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="viajes-eu" value="15" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="viajes-eu" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-eu">0</td><td style="text-align:center"><span class="dot dr" id="d-eu"></span></td>
+        </tr>
+        <tr>
+          <td>Viajes regionales (LATAM)</td><td>+8</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="viajes-reg" value="8" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="viajes-reg" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-vr">0</td><td style="text-align:center"><span class="dot dr" id="d-vr"></span></td>
+        </tr>
+        <tr>
+          <td>Rechazo previo reciente</td><td>−20</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="rech-rec" value="-20" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="rech-rec" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-rr">0</td><td style="text-align:center"><span class="dot dg" id="d-rr"></span></td>
+        </tr>
+        <tr>
+          <td>Rechazos múltiples</td><td>−35</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="rech-mult" value="-35" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="rech-mult" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-rm">0</td><td style="text-align:center"><span class="dot dg" id="d-rm"></span></td>
+        </tr>
+        <tr>
+          <td>Overstay o violación migratoria</td><td>−60</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="overstay" value="-60" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="overstay" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-ov">0</td><td style="text-align:center"><span class="dot dg" id="d-ov"></span></td>
+        </tr>
+        <tr>
+          <td>Familiar directo irregular en EE.UU.</td><td>−15</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="fam-irreg" value="-15" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="fam-irreg" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-fi">0</td><td style="text-align:center"><span class="dot dg" id="d-fi"></span></td>
+        </tr>
+        <tr class="tot"><td colspan="3">Total Historial Migratorio</td><td colspan="2" id="tot-mig2" class="sc-col">0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECCIÓN 5: PROPÓSITO -->
+  <div class="sc" id="sec-prop">
+    <div class="sc-hdr">
+      <div class="sc-hdr-l"><div class="sc-num">5</div><div><div class="sc-name">Propósito del Viaje</div><div class="sc-sub">Claridad, credibilidad y coherencia del motivo</div></div></div>
+      <div class="sc-total" id="tot-prop">0</div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Criterio</th><th>Rango</th><th style="text-align:center">Selección</th><th style="text-align:center">Score</th><th style="text-align:center">▲</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Turismo coherente con ingresos</td><td>+15</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="tur-coh" value="15" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="tur-coh" value="0" onclick="recalc()">No aplica</label></div></td>
+          <td class="sc-col" id="sc-tc">0</td><td style="text-align:center"><span class="dot dr" id="d-tc"></span></td>
+        </tr>
+        <tr>
+          <td>Visita familiar coherente</td><td>+10</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="vis-coh" value="10" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="vis-coh" value="0" onclick="recalc()">No aplica</label></div></td>
+          <td class="sc-col" id="sc-vc">0</td><td style="text-align:center"><span class="dot dr" id="d-vc"></span></td>
+        </tr>
+        <tr>
+          <td>Evento / conferencia / capacitación</td><td>+15</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="evento" value="15" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="evento" value="0" onclick="recalc()">No aplica</label></div></td>
+          <td class="sc-col" id="sc-ev">0</td><td style="text-align:center"><span class="dot dr" id="d-ev"></span></td>
+        </tr>
+        <tr>
+          <td>Motivo débil o ambiguo</td><td>−15</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="mot-deb" value="-15" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="mot-deb" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-md">0</td><td style="text-align:center"><span class="dot dg" id="d-md"></span></td>
+        </tr>
+        <tr>
+          <td>Duración excesiva para el perfil</td><td>−20</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="dur-exc" value="-20" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="dur-exc" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-dx">0</td><td style="text-align:center"><span class="dot dg" id="d-dx"></span></td>
+        </tr>
+        <tr>
+          <td>No sabe explicar el viaje</td><td>−25</td>
+          <td><div class="rg"><label class="ro"><input type="radio" name="no-expl" value="-25" onclick="recalc()">Sí</label><label class="ro"><input type="radio" name="no-expl" value="0" onclick="recalc()">No</label></div></td>
+          <td class="sc-col" id="sc-ne">0</td><td style="text-align:center"><span class="dot dg" id="d-ne"></span></td>
+        </tr>
+        <tr class="tot"><td colspan="3">Total Propósito del Viaje</td><td colspan="2" id="tot-prop2" class="sc-col">0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECCIÓN 6: COHERENCIA -->
+  <div class="sc" id="sec-coh">
+    <div class="sc-hdr">
+      <div class="sc-hdr-l"><div class="sc-num">6</div><div><div class="sc-name">Coherencia Consular</div><div class="sc-sub">Validaciones automáticas del perfil completo</div></div></div>
+      <div class="sc-total" id="tot-coh">0</div>
+    </div>
+    <div id="al-wrap" class="al-wrap">
+      <div class="al al-y"><span class="al-i">🔍</span><span>Complete los módulos anteriores para ver el análisis de coherencia automático.</span></div>
+    </div>
+    <div style="padding:0 18px 14px">
+      <table class="tbl"><tbody><tr class="tot"><td colspan="3">Ajuste de Coherencia Consular</td><td colspan="2" id="tot-coh2" class="sc-col">0</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <!-- PASTEL GRÁFICO -->
+  <div class="chart-section" id="sec-chart">
+    <div class="chart-title">📊 Distribución del Perfil por Módulo</div>
+    <div class="chart-wrap">
+      <div class="chart-canvas-wrap">
+        <canvas id="donut-canvas" width="220" height="220"></canvas>
+        <div class="donut-center">
+          <div class="donut-center-num" id="dc-num">0</div>
+          <div class="donut-center-lbl">Score Final</div>
+        </div>
+      </div>
+      <div class="chart-legend" id="chart-legend"></div>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="result-panel" id="sec-result">
+    <h2>📋 Resultado de Evaluación para Visa de No Inmigrante B1/B2</h2>
+    <div class="result-big">
+      <div class="result-num" id="r-num">0</div>
+      <div><span class="result-cat" id="r-cat" style="background:rgba(204,26,26,.28);color:#ff9090">Sin datos</span></div>
+      <div class="result-prob" id="r-prob">Probabilidad estimada: —</div>
+    </div>
+    <div class="result-grid">
+      <div class="rm"><span class="rm-name">👨‍👩‍👧 Familiar</span><span class="rm-val" id="rv-fam">0</span></div>
+      <div class="rm"><span class="rm-name">💼 Económico</span><span class="rm-val" id="rv-eco">0</span></div>
+      <div class="rm"><span class="rm-name">🎓 Social</span><span class="rm-val" id="rv-soc">0</span></div>
+      <div class="rm"><span class="rm-name">🛂 Migratorio</span><span class="rm-val" id="rv-mig">0</span></div>
+      <div class="rm"><span class="rm-name">✈️ Propósito</span><span class="rm-val" id="rv-prop">0</span></div>
+      <div class="rm"><span class="rm-name">🔍 Coherencia</span><span class="rm-val" id="rv-coh">0</span></div>
+    </div>
+    <div class="diag-box" id="diag-box">
+      <div class="diag-sec"><div class="diag-lbl">📋 Diagnóstico</div><div id="diag-txt">Complete el formulario para obtener el diagnóstico automático.</div></div>
+      <div class="diag-sec"><div class="diag-lbl">✅ Puntos Fuertes</div><div id="diag-fuertes">—</div></div>
+      <div class="diag-sec"><div class="diag-lbl">⚠️ Puntos Débiles</div><div id="diag-debiles">—</div></div>
+      <div class="diag-sec"><div class="diag-lbl">📌 Recomendaciones</div><div id="diag-recom">—</div></div>
+    </div>
+    <div style="margin-top:12px;font-size:10.5px;color:rgba(255,255,255,.35);text-align:center;line-height:1.5">
+      Estimación orientativa · No garantiza aprobación · INA §214(b) · © TengoVisa RD – tengovisard.com
+    </div>
+  </div>
+
+  <!-- IA SECTION -->
+  <div class="ia-section" id="sec-ia">
+    <div class="ia-hdr">
+      <div class="ia-hdr-l">
+        <span style="font-size:22px">🧠</span>
+        <div><div class="ia-hdr-title">Análisis IA Consular</div><div class="ia-hdr-sub">Opinión experta basada en perfil completo · Powered by Claude</div></div>
+      </div>
+      <span style="background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.3);color:#FFD700;font-size:10px;font-weight:700;padding:4px 11px;border-radius:16px;letter-spacing:.5px">CLAUDE AI</span>
+    </div>
+    <div class="ia-key-wrap">
+      <div class="ia-key-row">
+        <div class="ia-key-group" style="max-width:420px">
+          <label>API Key Anthropic (claude-sonnet-4-20250514)</label>
+          <input type="password" id="ia-key" class="ia-key-inp" placeholder="TU_ANTHROPIC_API_KEY..." autocomplete="off">
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:6px">
+          <select id="ia-mode" style="border:1px solid var(--border);border-radius:7px;padding:8px 11px;font-size:12.5px;font-family:'Sora',sans-serif;background:#fff;color:var(--text);outline:none">
+            <option value="full">Análisis Completo</option>
+            <option value="estrategia">Estrategia de Entrevista</option>
+            <option value="docs">Lista de Documentos</option>
+            <option value="foda">FODA Migratorio</option>
+            <option value="preguntas">Preguntas del Cónsul</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="ia-body">
+      <div class="ia-btn-row">
+        <button class="btn btn-gold" id="btn-ia" onclick="analizarIA()">🧠 Analizar con IA</button>
+        <button class="btn btn-outline" onclick="limpiarIA()">🗑️ Limpiar Análisis</button>
+      </div>
+      <div class="ia-output" id="ia-output"></div>
+    </div>
+  </div>
+
+  <!-- BOTONES -->
+  <div class="btn-row-bottom">
+    <button class="btn btn-navy" onclick="recalc()">🔄 Recalcular</button>
+    <button class="btn btn-green" onclick="exportarResumen()">📄 Exportar Resumen</button>
+    <button class="btn btn-outline" onclick="limpiarTodo()">🗑️ Limpiar</button>
+    <button class="btn btn-outline" onclick="window.print()">🖨️ Imprimir / PDF</button>
+  </div>
+
+</main>
+
+<script>
+// ─── HELPERS ───────────────────────────────────────────
+function adj(id, d) {
+  const el = document.getElementById(id);
+  el.value = Math.max(0, parseInt(el.value||0) + d);
+  recalc();
+}
+function rad(name) {
+  const s = document.querySelector(`input[name="${name}"]:checked`);
+  return s ? parseFloat(s.value) : 0;
+}
+function qty(id) { return parseInt(document.getElementById(id)?.value || 0); }
+function set$(id, v) { const e = document.getElementById(id); if(e) e.textContent = (v>=0?'+':'')+v; }
+function setRaw(id, v) { const e = document.getElementById(id); if(e) e.textContent = v; }
+
+function setDot(id, v, invert=false) {
+  const e = document.getElementById(id); if(!e) return;
+  if (invert) {
+    e.className = 'dot ' + (v < -30 ? 'dr' : v < -10 ? 'do' : v < 0 ? 'dy' : 'dg');
+  } else {
+    e.className = 'dot ' + (v >= 15 ? 'dg' : v >= 5 ? 'dy' : v >= 1 ? 'do' : 'dr');
+  }
+}
+
+function updateRadios() {
+  document.querySelectorAll('.ro').forEach(l => {
+    const i = l.querySelector('input');
+    l.classList.toggle('sel', i && i.checked);
+  });
+  // primera vez strip
+  const pv = rad('tipo-sol') === 0 ? null : document.querySelector('input[name="tipo-sol"]:checked')?.value;
+  ['primera','renovacion','negacion'].forEach(v => {
+    const lbl = document.getElementById('lbl-'+v);
+    if (!lbl) return;
+    lbl.className = 'pv-opt ' + (pv === v ? 'sel-'+v : '');
+  });
+}
+
+// ─── DONUT CHART ───────────────────────────────────────
+function drawDonut(modules) {
+  const canvas = document.getElementById('donut-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2, R = W*0.42, r = W*0.26;
+
+  ctx.clearRect(0,0,W,H);
+
+  const colors = ['#2e9e4f','#0B4F8A','#d4a017','#E07B00','#CC1A1A','#6B7A9E'];
+  const vals = modules.map(m => Math.max(0, m.val));
+  const total = vals.reduce((a,b)=>a+b,0) || 1;
+
+  let startAngle = -Math.PI/2;
+  vals.forEach((v, i) => {
+    const slice = (v/total) * 2 * Math.PI;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, R, startAngle, startAngle + slice);
+    ctx.closePath();
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+    startAngle += slice;
+  });
+
+  // hole
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, 2*Math.PI);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fill();
+
+  // legend
+  const leg = document.getElementById('chart-legend');
+  if (!leg) return;
+  leg.innerHTML = '';
+  modules.forEach((m,i) => {
+    const pct = ((vals[i]/total)*100).toFixed(1);
+    const maxBar = 100;
+    leg.innerHTML += `
+      <div class="cl-item">
+        <div class="cl-left">
+          <div class="cl-dot" style="background:${colors[i]}"></div>
+          <span class="cl-name">${m.name}</span>
+        </div>
+        <div class="cl-bar-wrap"><div class="cl-bar-fill" style="width:${pct}%;background:${colors[i]}"></div></div>
+        <span class="cl-val">${m.val}</span>
+      </div>`;
+  });
+}
+
+// ─── MAIN RECALC ───────────────────────────────────────
+function recalc() {
+  updateRadios();
+
+  // Tipo de solicitud bonus/penalty
+  const tipoSol = document.querySelector('input[name="tipo-sol"]:checked')?.value || '';
+  let tipoBonus = 0;
+  if (tipoSol === 'renovacion') tipoBonus = 15;
+  if (tipoSol === 'negacion') tipoBonus = -20;
+
+  // FAMILIAR
+  const scCivil = rad('civil');
+  const scCon   = rad('conyuge');
+  const scHm    = qty('q-hm') * 15;
+  const scHmy   = qty('q-hmy') * 5;
+  const scHu    = qty('q-hu') * -10;
+  const scPad   = rad('padres');
+  const scFu    = rad('fam-usa');
+  const tFam = scCivil + scCon + scHm + scHmy + scHu + scPad + scFu;
+
+  set$('sc-civil',scCivil); setDot('d-civil',scCivil);
+  set$('sc-con',scCon); setDot('d-con',scCon);
+  set$('sc-hm',scHm); setDot('d-hm',scHm);
+  set$('sc-hmy',scHmy); setDot('d-hmy',scHmy);
+  setRaw('sc-hu',scHu); setDot('d-hu',scHu,true);
+  set$('sc-pad',scPad); setDot('d-pad',scPad);
+  setRaw('sc-fu',scFu); setDot('d-fu',scFu,true);
+  setRaw('tot-fam',tFam); setRaw('tot-fam2',tFam);
+
+  // ECONÓMICO
+  const scEmp = rad('empresa');
+  const scTl  = rad('tlab');
+  const scSc  = rad('salcomp');
+  const scPu  = rad('puesto');
+  const scDe  = rad('desempl');
+  const scIn  = rad('inmueble');
+  const scCu  = rad('cuenta');
+  const scVe  = rad('vehiculo');
+  const scIg  = rad('ingresos');
+  const tEco = scEmp + scTl + scSc + scPu + scDe + scIn + scCu + scVe + scIg;
+
+  set$('sc-emp',scEmp); setDot('d-emp',scEmp);
+  set$('sc-tl',scTl); setDot('d-tl',scTl);
+  set$('sc-sc',scSc); setDot('d-sc',scSc);
+  set$('sc-pu',scPu); setDot('d-pu',scPu);
+  setRaw('sc-de',scDe); setDot('d-de',scDe,true);
+  set$('sc-in',scIn); setDot('d-in',scIn);
+  set$('sc-cu',scCu); setDot('d-cu',scCu);
+  set$('sc-ve',scVe); setDot('d-ve',scVe);
+  setRaw('sc-ig',scIg); setDot('d-ig',scIg);
+  setRaw('tot-eco',tEco); setRaw('tot-eco2',tEco);
+
+  // SOCIAL
+  const scPr = rad('prof');
+  const scGr = rad('gremial');
+  const scLe = rad('legal');
+  const tSoc = scPr + scGr + scLe;
+
+  set$('sc-pr',scPr); setDot('d-pr',scPr);
+  set$('sc-gr',scGr); setDot('d-gr',scGr);
+  setRaw('sc-le',scLe); setDot('d-le',scLe,true);
+  setRaw('tot-soc',tSoc); setRaw('tot-soc2',tSoc);
+
+  // MIGRATORIO
+  const scVp = rad('visa-prev');
+  const scRo = rad('renov-ok');
+  const scVu = rad('viajes-usa');
+  const scEu = rad('viajes-eu');
+  const scVr = rad('viajes-reg');
+  const scRr = rad('rech-rec');
+  const scRm = rad('rech-mult');
+  const scOv = rad('overstay');
+  const scFi = rad('fam-irreg');
+  const tMig = scVp+scRo+scVu+scEu+scVr+scRr+scRm+scOv+scFi;
+
+  set$('sc-vp',scVp); setDot('d-vp',scVp);
+  set$('sc-ro',scRo); setDot('d-ro',scRo);
+  set$('sc-vu',scVu); setDot('d-vu',scVu);
+  set$('sc-eu',scEu); setDot('d-eu',scEu);
+  set$('sc-vr',scVr); setDot('d-vr',scVr);
+  setRaw('sc-rr',scRr); setDot('d-rr',scRr,true);
+  setRaw('sc-rm',scRm); setDot('d-rm',scRm,true);
+  setRaw('sc-ov',scOv); setDot('d-ov',scOv,true);
+  setRaw('sc-fi',scFi); setDot('d-fi',scFi,true);
+  setRaw('tot-mig',tMig); setRaw('tot-mig2',tMig);
+
+  // PROPÓSITO
+  const scTc = rad('tur-coh');
+  const scVc = rad('vis-coh');
+  const scEv = rad('evento');
+  const scMd = rad('mot-deb');
+  const scDx = rad('dur-exc');
+  const scNe = rad('no-expl');
+  const tProp = scTc+scVc+scEv+scMd+scDx+scNe;
+
+  set$('sc-tc',scTc); setDot('d-tc',scTc);
+  set$('sc-vc',scVc); setDot('d-vc',scVc);
+  set$('sc-ev',scEv); setDot('d-ev',scEv);
+  setRaw('sc-md',scMd); setDot('d-md',scMd,true);
+  setRaw('sc-dx',scDx); setDot('d-dx',scDx,true);
+  setRaw('sc-ne',scNe); setDot('d-ne',scNe,true);
+  setRaw('tot-prop',tProp); setRaw('tot-prop2',tProp);
+
+  // COHERENCIA AUTOMÁTICA
+  let coh = tipoBonus;
+  const alerts = [];
+
+  if (tipoSol === 'primera') alerts.push({t:'y', i:'🆕', txt:'<strong>Primera Solicitud:</strong> El oficial no tiene historial previo. Cada criterio de arraigo debe estar perfectamente documentado.'});
+  if (tipoSol === 'renovacion') { coh += 0; alerts.push({t:'g', i:'✅', txt:'<strong>Renovación:</strong> +15 puntos de base. Historial previo limpio refuerza la solicitud significativamente.'}); }
+  if (tipoSol === 'negacion') alerts.push({t:'r', i:'❌', txt:'<strong>Ya con negación −20:</strong> Debe demostrar cambios verificables en el perfil desde la negación anterior. Sin cambios = nueva negación casi segura.'});
+
+  if (scDe === -20 && scCu === 0 && scIn === 0) { coh -= 15; alerts.push({t:'r',i:'🚨',txt:'<strong>ALERTA ROJA:</strong> Desempleado sin cuentas bancarias ni bienes inmuebles. Perfil de inmigrante potencial crítico.'}); }
+  if (scFu === -20 && tFam < 15) { coh -= 10; alerts.push({t:'r',i:'🚨',txt:'<strong>ALERTA ROJA:</strong> Familia principal en EE.UU. con arraigo familiar débil en RD. Señal migratoria fuerte.'}); }
+  if (scOv === -60) { coh -= 15; alerts.push({t:'r',i:'🔴',txt:'<strong>CRÍTICO – OVERSTAY:</strong> Violación migratoria registrada. Probabilidad de aprobación &lt;5%. Consultar abogado de inmigración ANTES de aplicar.'}); }
+  if (scRm === -35) alerts.push({t:'r',i:'⚠️',txt:'<strong>Rechazos Múltiples:</strong> Sin cambio documentado de perfil, nueva negación prácticamente garantizada.'});
+  if (scFi === -15) alerts.push({t:'r',i:'⚠️',txt:'<strong>Familiar Irregular:</strong> El oficial puede presumir intención de unirse. Preparar desvinculación explícita de intención migratoria.'});
+  if (scCivil === 0) { // soltero
+    const edad = parseInt(document.getElementById('d-edad')?.value||0);
+    if (edad > 0 && edad < 32 && scTl === 0 && scVp === 0) { coh -= 10; alerts.push({t:'r',i:'🚨',txt:'<strong>ALERTA ROJA:</strong> Perfil soltero joven sin empleo fijo ni historial de viajes. Riesgo máximo de intención inmigrante.'}); }
+  }
+  if (scIg <= 3 && parseInt(document.getElementById('d-duracion')?.value||0) > 21) { coh -= 8; alerts.push({t:'r',i:'⚠️',txt:'<strong>Inconsistencia Financiera:</strong> Ingresos bajos con duración de viaje extensa. El oficial cuestionará quién financia.'}); }
+  if (tipoSol === 'renovacion' && scRo === 25) { coh += 5; alerts.push({t:'g',i:'✅',txt:'<strong>Perfil Óptimo:</strong> Renovación con historial limpio y viajes previos correctos. Caso de alta elegibilidad.'}); }
+  if (tFam >= 35 && tEco >= 35 && tMig >= 30) { coh += 5; alerts.push({t:'g',i:'✅',txt:'<strong>Coherencia Alta:</strong> Arraigo familiar, económico e historial migratorio sólidos. Caso bien fundamentado.'}); }
+
+  if (alerts.length === 0) alerts.push({t:'y',i:'🔍',txt:'Complete todos los módulos para el análisis de coherencia automático.'});
+
+  const aw = document.getElementById('al-wrap');
+  aw.innerHTML = '';
+  alerts.forEach(a => {
+    const d = document.createElement('div');
+    d.className = `al al-${a.t}`;
+    d.innerHTML = `<span class="al-i">${a.i}</span><span>${a.txt}</span>`;
+    aw.appendChild(d);
+  });
+  const cohDisp = coh >= 0 ? '+'+coh : coh;
+  document.getElementById('tot-coh').textContent = cohDisp;
+  document.getElementById('tot-coh2').textContent = cohDisp;
+
+  // SCORE FINAL
+  const bruto = tFam + tEco + tSoc + tMig + tProp + coh;
+  const final = Math.max(0, Math.min(100, bruto));
+
+  let cat, catC, catBg, prob, decision;
+  if (final >= 80) { cat='Alta – Caso de Elegibilidad'; catC='#6dde97'; catBg='rgba(46,158,79,.28)'; prob='75%–90%'; decision='✅ APLICAR'; }
+  else if (final >= 60) { cat='Media – Caso de Consideración'; catC='#ffe08a'; catBg='rgba(212,160,23,.28)'; prob='50%–74%'; decision='⚠️ MEJORAR Y APLICAR'; }
+  else if (final >= 40) { cat='Riesgo Considerable'; catC='#ffb347'; catBg='rgba(224,123,0,.28)'; prob='25%–49%'; decision='🔴 MEJORAR ANTES'; }
+  else { cat='Baja – Inmigrante Potencial'; catC='#ff8888'; catBg='rgba(204,26,26,.28)'; prob='<25%'; decision='⛔ NO APLICAR'; }
+
+  // Sidebar & result
+  ['sb-n','r-num','dc-num'].forEach(id => setRaw(id, final));
+  ['sb-cat','r-cat'].forEach(id => {
+    const e = document.getElementById(id);
+    if(e){ e.textContent=cat; e.style.background=catBg; e.style.color=catC; }
+  });
+  document.getElementById('sb-prob').textContent = `Probabilidad: ${prob}`;
+  document.getElementById('r-prob').textContent = `Probabilidad estimada: ${prob} · ${decision}`;
+
+  // Sidebar bars
+  const sbvals = [
+    {id:'sbv-fam',pid:'sbp-fam',v:tFam,max:65},
+    {id:'sbv-eco',pid:'sbp-eco',v:tEco,max:70},
+    {id:'sbv-soc',pid:'sbp-soc',v:tSoc,max:20},
+    {id:'sbv-mig',pid:'sbp-mig',v:tMig,max:90},
+    {id:'sbv-prop',pid:'sbp-prop',v:tProp,max:40},
+    {id:'sbv-coh',pid:'sbp-coh',v:coh,max:25},
+  ];
+  sbvals.forEach(({id,pid,v,max})=>{
+    setRaw(id,v);
+    const pb = document.getElementById(pid);
+    if(pb) pb.style.width = Math.max(0,Math.min(100,(v/max)*100)).toFixed(0)+'%';
+  });
+
+  // Result grid
+  ['fam','eco','soc','mig','prop'].forEach((k,i)=>{
+    setRaw('rv-'+k,[tFam,tEco,tSoc,tMig,tProp][i]);
+  });
+  setRaw('rv-coh',coh);
+
+  // Progress
+  const names = ['civil','conyuge','padres','fam-usa','empresa','tlab','salcomp','puesto','desempl','inmueble','cuenta','vehiculo','ingresos','prof','gremial','legal','visa-prev','overstay','fam-irreg','tur-coh'];
+  const filled = names.filter(n => document.querySelector(`input[name="${n}"]:checked`)).length;
+  const pct = Math.round((filled/names.length)*100);
+  document.getElementById('main-prog').style.width = pct+'%';
+  document.getElementById('main-pct').textContent = pct+'%';
+
+  // Donut chart
+  const mods = [
+    {name:'👨‍👩‍👧 Familiar', val:tFam},
+    {name:'💼 Económico', val:tEco},
+    {name:'🎓 Social', val:tSoc},
+    {name:'🛂 Migratorio', val:tMig},
+    {name:'✈️ Propósito', val:tProp},
+    {name:'🔍 Coherencia', val:coh},
+  ];
+  drawDonut(mods);
+
+  // Diagnóstico
+  doDiag(final, cat, prob, tFam, tEco, tSoc, tMig, tProp, coh, scOv, scRr, scRm, scFu, scFi, scDe, scIg, tipoSol);
+}
+
+function doDiag(sf, cat, prob, fam, eco, soc, mig, prop, coh, ov, rr, rm, fu, fi, de, ig, tipoSol) {
+  const nombre = document.getElementById('d-nombre')?.value || 'el solicitante';
+  const fuertes = [], debiles = [], recom = [];
+
+  if (fam >= 35) fuertes.push('Arraigo familiar sólido');
+  if (eco >= 40) fuertes.push('Estabilidad económica comprobable');
+  if (mig >= 40) fuertes.push('Historial migratorio limpio');
+  if (soc >= 15) fuertes.push('Perfil académico/profesional activo');
+  if (prop >= 20) fuertes.push('Propósito de viaje coherente');
+  if (tipoSol === 'renovacion') fuertes.push('Renovación con historial previo');
+  if (coh > 0) fuertes.push('Alta coherencia consular');
+
+  if (fam < 20) debiles.push('Arraigo familiar débil');
+  if (eco < 20) debiles.push('Estabilidad económica insuficiente');
+  if (mig < 0) debiles.push('Historial migratorio negativo');
+  if (ov === -60) debiles.push('⚠️ Overstay registrado (CRÍTICO)');
+  if (rm === -35) debiles.push('Rechazos múltiples sin cambio verificable');
+  if (rr === -20) debiles.push('Rechazo reciente');
+  if (fu === -20) debiles.push('Familia principal en EE.UU.');
+  if (fi === -15) debiles.push('Familiar directo irregular EE.UU.');
+  if (de === -20) debiles.push('Desempleo activo');
+  if (ig <= 3) debiles.push('Ingresos insuficientes');
+  if (tipoSol === 'negacion') debiles.push('Historial con negación previa');
+
+  if (fam < 25) recom.push('Preparar carta del empleador del cónyuge y partidas de nacimiento de hijos menores');
+  if (eco < 30) recom.push('Estados bancarios 6–12 meses, carta laboral con salario y antigüedad, o RNC si tiene empresa');
+  if (mig <= 0) recom.push('Acumular historial de viajes regionales (Panamá, Colombia, México) antes de aplicar');
+  if (prop < 15) recom.push('Preparar itinerario específico: ciudades, hotel, presupuesto diario y fecha exacta de retorno');
+  if (tipoSol === 'negacion') recom.push('Documentar todos los cambios de perfil desde la negación: empleo nuevo, bienes, matrimonio, hijos');
+  if (ov === -60) recom.push('Consultar abogado de inmigración certificado ANTES de cualquier nueva solicitud');
+
+  let texto = `El perfil de <strong>${nombre}</strong> obtiene un score de <strong>${sf}/100</strong> — "${cat}" · Probabilidad: <strong>${prob}</strong>.\n`;
+  if (sf >= 80) texto += 'El caso reúne los criterios fundamentales de INA §214(b). Se recomienda APLICAR con documentación completa y entrevista bien preparada.';
+  else if (sf >= 60) texto += 'Perfil viable con áreas de mejora. Se recomienda fortalecer evidencia documental antes de aplicar para reducir riesgo de denegación.';
+  else if (sf >= 40) texto += 'Riesgo consular significativo. Preparar un plan de mejora de 3–6 meses antes de aplicar. La denegación bajo §214(b) sería probable en este momento.';
+  else texto += 'Alta probabilidad de denegación bajo INA §214(b). No se recomienda aplicar hasta fortalecer arraigo económico, familiar e historial migratorio.';
+
+  document.getElementById('diag-txt').innerHTML = texto;
+  document.getElementById('diag-fuertes').innerHTML = fuertes.length
+    ? fuertes.map(f=>`<span class="tag tg">✓ ${f}</span>`).join(' ')
+    : '<span style="opacity:.5">Ningún punto fuerte identificado aún.</span>';
+  document.getElementById('diag-debiles').innerHTML = debiles.length
+    ? debiles.map(d=>`<span class="tag tr">✗ ${d}</span>`).join(' ')
+    : '<span style="opacity:.5">Sin debilidades críticas.</span>';
+  document.getElementById('diag-recom').innerHTML = recom.length
+    ? recom.map(r=>`<div style="margin-bottom:5px">→ ${r}</div>`).join('')
+    : '<span style="opacity:.5">Perfil listo. Preparar documentación estándar.</span>';
+}
+
+// ─── ANÁLISIS IA ───────────────────────────────────────
+async function analizarIA() {
+  const key = document.getElementById('ia-key').value.trim();
+  if (!key) { alert('Ingresa tu API Key de Anthropic para activar el análisis IA.'); return; }
+
+  const nombre  = document.getElementById('d-nombre')?.value || 'N/A';
+  const edad    = document.getElementById('d-edad')?.value || 'N/A';
+  const ciudad  = document.getElementById('d-ciudad')?.value || 'N/A';
+  const cargo   = document.getElementById('d-cargo')?.value || 'N/A';
+  const tipo    = document.getElementById('d-tipo')?.value || 'N/A';
+  const motivo  = document.getElementById('d-motivo')?.value || 'N/A';
+  const duracion= document.getElementById('d-duracion')?.value || 'N/A';
+  const pagador = document.getElementById('d-pagador')?.value || 'N/A';
+  const tipoSol = document.querySelector('input[name="tipo-sol"]:checked')?.value || 'no especificado';
+
+  const score   = document.getElementById('r-num')?.textContent || '0';
+  const cat     = document.getElementById('r-cat')?.textContent || '';
+  const prob    = document.getElementById('r-prob')?.textContent || '';
+
+  const fam  = document.getElementById('rv-fam')?.textContent || '0';
+  const eco  = document.getElementById('rv-eco')?.textContent || '0';
+  const soc  = document.getElementById('rv-soc')?.textContent || '0';
+  const mig  = document.getElementById('rv-mig')?.textContent || '0';
+  const prop = document.getElementById('rv-prop')?.textContent || '0';
+  const coh  = document.getElementById('rv-coh')?.textContent || '0';
+
+  const modo = document.getElementById('ia-mode').value;
+
+  const prompts = {
+    full: `Eres un Oficial Consular Senior simulado con 20 años de experiencia en la Embajada de EE.UU. en Santo Domingo. Analiza este perfil bajo INA §214(b) y entrega un reporte completo:
+
+PERFIL DEL SOLICITANTE:
+- Nombre: ${nombre} | Edad: ${edad} | Ciudad: ${ciudad}
+- Cargo: ${cargo} | Visa: ${tipo}
+- Motivo: ${motivo} | Duración: ${duracion} días
+- Pagador: ${pagador} | Tipo de solicitud: ${tipoSol}
+
+SCORING:
+- Score Final: ${score}/100 — ${cat}
+- Arraigo Familiar: ${fam} | Económico: ${eco} | Social: ${soc}
+- Historial Migratorio: ${mig} | Propósito: ${prop} | Coherencia: ${coh}
+- ${prob}
+
+ENTREGA:
+1. VEREDICTO CONSULAR (1 párrafo directo)
+2. RED FLAGS críticos (lista)
+3. PUNTOS FUERTES del perfil (lista)
+4. ESTRATEGIA DE NARRATIVA (30-45 segundos de presentación)
+5. PREGUNTAS DIFÍCILES que haría el cónsul + respuestas modelo en inglés y español
+6. LISTA PRIORIZADA DE DOCUMENTOS a llevar a la entrevista
+7. DECISIÓN: APLICAR / MEJORAR / NO APLICAR con justificación
+
+Sé directo, específico y sin contenido genérico. Usa el perfil real.`,
+
+    estrategia: `Como ex-oficial consular especializado en visas B1/B2 de República Dominicana, crea la estrategia de entrevista para este perfil:\n\nNombre: ${nombre} | Edad: ${edad} | Cargo: ${cargo} | Score: ${score}/100 | Tipo: ${tipoSol}\nFamiliar: ${fam} | Económico: ${eco} | Migratorio: ${mig} | Propósito: ${prop}\n\nEntrega: narrativa central (30-45 seg), 5 preguntas frecuentes con respuestas en inglés y español, y qué NO decir.`,
+
+    docs: `Para este perfil de visa B1/B2, genera la lista priorizada de documentos:\n\nNombre: ${nombre} | Cargo: ${cargo} | Score: ${score}/100 | Tipo: ${tipoSol}\nEconómico: ${eco} | Familiar: ${fam} | Migratorio: ${mig}\n\nLista priorizada (1=más importante) con: nombre del documento, por qué lo pide el cónsul y cómo presentarlo.`,
+
+    foda: `Haz un análisis FODA migratorio para visa B1/B2 de este perfil:\n\nNombre: ${nombre} | Edad: ${edad} | Cargo: ${cargo}\nScore: ${score}/100 | ${cat}\nFamiliar: ${fam} | Económico: ${eco} | Social: ${soc} | Migratorio: ${mig} | Propósito: ${prop} | Tipo: ${tipoSol}\n\nFortalezas, Oportunidades, Debilidades, Amenazas — específicas al caso, no genéricas.`,
+
+    preguntas: `Como oficial consular de la Embajada EE.UU. en Santo Domingo, genera las 10 preguntas más probables para esta entrevista:\n\nNombre: ${nombre} | Cargo: ${cargo} | Visa: ${tipo} | Motivo: ${motivo} | Duración: ${duracion} días | Tipo: ${tipoSol}\nScore: ${score}/100 | Familiar: ${fam} | Económico: ${eco} | Migratorio: ${mig}\n\nPara cada pregunta: la pregunta en inglés, la respuesta modelo en inglés y en español. Basadas en el perfil real, no genéricas.`
+  };
+
+  const out = document.getElementById('ia-output');
+  const btn = document.getElementById('btn-ia');
+  out.className = 'ia-output visible';
+  out.innerHTML = `<div class="ia-typing">🧠 Analizando perfil con IA... <span><b></b><b></b><b></b></span></div>`;
+  btn.disabled = true;
+  btn.textContent = '⏳ Analizando...';
+
+  try {
+    const resp = await fetch('/ds160/proxy-ia.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ apiKey: 'TU_ANTHROPIC_API_KEY',
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        system: 'Eres un Oficial Consular Senior simulado + Analista Migratorio experto en visas B1/B2. Tu análisis es directo, específico, sin contenido genérico y basado en INA §214(b). No prometes aprobaciones. Usas los datos reales del perfil.',
+        messages: [{ role: 'user', content: prompts[modo] }]
+      })
+    });
+
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+    const text = data.content?.map(b => b.text || '').join('') || 'Sin respuesta.';
+    out.textContent = text;
+  } catch(err) {
+    out.textContent = `❌ Error: ${err.message}\n\nVerifica que tu API Key sea válida y tenga créditos disponibles.`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🧠 Analizar con IA';
+  }
+}
+
+function limpiarIA() {
+  const out = document.getElementById('ia-output');
+  out.className = 'ia-output';
+  out.textContent = '';
+}
+
+// ─── EXPORTAR ──────────────────────────────────────────
+function exportarResumen() {
+  const n  = document.getElementById('d-nombre')?.value || 'N/A';
+  const ts = document.querySelector('input[name="tipo-sol"]:checked')?.value || 'N/A';
+  const sc = document.getElementById('r-num')?.textContent || '0';
+  const ct = document.getElementById('r-cat')?.textContent || '';
+  const pr = document.getElementById('r-prob')?.textContent || '';
+  const dt = document.getElementById('diag-txt')?.innerText || '';
+  const recom = document.getElementById('diag-recom')?.innerText || '';
+
+  const txt = `EVALUACIÓN FLASH ASESOR – TengoVisa RD
+${'='.repeat(50)}
+Solicitante : ${n}
+Tipo        : ${ts}
+Fecha       : ${new Date().toLocaleDateString('es-DO')}
+${'─'.repeat(50)}
+SCORE FINAL : ${sc}/100
+Clasificación: ${ct}
+${pr}
+${'─'.repeat(50)}
+Arraigo Familiar   : ${document.getElementById('rv-fam')?.textContent}
+Arraigo Económico  : ${document.getElementById('rv-eco')?.textContent}
+Arraigo Social     : ${document.getElementById('rv-soc')?.textContent}
+Historial Migratorio: ${document.getElementById('rv-mig')?.textContent}
+Propósito del Viaje: ${document.getElementById('rv-prop')?.textContent}
+Coherencia Consular: ${document.getElementById('rv-coh')?.textContent}
+${'─'.repeat(50)}
+DIAGNÓSTICO:
+${dt}
+${'─'.repeat(50)}
+RECOMENDACIONES:
+${recom}
+${'='.repeat(50)}
+AVISO LEGAL: Estimación orientativa. No garantiza aprobación.
+INA §214(b) · © TengoVisa RD – tengovisard.com`.trim();
+
+  const blob = new Blob([txt], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `EvalFlash-${n.replace(/\s+/g,'-')}-${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function limpiarTodo() {
+  if (!confirm('¿Limpiar todo el formulario?')) return;
+  document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+  document.querySelectorAll('.qv').forEach(i => i.value = 0);
+  ['d-nombre','d-edad','d-ciudad','d-motivo','d-duracion','d-cargo'].forEach(id => {
+    const e = document.getElementById(id); if(e) e.value='';
+  });
+  ['d-tipo','d-pagador'].forEach(id => {
+    const e = document.getElementById(id); if(e) e.value='';
+  });
+  limpiarIA();
+  recalc();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  recalc();
+  document.querySelectorAll('input').forEach(i => i.addEventListener('change', recalc));
+});
+</script>
+</body>
+</html>

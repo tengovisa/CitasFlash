@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/icons/logo_tengovisa.png">
+<link rel="apple-touch-icon" href="/icons/logo_tengovisa.png">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Global Entry — TengoVisaRD</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--red:#FF1117;--red-h:#D90D14;--red-s:#FFE9EA;--blue:#001F73;--blue-s:#EAF0FF;--green:#16A34A;--green-s:#EAF8EE;--warn:#CC1A1A;--warn-s:#FFF4DE;--bg:#F5F7FB;--card:#fff;--text:#0F172A;--soft:#475569;--faint:#64748B;--border:#D8E1F0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.hdr{background:var(--blue);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hdr-l{display:flex;align-items:center;gap:10px}
+.hdr-logo{width:36px;height:36px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.hdr h1{font-size:14px;font-weight:800}.hdr .sub{font-size:10px;opacity:.75}
+.prog-wrap{background:rgba(255,255,255,.15);height:4px;position:sticky;top:56px;z-index:99}
+.prog-fill{height:100%;background:var(--red);transition:width .4s ease}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 100px}
+.step-ind{display:flex;justify-content:center;gap:4px;margin-bottom:20px;flex-wrap:wrap}
+.si{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--faint);background:#fff;transition:.3s}
+.si.active{border-color:var(--red);background:var(--red);color:#fff}
+.si.done{border-color:var(--green);background:var(--green);color:#fff}
+.sc{display:none}.sc.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(15,23,42,.05)}
+.sec-hdr{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.sec-ico{width:36px;height:36px;border-radius:10px;background:var(--blue-s);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sec-title{font-size:15px;font-weight:800;color:var(--blue)}
+.sec-sub{font-size:11px;color:var(--faint);margin-top:1px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--soft);margin-bottom:6px;text-transform:uppercase;letter-spacing:.03em}
+.req{color:var(--red)}
+.inp{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Inter',sans-serif;color:var(--text);background:#fff;outline:none;transition:.2s}
+.inp:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,31,115,.07)}
+.inp
+textarea.inp{resize:vertical;min-height:80px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.rg{display:flex;flex-direction:column;gap:8px}
+.rg.row{flex-direction:row;flex-wrap:wrap}
+.ro{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:.2s;background:#fff;flex:1;min-width:80px}
+.ro:hover{border-color:var(--blue);background:var(--blue-s)}
+.ro.sel{border-color:var(--red);background:var(--red-s)}
+.ro input{width:15px;height:15px;accent-color:var(--red);flex-shrink:0}
+.ro span{font-size:13px;font-weight:500}
+.chk-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chk{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;transition:.2s;background:#fff}
+.chk:hover{border-color:var(--blue);background:var(--blue-s)}
+.chk input{width:14px;height:14px;accent-color:var(--red)}
+.chk span{font-size:12px;font-weight:500}
+.info-box{background:var(--blue-s);border-left:3px solid var(--blue);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--blue);line-height:1.5}
+.warn-box{background:var(--warn-s);border-left:3px solid var(--warn);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#92400E}
+.otp-wrap{display:flex;gap:10px;justify-content:center;margin:16px 0}
+.otp-box{width:48px;height:56px;border:2px solid var(--border);border-radius:12px;text-align:center;font-size:24px;font-weight:800;color:var(--blue);font-family:'Inter',sans-serif;outline:none;transition:.2s}
+.otp-box:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,17,23,.1)}
+.btnr{display:flex;gap:10px;justify-content:space-between;align-items:center;padding:14px 20px;background:#fff;border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:50;box-shadow:0 -2px 12px rgba(15,23,42,.08)}
+.btn{padding:11px 22px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:.2s}
+.btnp{background:var(--red);color:#fff}.btnp:hover{background:var(--red-h)}
+.btno{background:#fff;color:var(--soft);border:1.5px solid var(--border)}.btno:hover{border-color:var(--blue);color:var(--blue)}
+.step-lbl{font-size:11px;font-weight:700;color:var(--faint);text-align:center}
+.alert{padding:10px 14px;border-radius:9px;font-size:13px;margin-bottom:12px;display:none}
+.alert.err{background:var(--red-s);color:var(--red-h);border:1px solid #FECACA;display:block}
+@media(max-width:600px){.grid2,.grid3,.chk-grid{grid-template-columns:1fr}.rg.row{flex-direction:column}.otp-box{width:40px;height:50px;font-size:20px}}
+
+/* Prevenir selección/copia de texto */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+/* Pero SÍ permitir en los campos del formulario */
+input, textarea, select {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
+}
+
+
+/* ── PLACEHOLDER ULTRA SUTIL ── */
+::placeholder{color:#C8D0DC;opacity:0.45;font-size:13px;font-weight:400;font-style:italic}
+::-webkit-input-placeholder{color:#C8D0DC;opacity:0.45;font-style:italic}
+::-moz-placeholder{color:#C8D0DC;opacity:0.45;font-style:italic}
+input:focus::placeholder,textarea:focus::placeholder{opacity:0.2}
+
+</style>
+<style id="tvrd-palette">
+:root{
+  --tv-blue:#001F73;
+  --tv-red:#CC1A1A;
+  --tv-white:#FFFFFF;
+  --tv-blue2:#0A2A8B;
+  --tv-red2:#E02424;
+  --tv-gray-l:#F5F7FA;
+  --tv-gray-d:#1A1A1A;
+}
+</style>
+<style id="tv-p">
+:root{
+  --tv-blue:#001F73;--tv-red:#CC1A1A;--tv-white:#FFFFFF;
+  --tv-blue2:#0A2A8B;--tv-red2:#E02424;
+  --tv-gray-l:#F5F7FA;--tv-gray-d:#1A1A1A
+}
+</style>
+<style id="ge-responsive">
+@media(max-width:768px){
+  .card,.wrap>div{border-radius:12px!important;margin-bottom:10px!important}
+  .btn{min-height:48px!important;width:100%!important}
+  .rg{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important}
+  .row{flex-direction:column!important}
+  input,select,textarea{font-size:14px!important}
+}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="hdr-logo">🌐</div>
+    <div><h1>Solicitud Global Entry</h1><div class="sub">TengoVisaRD · CBP Trusted Traveler Programs</div></div>
+  </div>
+  <div style="background:rgba(255,255,255,.15);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700">GLOBAL ENTRY · NEXUS · SENTRI</div>
+</header>
+<div class="prog-wrap"><div class="prog-fill" id="pgf" style="width:9%"></div></div>
+
+<div id="consent-block" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:flex-end;justify-content:center">
+  <div style="background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:640px;padding:24px 20px calc(24px + env(safe-area-inset-bottom,0));max-height:90vh;overflow-y:auto">
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:40px">⚖️</div>
+      <h2 style="font-size:17px;font-weight:800;color:#001F73;margin-top:8px">Declaración Jurada — Global Entry</h2>
+      <p style="font-size:12px;color:#64748B;margin-top:4px">TengoVisaRD · CBP Trusted Traveler Program</p>
+    </div>
+    <div style="background:#FFF4DE;border:1px solid #FDE68A;border-radius:12px;padding:14px;margin-bottom:14px;font-size:12px;color:#92400E;line-height:1.7">
+      ⚠️ <strong>ADVERTENCIA FEDERAL:</strong> Proporcionar información falsa en una solicitud de Global Entry constituye una ofensa criminal bajo las leyes federales de Estados Unidos. Puede resultar en denegación permanente, deportación y cargos criminales.
+    </div>
+    <div style="background:#EAF0FF;border-radius:12px;padding:14px;margin-bottom:16px;font-size:12px;color:#001F73;line-height:1.7">
+      Al enviar esta solicitud confirmo que:<br>
+      • Toda la información es <strong>verdadera, completa y correcta</strong><br>
+      • No he omitido información relevante para mi elegibilidad<br>
+      • <strong>Exonero a TengoVisaRD</strong> de responsabilidad por consecuencias de información incorrecta
+    </div>
+    <label style="display:flex;align-items:flex-start;gap:12px;padding:14px;border:2px solid #D8E1F0;border-radius:12px;cursor:pointer;margin-bottom:16px" id="consent-label">
+      <input type="checkbox" id="consent-check" style="width:20px;height:20px;accent-color:#001F73;flex-shrink:0;margin-top:2px" onchange="toggleConsentBtn()">
+      <span style="font-size:13px;font-weight:600;color:#0F172A;line-height:1.5">Declaro bajo pena de perjurio que toda la información proporcionada es verdadera y correcta. Exonero a TengoVisaRD y sus funcionarios de toda responsabilidad.</span>
+    </label>
+    <button id="consent-btn" onclick="confirmConsent()" disabled style="width:100%;padding:15px;background:#CBD5E1;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:not-allowed;font-family:inherit;transition:.3s">
+      ✋ Acepta la declaración para enviar
+    </button>
+    <button onclick="cancelConsent()" style="width:100%;padding:12px;background:transparent;color:#94A3B8;border:none;font-size:13px;cursor:pointer;margin-top:8px;font-family:inherit">✕ Cerrar — Salir</button>
+  </div>
+</div>
+<div class="wrap">
+  <div class="step-ind">
+    <div class="si active" id="pi1">1</div><div class="si" id="pi2">2</div><div class="si" id="pi3">3</div>
+    <div class="si" id="pi4">4</div><div class="si" id="pi5">5</div><div class="si" id="pi6">6</div>
+    <div class="si" id="pi7">7</div><div class="si" id="pi8">8</div><div class="si" id="pi9">9</div>
+    <div class="si" id="pi10">10</div><div class="si" id="pi11">11</div>
+  </div>
+
+  <!-- S1: OTP -->
+  <div class="sc active" id="s1">
+    <div class="card">
+      <div class="sec-hdr"><div class="sec-ico">🔐</div><div><div class="sec-title">Verificación de Identidad</div><div class="sec-sub">Antes de comenzar tu solicitud</div></div></div>
+      <div class="info-box">🌐 <strong>Global Entry</strong> permite entrada acelerada a EE.UU. desde el extranjero e incluye TSA PreCheck®. Tarifa: $120 USD por 5 años. Tiempo estimado: 40 minutos.</div>
+      <div class="grid2">
+        <div class="field"><label>Nombre <span class="req">*</span></label><input class="inp" id="fn" type="text" placeholder="Tu nombre"></div>
+        <div class="field"><label>Apellido <span class="req">*</span></label><input class="inp" id="fa" type="text" placeholder="Tu apellido"></div>
+      </div>
+      <div class="field"><label>WhatsApp <span class="req">*</span></label><input class="inp" id="fw" type="tel" placeholder="+1 809 000 0000"></div>
+      <div class="field"><label>Email <span class="req">*</span></label><input class="inp" id="fe" type="email" placeholder="correo@ejemplo.com"></div>
+      <div id="a1"></div>
+      <button class="btn btnp" style="width:100%;margin-top:8px" onclick="sendOTP()">Enviar código de verificación →</button>
+    </div>
+  </div>
+
+  <!-- S2: OTP CODE -->
+  <div class="sc" id="s2">
+    <div class="card">
+      <div class="sec-hdr"><div class="sec-ico">📱</div><div><div class="sec-title">Código de Verificación</div><div class="sec-sub" id="otp-sub">Enviamos un código a tu WhatsApp</div></div></div>
+      <div class="otp-wrap">
+        <input class="otp-box" id="o1" maxlength="1" inputmode="numeric">
+        <input class="otp-box" id="o2" maxlength="1" inputmode="numeric">
+        <input class="otp-box" id="o3" maxlength="1" inputmode="numeric">
+        <input class="otp-box" id="o4" maxlength="1" inputmode="numeric">
+        <input class="otp-box" id="o5" maxlength="1" inputmode="numeric">
+        <input class="otp-box" id="o6" maxlength="1" inputmode="numeric">
+      </div>
+      <div id="a2"></div>
+      <p style="text-align:center;font-size:12px;color:var(--faint);margin-top:10px">¿No recibiste? <span onclick="sendOTP()" style="color:var(--red);cursor:pointer;font-weight:700">Reenviar</span></p>
+    </div>
+  </div>
+
+  <!-- S3: PROGRAMA -->
+  <div class="sc" id="s3">
+    <div class="card">
+      <div class="sec-hdr"><div class="sec-ico">🌐</div><div><div class="sec-title">Programa Solicitado</div><div class="sec-sub">Sección 1 de 9</div></div></div>
+      <div class="field"><label>Selecciona el programa <span class="req">*</span></label>
+        <div class="rg">
+          <label class="ro sel"><input type="radio" name="programa" value="global_entry" checked><span>🌐 Global Entry — $120/5 años — Entrada acelerada + TSA PreCheck®</span></label>
+          <label class="ro"><input type="radio" name="programa" value="nexus"><span>🍁 NEXUS — $120/5 años — EE.UU. y Canadá</span></label>
+          <label class="ro"><input type="radio" name="programa" value="sentri"><span>🇲🇽 SENTRI — $120/5 años — EE.UU. y México</span></label>
+        </div>
+      </div>
+      <div class="field"><label>Tipo de ciudadanía <span class="req">*</span></label>
+        <div class="rg row">
+          <label class="ro"><input type="radio" name="ciudadania" value="ciudadano_us"><span>🇺🇸 Ciudadano EE.UU.</span></label>
+          <label class="ro"><input type="radio" name="ciudadania" value="lpr"><span>🟢 Residente (LPR)</span></label>
+          <label class="ro"><input type="radio" name="ciudadania" value="extranjero"><span>🌍 Extranjero</span></label>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>País de ciudadanía <span class="req">*</span></label>
+          <select class="inp" id="pais_cid"><option value="">Seleccionar...</option><option>República Dominicana</option><option>Colombia</option><option>México</option><option>Venezuela</option><option>Argentina</option><option>España</option><option>Estados Unidos</option><option>Otro</option></select>
+        </div>
+        <div class="field"><label>¿Pasaporte vigente? <span class="req">*</span></label>
+          <div class="rg row" style="margin-top:8px">
+            <label class="ro"><input type="radio" name="tiene_pasaporte" value="si"><span>Sí</span></label>
+            <label class="ro"><input type="radio" name="tiene_pasaporte" value="no"><span>No</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S4: IDENTIDAD -->
+  <div class="sc" id="s4">
+    <div class="card">
+      <div class="sec-hdr"><div class="sec-ico">👤</div><div><div class="sec-title">Datos Personales</div><div class="sec-sub">Sección 2 de 9 — Exactamente como en tu pasaporte</div></div></div>
+      <div class="grid2">
+        <div class="field"><label>Primer nombre <span class="req">*</span></label><input class="inp" id="ge_nombre" type="text" placeholder="Ej: María"></div>
+        <div class="field"><label>Segundo nombre</label><input class="inp" id="ge_nombre2" type="text" placeholder="(Opcional)"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Primer apellido <span class="req">*</span></label><input class="inp" id="ge_apellido1" type="text" placeholder="Ej: García"></div>
+        <div class="field"><label>Segundo apellido</label><input class="inp" id="ge_apellido2" type="text" placeholder="(Opcional)"></div>
+      </div>
+      <div class="grid3">
+        <div class="field"><label>Fecha de nacimiento <span class="req">*</span></label><input class="inp" id="ge_nac" type="date"></div>
+        <div class="field"><label>Ciudad de nacimiento <span class="req">*</span></label><input class="inp" id="ge_ciudad_nac" type="text" placeholder="Ej: Santo Domingo"></div>
+        <div class="field"><label>País de nacimiento <span class="req">*</span></label>
+          <select class="inp" id="ge_pais_nac"><option value="">Seleccionar...</option><option>República Dominicana</option><option>Colombia</option><option>México</option><option>Estados Unidos</option><option>Otro</option></select>
+        </div>
+      </div>
+      <div class="grid3">
+        <div class="field"><label>Género <span class="req">*</span></label>
+          <select class="inp" id="ge_genero"><option value="">Seleccionar...</option><option value="M">Masculino</option><option value="F">Femenino</option><option value="X">No binario</option></select>
+        </div>
+        <div class="field"><label>Estatura <span class="req">*</span></label><input class="inp" id="ge_estatura" type="text" placeholder="Ej: 5'8&quot; o 173cm"></div>
+        <div class="field"><label>Color de ojos <span class="req">*</span></label>
+          <select class="inp" id="ge_ojos"><option value="">Seleccionar...</option><option>Negros</option><option>Marrones</option><option>Verdes</option><option>Azules</option><option>Grises</option><option>Miel</option></select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Número de pasaporte <span class="req">*</span></label><input class="inp" id="ge_pasaporte" type="text" placeholder="Ej: RD123456"></div>
+        <div class="field"><label>SSN (solo ciudadanos/residentes EE.UU.)</label><input class="inp" id="ge_ssn" type="text" placeholder="XXX-XX-XXXX"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S5: DOMICILIO -->
+  <div class="sc" id="s5">
+    <div class="card">
+      <div class="sec-hdr"><div class="sec-ico">🏠</div><div><div class="sec-title">Domicilio Actual</div><div class="sec-sub">Sección 3 de 9</div></div></div>
+      <div class="field"><label>Dirección <span class="req">*</span></label><input class="inp" id="ge_dir1" type="text" placeholder="Calle, número, apartamento"></div>
+      <div class="field"><label>Dirección 2</label><input class="inp" id="ge_dir2" type="text" placeholder="Urbanización, sector (opcional)"></div>
+      <div class="grid3">
+        <div class="field"><label>Ciudad <span class="req">*</span></label><input class="inp" id="ge_ciudad" type="text" placeholder="Ej: Santo Domingo"></div>
+        <div class="field"><label>Provincia / Estado</label><input class="inp" id="ge_provincia" type="text" placeholder="Ej: Distrito Nacional"></div>
+        <div class="field"><label>Código postal</label><input class="inp" id="ge_postal" type="text" placeholder="(Opcional)"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>País de residencia <span class="req">*</span></label>
+          <select class="inp" id="ge_pais_res"><option value="">Seleccionar...</option><option>República Dominicana</option><option>Colombia</option><option>México</option><option>Estados Unidos</option><option>Otro</option></select>
+        </div>
+        <div class="field"><label>Desde cuándo vive aquí <span class="req">*</span></label><input class="inp" id="ge_desde_dir" type="date"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S6: EMPLEO -->
+  <div class="sc" id="s6">
+    <div class="card">
+      <div class="sec-hdr"><div class="sec-ico">💼</div><div><div class="sec-title">Empleo Actual</div><div class="sec-sub">Sección 4 de 9</div></div></div>
+      <div class="field"><label>Estado laboral <span class="req">*</span></label>
+        <select class="inp" id="ge_estado_laboral"><option value="">Seleccionar...</option><option>Empleado tiempo completo</option><option>Empleado tiempo parcial</option><option>Trabajador independiente</option><option>Empresario</option><option>Jubilado</option><option>Estudiante</option><option>Desempleado</option></select>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Empleador / Empresa <span class="req">*</span></label><input class="inp" id="ge_empleador" type="text" placeholder="Nombre del empleador"></div>
+        <div class="field"><label>Cargo <span class="req">*</span></label><input class="inp" id="ge_cargo" type="text" placeholder="Ej: Gerente de Ventas"></div>
+      </div>
+      <div class="field"><label>Dirección del empleador <span class="req">*</span></label><input class="inp" id="ge_dir_emp" type="text" placeholder="Calle, ciudad, país del empleador"></div>
+      <div class="grid2">
+        <div class="field"><label>Teléfono del empleador</label><input class="inp" id="ge_tel_emp" type="tel" placeholder="+1 000 000 0000"></div>
+        <div class="field"><label>Fecha de inicio <span class="req">*</span></label><input class="inp" id="ge_inicio_emp" type="date"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S7: VIAJES -->
+  <div class="sc" id="s7">
+    <div class="card">
+      <div class="sec-hdr"><div class="sec-ico">🌍</div><div><div class="sec-title">Historial de Viajes</div><div class="sec-sub">Sección 5 de 9 — Últimos 5 años</div></div></div>
+      <div class="warn-box">⚠️ Debe declarar TODOS los países visitados en los últimos 5 años, incluyendo tránsitos.</div>
+      <div class="field"><label>Países visitados en los últimos 5 años</label>
+        <div class="chk-grid">
+          <label class="chk"><input type="checkbox" name="paises_vis" value="eeuu"><span>🇺🇸 Estados Unidos</span></label>
+          <label class="chk"><input type="checkbox" name="paises_vis" value="canada"><span>🇨🇦 Canadá</span></label>
+          <label class="chk"><input type="checkbox" name="paises_vis" value="mexico"><span>🇲🇽 México</span></label>
+          <label class="chk"><input type="checkbox" name="paises_vis" value="europa"><span>🇪🇺 Europa</span></label>
+          <label class="chk"><input type="checkbox" name="paises_vis" value="caribe"><span>🏝️ Caribe</span></label>
+          <label class="chk"><input type="checkbox" name="paises_vis" value="latam"><span>🌎 Latinoamérica</span></label>
+          <label class="chk"><input type="checkbox" name="paises_vis" value="asia"><span>🌏 Asia</span></label>
+          <label class="chk"><input type="checkbox" name="paises_vis" value="otro"><span>🌍 Otro</span></label>
+        </div>
+      </div>
+      <div class="field"><label>Describe los viajes más recientes</label>
+        <textarea class="inp" id="ge_viajes_desc" placeholder="Ej: EE.UU. – 2023 – 10 días – turismo&#10;España – 2022 – 2 semanas – vacaciones"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- S8: DOCUMENTOS -->
+  <div class="sc" id="s8">
+    <div class="card">
+      <div class="sec-hdr"><div class="sec-ico">📄</div><div><div class="sec-title">Documentos de Identidad</div><div class="sec-sub">Sección 6 de 9</div></div></div>
+      <div class="grid2">
+        <div class="field"><label>Número de pasaporte <span class="req">*</span></label><input class="inp" id="ge_num_pasaporte" type="text" placeholder="Ej: RD123456"></div>
+        <div class="field"><label>País emisor <span class="req">*</span></label>
+          <select class="inp" id="ge_pais_emisor_pas"><option value="">Seleccionar...</option><option>República Dominicana</option><option>Colombia</option><option>México</option><option>Estados Unidos</option><option>Otro</option></select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Fecha de expedición <span class="req">*</span></label><input class="inp" id="ge_expedicion_pas" type="date"></div>
+        <div class="field"><label>Fecha de vencimiento <span class="req">*</span></label><input class="inp" id="ge_vence_pas" type="date"></div>
+      </div>
+      <div class="field"><label>Número de cédula / ID nacional</label><input class="inp" id="ge_cedula" type="text" placeholder="Ej: 001-0000000-0"></div>
+    </div>
+  </div>
+
+  <!-- S9: VEHÍCULO -->
+  <div class="sc" id="s9">
+    <div class="card">
+      <div class="sec-hdr"><div class="sec-ico">🚗</div><div><div class="sec-title">Vehículo (SENTRI)</div><div class="sec-sub">Sección 7 de 9 — Requerido solo para SENTRI</div></div></div>
+      <div class="info-box">ℹ️ Esta sección es requerida para SENTRI. Para Global Entry y NEXUS es opcional.</div>
+      <div class="field"><label>¿Tiene vehículo registrado para cruce?</label>
+        <div class="rg row">
+          <label class="ro"><input type="radio" name="tiene_vehiculo" value="no"><span>No</span></label>
+          <label class="ro"><input type="radio" name="tiene_vehiculo" value="si"><span>Sí</span></label>
+        </div>
+      </div>
+      <div id="wrap_vehiculo" style="display:none">
+        <div class="grid3">
+          <div class="field"><label>Marca</label><input class="inp" id="ge_marca_v" type="text" placeholder="Ej: Toyota"></div>
+          <div class="field"><label>Modelo</label><input class="inp" id="ge_modelo_v" type="text" placeholder="Ej: Corolla"></div>
+          <div class="field"><label>Año</label><input class="inp" id="ge_anio_v" type="text" placeholder="Ej: 2020"></div>
+        </div>
+        <div class="field"><label>Placa / Matrícula</label><input class="inp" id="ge_placa_v" type="text" placeholder="Ej: A-123456"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S10: ELEGIBILIDAD -->
+  <div class="sc" id="s10">
+    <div class="card">
+      <div class="sec-hdr"><div class="sec-ico">✅</div><div><div class="sec-title">Preguntas de Elegibilidad</div><div class="sec-sub">Sección 8 de 9 — Responde con honestidad</div></div></div>
+      <div class="warn-box">⚠️ Responder falsamente puede resultar en denegación permanente y cargos criminales federales.</div>
+      <div class="field"><label>¿Has sido arrestado o condenado por algún delito? <span class="req">*</span></label>
+        <div class="rg row"><label class="ro"><input type="radio" name="elig_arrestado" value="no"><span>No</span></label><label class="ro"><input type="radio" name="elig_arrestado" value="si"><span>Sí</span></label></div>
+      </div>
+      <div class="field"><label>¿Has violado leyes de sustancias controladas? <span class="req">*</span></label>
+        <div class="rg row"><label class="ro"><input type="radio" name="elig_drogas" value="no"><span>No</span></label><label class="ro"><input type="radio" name="elig_drogas" value="si"><span>Sí</span></label></div>
+      </div>
+      <div class="field"><label>¿Has sido deportado o removido de algún país? <span class="req">*</span></label>
+        <div class="rg row"><label class="ro"><input type="radio" name="elig_deportado" value="no"><span>No</span></label><label class="ro"><input type="radio" name="elig_deportado" value="si"><span>Sí</span></label></div>
+      </div>
+      <div class="field"><label>¿Has usado documentos falsos o cometido fraude? <span class="req">*</span></label>
+        <div class="rg row"><label class="ro"><input type="radio" name="elig_fraude" value="no"><span>No</span></label><label class="ro"><input type="radio" name="elig_fraude" value="si"><span>Sí</span></label></div>
+      </div>
+      <div class="field"><label>¿Tienes afiliación con organizaciones terroristas? <span class="req">*</span></label>
+        <div class="rg row"><label class="ro"><input type="radio" name="elig_terrorismo" value="no"><span>No</span></label><label class="ro"><input type="radio" name="elig_terrorismo" value="si"><span>Sí</span></label></div>
+      </div>
+      <div class="field"><label>¿Has tenido overstay en EE.UU. u otro país? <span class="req">*</span></label>
+        <div class="rg row"><label class="ro"><input type="radio" name="elig_overstay" value="no"><span>No</span></label><label class="ro"><input type="radio" name="elig_overstay" value="si"><span>Sí</span></label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S11: ENVÍO -->
+  <div class="sc" id="s11">
+    <div class="card">
+      <div class="sec-hdr"><div class="sec-ico">📋</div><div><div class="sec-title">Revisión y Envío</div><div class="sec-sub">Sección 9 de 9</div></div></div>
+      <div class="info-box">✅ Revisa tu información antes de enviar. El asesor de TengoVisaRD procesará tu solicitud.</div>
+      <div id="resumen" style="background:var(--bg);border-radius:10px;padding:14px;font-size:13px;line-height:2"></div>
+      <div class="field" style="margin-top:14px">
+        <label class="chk" style="border:1.5px solid var(--border)">
+          <input type="checkbox" id="declara">
+          <span>Declaro que toda la información es verdadera y correcta bajo pena de perjurio.</span>
+        </label>
+      </div>
+      <div id="a11"></div>
+    </div>
+  </div>
+
+  <!-- S12: GRACIAS -->
+  <div class="sc" id="s12">
+    <div class="card" style="text-align:center;padding:40px">
+      <div style="font-size:56px;margin-bottom:16px">🌐</div>
+      <div style="font-size:20px;font-weight:800;color:var(--blue);margin-bottom:8px">¡Solicitud Enviada!</div>
+      <div style="font-size:13px;color:var(--soft);line-height:1.6;margin-bottom:20px">Tu solicitud de Global Entry ha sido recibida. Un asesor de TengoVisaRD te contactará en las próximas 24 horas.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px">
+        <div style="background:var(--blue-s);border-radius:10px;padding:14px;text-align:center"><div style="font-size:20px">📋</div><div style="font-size:11px;font-weight:700;color:var(--blue);margin-top:6px">Solicitud recibida</div></div>
+        <div style="background:var(--warn-s);border-radius:10px;padding:14px;text-align:center"><div style="font-size:20px">🔍</div><div style="font-size:11px;font-weight:700;color:#92400e;margin-top:6px">Revisión del asesor</div></div>
+        <div style="background:var(--green-s);border-radius:10px;padding:14px;text-align:center"><div style="font-size:20px">✅</div><div style="font-size:11px;font-weight:700;color:#15803d;margin-top:6px">Envío a CBP</div></div>
+      </div>
+      <a href="/" style="display:inline-block;padding:12px 24px;background:var(--blue);color:#fff;border-radius:10px;font-weight:800;text-decoration:none">← Volver al inicio</a>
+    </div>
+  </div>
+</div>
+
+<div class="btnr" id="btnr">
+  <button class="btn btno" id="btnBack" onclick="goS(curS-1)" style="display:none">← Atrás</button>
+  <div class="step-lbl" id="step-lbl">Paso 1 de 11</div>
+  <button class="btn btnp" id="btnNext" onclick="nextStep()">Continuar →</button>
+</div>
+
+<script>
+const API='https://crm.tengovisard.com/api', KEY='TVPublic2026';
+let curS=1, otpVerified=false, TOTAL=11;
+function hdr(){return{'x-api-key':KEY,'Content-Type':'application/json'};}
+function g(id){return document.getElementById(id);}
+function rv(name){const r=document.querySelector(`input[name="${name}"]:checked`);return r?r.value:'';}
+function chkVals(name){return[...document.querySelectorAll(`input[name="${name}"]:checked`)].map(e=>e.value).join(', ');}
+
+function goS(n){
+  if(n<1||n>12)return;
+  document.querySelectorAll('.sc').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.si').forEach((s,i)=>{
+    s.classList.remove('active','done');
+    if(i+1<n)s.classList.add('done');
+    else if(i+1===n)s.classList.add('active');
+  });
+  const el=g('s'+n);if(el)el.classList.add('active');
+  curS=n;
+  g('pgf').style.width=Math.min((n-1)/TOTAL*100,100)+'%';
+  g('step-lbl').textContent=n<=TOTAL?`Paso ${n} de ${TOTAL}`:'Enviado';
+  g('btnBack').style.display=n>1&&n<=11?'block':'none';
+  g('btnNext').style.display=n<=11?'flex':'none';
+  if(n===11)g('btnNext').textContent='📤 Enviar Solicitud';
+  else g('btnNext').textContent='Continuar →';
+  if(n===11)buildResumen();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function sendOTP(){
+  const fn=g('fn').value.trim(),fa=g('fa').value.trim(),fw=g('fw').value.trim(),fe=g('fe').value.trim();
+  if(!fn||!fa||!fw||!fe){setAlert('a1','Completa todos los campos','err');return;}
+  try{
+    const r=await fetch(`${API}/otp/request`,{method:'POST',headers:hdr(),body:JSON.stringify({nombre:fn,apellido:fa,whatsapp:fw,email:fe})});
+    const d=await r.json();
+    if(d.ok||d.otp){g('otp-sub').textContent=`Código enviado a ${fw}`;goS(2);setupOTP();}
+    else setAlert('a1',d.error||'Error enviando código','err');
+  }catch(e){setAlert('a1','Error de conexión','err');}
+}
+
+function setupOTP(){
+  ['o1','o2','o3','o4','o5','o6'].forEach((id,i,arr)=>{
+    const el=g(id);
+    el.addEventListener('input',()=>{
+      if(el.value.length===1&&i<arr.length-1)g(arr[i+1]).focus();
+      if(i===arr.length-1)verifyOTP();
+    });
+    el.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!el.value&&i>0)g(arr[i-1]).focus();});
+  });
+  g('o1').focus();
+}
+
+async function verifyOTP(){
+  const code=['o1','o2','o3','o4','o5','o6'].map(id=>g(id).value).join('');
+  if(code.length!==6)return;
+  try{
+    const r=await fetch(`${API}/otp/verify`,{method:'POST',headers:hdr(),body:JSON.stringify({email:g('fe').value.trim(),otp:code})});
+    const d=await r.json();
+    if(d.ok){otpVerified=true;goS(3);}
+    else setAlert('a2','Código incorrecto — intenta de nuevo','err');
+  }catch(e){setAlert('a2','Error de conexión','err');}
+}
+
+function nextStep(){
+  if(curS===1){sendOTP();return;}
+  if(curS===2){verifyOTP();return;}
+  if(curS===11){requestConsent();return;}
+  goS(curS+1);
+}
+
+function buildResumen(){
+  const campos=[
+    ['Nombre',`${g('ge_nombre').value} ${g('ge_apellido1').value}`],
+    ['Email',g('fe').value],['WhatsApp',g('fw').value],
+    ['Programa',rv('programa')],['País',g('pais_cid').value],
+    ['Nacimiento',g('ge_nac').value],['Pasaporte',g('ge_pasaporte').value],
+    ['Ciudad',g('ge_ciudad').value],['Empleador',g('ge_empleador').value],
+    ['Cargo',g('ge_cargo').value],['Países visitados',chkVals('paises_vis')],
+  ];
+  g('resumen').innerHTML=campos.filter(([,v])=>v).map(([l,v])=>
+    `<div style="display:flex;gap:8px"><span style="color:var(--faint);min-width:120px;font-size:12px">${l}:</span><span style="font-weight:600;font-size:12px">${v}</span></div>`
+  ).join('');
+}
+
+async function submitGE(){
+  if(!g('declara').checked){setAlert('a11','Debes aceptar la declaración','err');return;}
+  const datos={
+    f_nombre:g('ge_nombre').value,f_nombre2:g('ge_nombre2').value,
+    f_apellido1:g('ge_apellido1').value,f_apellido2:g('ge_apellido2').value,
+    email:g('fe').value,whatsapp:g('fw').value,
+    fecha_nac:g('ge_nac').value,ciudad_nac:g('ge_ciudad_nac').value,
+    pais_nac:g('ge_pais_nac').value,genero:g('ge_genero').value,
+    estatura:g('ge_estatura').value,ojos:g('ge_ojos').value,
+    pasaporte:g('ge_pasaporte').value,ssn:g('ge_ssn').value,
+    programa:rv('programa'),ciudadania:rv('ciudadania'),pais_cid:g('pais_cid').value,
+    dir1:g('ge_dir1').value,ciudad:g('ge_ciudad').value,
+    provincia:g('ge_provincia').value,pais_res:g('ge_pais_res').value,
+    empleador:g('ge_empleador').value,cargo:g('ge_cargo').value,
+    dir_emp:g('ge_dir_emp').value,inicio_emp:g('ge_inicio_emp').value,
+    paises_visitados:chkVals('paises_vis'),viajes_desc:g('ge_viajes_desc').value,
+    num_pasaporte:g('ge_num_pasaporte').value,
+    pais_emisor_pas:g('ge_pais_emisor_pas').value,
+    expedicion_pas:g('ge_expedicion_pas').value,
+    vence_pas:g('ge_vence_pas').value,cedula:g('ge_cedula').value,
+    elig_arrestado:rv('elig_arrestado'),elig_drogas:rv('elig_drogas'),
+    elig_deportado:rv('elig_deportado'),elig_fraude:rv('elig_fraude'),
+    elig_terrorismo:rv('elig_terrorismo'),elig_overstay:rv('elig_overstay'),
+  };
+  try{
+    g('btnNext').textContent='⏳ Enviando...';g('btnNext').disabled=true;
+    const r=await fetch(`${API}/globalentry/save`,{method:'POST',headers:hdr(),body:JSON.stringify(datos)});
+    const d=await r.json();
+    if(d.ok)goS(12);
+    else setAlert('a11','Error: '+d.error,'err');
+  }catch(e){setAlert('a11','Error de conexión','err');}
+  finally{g('btnNext').disabled=false;g('btnNext').textContent='📤 Enviar Solicitud';}
+}
+
+function setAlert(id,msg,type){
+  const el=g(id);if(!el)return;
+  el.className='alert '+(type||'err');el.textContent=msg;el.style.display='block';
+  setTimeout(()=>el.style.display='none',5000);
+}
+
+document.querySelectorAll('input[name="tiene_vehiculo"]').forEach(r=>r.addEventListener('change',()=>{
+  g('wrap_vehiculo').style.display=rv('tiene_vehiculo')==='si'?'block':'none';
+}));
+document.querySelectorAll('.ro input[type=radio]').forEach(r=>{
+  r.addEventListener('change',()=>{
+    document.querySelectorAll(`.ro input[name="${r.name}"]`).forEach(i=>{
+      i.closest('.ro').classList.toggle('sel',i.checked);
+    });
+  });
+});
+goS(1);
+
+let _consentApproved=false;
+function showConsent(){const cb=document.getElementById('consent-block');if(cb)cb.style.display='flex';}
+function toggleConsentBtn(){
+  const check=document.getElementById('consent-check');
+  const btn=document.getElementById('consent-btn');
+  const label=document.getElementById('consent-label');
+  if(check.checked){btn.disabled=false;btn.style.background='#001F73';btn.style.cursor='pointer';btn.textContent='✅ Acepto — Enviar solicitud Global Entry';label.style.borderColor='#001F73';label.style.background='#EAF0FF';}
+  else{btn.disabled=true;btn.style.background='#CBD5E1';btn.style.cursor='not-allowed';btn.textContent='✋ Acepta la declaración para enviar';label.style.borderColor='#D8E1F0';label.style.background='#fff';}
+}
+function confirmConsent(){_consentApproved=true;document.getElementById('consent-block').style.display='none';submitGE();}
+function cancelConsent(){window.location.href='https://tengovisard.com/';}
+function requestConsent(){showConsent();}
+
+
+// Bloquear clic derecho y atajos de copia
+document.addEventListener('contextmenu', e => {
+  if(!['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) e.preventDefault();
+});
+document.addEventListener('keydown', e => {
+  // Bloquear Ctrl+C, Ctrl+U (ver fuente), Ctrl+S, F12 en móvil
+  if(e.ctrlKey && ['c','u','s','a'].includes(e.key.toLowerCase())){
+    if(!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){
+      e.preventDefault();
+    }
+  }
+  if(e.key==='PrintScreen') e.preventDefault();
+});
+// Bloquear drag de texto
+document.addEventListener('dragstart', e => {
+  if(!['INPUT','TEXTAREA'].includes(e.target.tagName)) e.preventDefault();
+});
+
+
+// Marca de agua dinámica — identifica al usuario en capturas
+function addWatermark(email){
+  if(!email) return;
+  const wm = document.createElement('div');
+  wm.style.cssText = `
+    position:fixed;inset:0;pointer-events:none;z-index:8888;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  `;
+  const texto = `${email} · TengoVisaRD · ${new Date().toLocaleDateString('es-DO')}`;
+  for(let i=0;i<12;i++){
+    const span = document.createElement('div');
+    span.style.cssText = `
+      position:absolute;
+      color:rgba(0,31,115,0.04);
+      font-size:13px;font-weight:700;
+      white-space:nowrap;
+      transform:rotate(-30deg);
+      font-family:-apple-system,sans-serif;
+      top:${Math.random()*100}%;
+      left:${Math.random()*100}%;
+    `;
+    span.textContent = texto;
+    wm.appendChild(span);
+  }
+  document.body.appendChild(wm);
+}
+
+
+// ── AUTOSAVE GlobalEntry ──
+function autoSaveGE(){
+  try{
+    const fields = {};
+    document.querySelectorAll('input:not([type=radio]):not([type=checkbox]),select,textarea').forEach(el=>{
+      if(el.id) fields[el.id]=el.value;
+    });
+    document.querySelectorAll('input[type=radio]:checked').forEach(el=>{
+      fields['r_'+el.name]=el.value;
+    });
+    fields._step = typeof curS!=='undefined'?curS:1;
+    localStorage.setItem('ge_progress',JSON.stringify(fields));
+  }catch(e){}
+}
+function restoreGE(){
+  try{
+    const saved=localStorage.getItem('ge_progress');
+    if(!saved) return;
+    const data=JSON.parse(saved);
+    Object.keys(data).forEach(k=>{
+      if(k==='_step') return;
+      if(k.startsWith('r_')){
+        const el=document.querySelector(`input[name="${k.slice(2)}"][value="${data[k]}"]`);
+        if(el){el.checked=true;el.dispatchEvent(new Event('change'));}
+      } else {
+        const el=document.getElementById(k);
+        if(el) el.value=data[k];
+      }
+    });
+  }catch(e){}
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Panel TengoVisa — Leads</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --navy: #1B2A4A; --navydk: #0f1e3a; --red: #E31837;
+    --white: #fff; --off: #F8F9FC; --gray: #64748b; --border: #e2e8f0;
+    --green: #16a34a; --yellow: #d97706; --blue: #2563eb; --purple: #7c3aed;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: system-ui, sans-serif; background:var(--off); color:var(--navy); }
+
+  /* SIDEBAR */
+  .sidebar {
+    position:fixed; top:0; left:0; width:220px; height:100vh;
+    background:var(--navydk); display:flex; flex-direction:column;
+    border-right:1px solid rgba(255,255,255,0.06); z-index:100;
+  }
+  .logo { padding:20px 18px; border-bottom:1px solid rgba(255,255,255,0.08); }
+  .logo-tengo { color:#fff; font-weight:900; font-style:italic; font-size:14px; }
+  .logo-visa  { color:var(--red); font-weight:900; font-style:italic; font-size:22px; }
+  .logo-stars { background:var(--navy); border-radius:3px; padding:2px 6px; font-size:7px; color:var(--red); letter-spacing:1px; display:inline-block; margin-bottom:2px; }
+
+  .nav { flex:1; padding:12px 0; overflow-y:auto; }
+  .nav-section { padding:8px 18px 4px; font-size:9px; font-weight:700; color:rgba(255,255,255,0.3); letter-spacing:1.5px; text-transform:uppercase; }
+  .nav-item {
+    display:flex; align-items:center; gap:10px; padding:10px 18px;
+    color:rgba(255,255,255,0.55); font-size:13px; font-weight:500;
+    cursor:pointer; transition:all 0.2s; border-left:3px solid transparent;
+    text-decoration:none;
+  }
+  .nav-item:hover { color:#fff; background:rgba(255,255,255,0.05); }
+  .nav-item.active { color:#fff; background:rgba(227,24,55,0.12); border-left-color:var(--red); }
+  .nav-icon { font-size:16px; width:20px; text-align:center; }
+
+  /* MAIN */
+  .main { margin-left:220px; min-height:100vh; }
+  .topbar {
+    background:#fff; border-bottom:1px solid var(--border);
+    padding:0 28px; height:58px; display:flex; align-items:center;
+    justify-content:space-between; position:sticky; top:0; z-index:50;
+  }
+  .topbar-title { font-weight:800; font-size:17px; color:var(--navy); }
+  .badge-nuevo { background:rgba(227,24,55,0.1); color:var(--red); border-radius:100px; padding:3px 10px; font-size:11px; font-weight:700; }
+
+  .content { padding:28px; }
+
+  /* TABS */
+  .tabs { display:flex; gap:4px; margin-bottom:24px; background:#fff; border-radius:12px; padding:6px; border:1px solid var(--border); width:fit-content; }
+  .tab { padding:8px 18px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s; color:var(--gray); border:none; background:none; }
+  .tab.active { background:var(--navy); color:#fff; }
+
+  /* STATS */
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:16px; margin-bottom:28px; }
+  .stat { background:#fff; border-radius:12px; padding:18px 20px; border:1px solid var(--border); }
+  .stat-num { font-size:2rem; font-weight:900; color:var(--navy); line-height:1; }
+  .stat-label { font-size:12px; color:var(--gray); margin-top:4px; }
+  .stat-new { color:var(--red); font-size:12px; font-weight:700; margin-top:6px; }
+
+  /* FILTROS */
+  .filtros { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+  .filtro-btn { padding:6px 14px; border-radius:100px; font-size:12px; font-weight:600; cursor:pointer; border:1.5px solid var(--border); background:#fff; color:var(--gray); transition:all 0.2s; }
+  .filtro-btn.active { border-color:var(--navy); background:var(--navy); color:#fff; }
+
+  /* TABLA */
+  .tabla-wrap { background:#fff; border-radius:14px; border:1px solid var(--border); overflow:hidden; }
+  .tabla-header { padding:14px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+  .tabla-search { padding:8px 14px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; outline:none; width:220px; color:var(--navy); }
+  .tabla-search:focus { border-color:var(--red); }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { background:var(--off); padding:10px 14px; text-align:left; font-weight:700; font-size:11px; color:var(--gray); letter-spacing:0.5px; text-transform:uppercase; }
+  td { padding:12px 14px; border-top:1px solid var(--border); vertical-align:middle; }
+  tr:hover td { background:rgba(27,42,74,0.02); }
+  .td-nombre { font-weight:700; color:var(--navy); }
+  .td-wa { color:var(--green); font-weight:600; }
+
+  /* STATUS BADGES */
+  .status { padding:3px 10px; border-radius:100px; font-size:11px; font-weight:700; display:inline-block; }
+  .status-nuevo       { background:rgba(227,24,55,0.1); color:var(--red); }
+  .status-contactado  { background:rgba(37,99,235,0.1); color:var(--blue); }
+  .status-calificado  { background:rgba(22,163,74,0.1); color:var(--green); }
+  .status-cerrado     { background:rgba(100,116,139,0.1); color:var(--gray); }
+  .status-link_enviado{ background:rgba(124,58,237,0.1); color:var(--purple); }
+  .status-pagado      { background:rgba(22,163,74,0.15); color:var(--green); }
+  .status-evaluado    { background:rgba(27,42,74,0.1); color:var(--navy); }
+  .status-pendiente   { background:rgba(217,119,6,0.1); color:var(--yellow); }
+  .status-confirmado  { background:rgba(22,163,74,0.1); color:var(--green); }
+  .status-completado  { background:rgba(27,42,74,0.1); color:var(--navy); }
+
+  /* SELECT STATUS */
+  .sel-status { border:1.5px solid var(--border); border-radius:6px; padding:4px 8px; font-size:12px; font-weight:600; cursor:pointer; outline:none; background:#fff; color:var(--navy); }
+
+  /* WA BUTTON */
+  .btn-wa { background:#25D366; color:#fff; border:none; border-radius:6px; padding:5px 10px; font-size:11px; font-weight:700; cursor:pointer; }
+
+  /* MODAL */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:200; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .modal { background:#fff; border-radius:16px; padding:28px; max-width:520px; width:100%; max-height:80vh; overflow-y:auto; }
+  .modal-title { font-weight:900; font-size:18px; color:var(--navy); margin-bottom:20px; }
+  .modal-field { margin-bottom:14px; }
+  .modal-label { font-size:11px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+  .modal-value { font-size:14px; color:var(--navy); font-weight:600; }
+  .modal-nota { width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; resize:vertical; outline:none; font-family:inherit; color:var(--navy); margin-top:4px; }
+  .modal-nota:focus { border-color:var(--red); }
+  .btn-save { background:var(--navy); color:#fff; border:none; border-radius:8px; padding:10px 20px; font-weight:700; font-size:13px; cursor:pointer; margin-top:8px; }
+  .btn-close { background:var(--off); color:var(--gray); border:1px solid var(--border); border-radius:8px; padding:10px 20px; font-weight:700; font-size:13px; cursor:pointer; margin-top:8px; margin-left:8px; }
+
+  /* EMPTY */
+  .empty { text-align:center; padding:60px 20px; color:var(--gray); }
+  .empty-icon { font-size:48px; margin-bottom:12px; }
+
+  /* LOADING */
+  .loading { text-align:center; padding:40px; color:var(--gray); font-size:14px; }
+
+  @media(max-width:768px) {
+    .sidebar { width:60px; }
+    .logo-tengo, .logo-visa, .logo-stars, .nav-section, .nav-item span { display:none; }
+    .main { margin-left:60px; }
+    .stats { grid-template-columns:1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-stars">★★★★★</div>
+    <div><span class="logo-tengo">tengo</span></div>
+    <div class="logo-visa">Visa RD</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Formularios</div>
+    <a class="nav-item" href="/ds160/admin.html">
+      <span class="nav-icon">📋</span><span>DS-160</span>
+    </a>
+    <a class="nav-item" href="/pasaporte/admin.html">
+      <span class="nav-icon">🛂</span><span>Pasaportes</span>
+    </a>
+
+    <div class="nav-section" style="margin-top:8px">Leads Landing</div>
+    <a class="nav-item active" href="#" onclick="cambiarVista('cita'); return false;">
+      <span class="nav-icon">📅</span><span>Clientes Cita</span>
+    </a>
+    <a class="nav-item" href="#" onclick="cambiarVista('asesores'); return false;">
+      <span class="nav-icon">💼</span><span>Asesores</span>
+    </a>
+    <a class="nav-item" href="#" onclick="cambiarVista('evaluacion'); return false;">
+      <span class="nav-icon">📊</span><span>Evaluaciones</span>
+    </a>
+    <a class="nav-item" href="#" onclick="cambiarVista('pagos'); return false;">
+      <span class="nav-icon">💳</span><span>Pagos</span>
+    </a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Clientes con Cita</div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <span class="badge-nuevo" id="badge-nuevos">0 nuevos</span>
+      <button onclick="cargarDatos()" style="background:var(--off);border:1px solid var(--border);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">↻ Actualizar</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- STATS -->
+    <div class="stats" id="stats-container"></div>
+
+    <!-- TABS (solo para evaluacion) -->
+    <div class="tabs" id="tabs-evaluacion" style="display:none;">
+      <button class="tab active" onclick="tabEval('leads')">Leads</button>
+      <button class="tab" onclick="tabEval('pagos')">Pagos</button>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="filtros" id="filtros-container"></div>
+
+    <!-- TABLA -->
+    <div class="tabla-wrap">
+      <div class="tabla-header">
+        <div style="font-weight:700;font-size:14px;color:var(--navy);" id="tabla-titulo">Registros</div>
+        <input class="tabla-search" type="text" placeholder="Buscar por nombre o WhatsApp..." oninput="filtrarBusqueda(this.value)" />
+      </div>
+      <div id="tabla-body"><div class="loading">Cargando datos...</div></div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL DETALLE -->
+<div class="modal-overlay" id="modal" style="display:none;" onclick="cerrarModal(event)">
+  <div class="modal" id="modal-content">
+    <div class="modal-title" id="modal-title">Detalle del lead</div>
+    <div id="modal-fields"></div>
+    <div class="modal-field">
+      <div class="modal-label">Nota interna</div>
+      <textarea class="modal-nota" id="modal-nota" rows="3" placeholder="Agregar nota sobre este lead..."></textarea>
+    </div>
+    <div class="modal-field">
+      <div class="modal-label">Cambiar status</div>
+      <select class="sel-status" id="modal-status-sel" style="margin-top:4px;width:100%;padding:10px;font-size:14px;"></select>
+    </div>
+    <div>
+      <button class="btn-save" onclick="guardarModal()">💾 Guardar cambios</button>
+      <button class="btn-close" onclick="document.getElementById('modal').style.display='none'">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL  = "https://lbttnpcpqdjmpktuoegs.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxidHRucGNwcWRqbXBrdHVvZWdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NjAyNDEsImV4cCI6MjA5MTIzNjI0MX0.GsuZUkJIOmOITdl0hATt_P603a7vaI01j72nzG94O60";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let vistaActual   = "cita";
+let tablaActual   = "leads_cita";
+let todosLosDatos = [];
+let datosFiltrados= [];
+let filtroStatus  = "todos";
+let modalLead     = null;
+
+const VISTAS = {
+  cita: {
+    tabla:"leads_cita", titulo:"Clientes con Cita", topbar:"Clientes con Cita",
+    statuses:["nuevo","contactado","calificado","cerrado"],
+    columnas:["Nombre","WhatsApp","Fecha Cita","Solicitantes","AIS","Inicia Hoy","Status","Acciones"],
+    render: r => `
+      <td class="td-nombre">${r.nombre}</td>
+      <td class="td-wa">${r.whatsapp}</td>
+      <td>${r.fecha_cita || "-"}</td>
+      <td>${r.solicitantes || "-"}</td>
+      <td>${r.tiene_ais || "-"}</td>
+      <td>${r.inicia_hoy || "-"}</td>
+    `,
+    fields: r => [
+      ["Nombre",r.nombre],["WhatsApp",r.whatsapp],
+      ["Fecha de cita",r.fecha_cita],["Solicitantes",r.solicitantes],
+      ["Tiene AIS",r.tiene_ais],["Inicia hoy",r.inicia_hoy],
+      ["Comentario",r.comentario||"—"],["Registrado",fmtDate(r.created_at)],
+    ]
+  },
+  asesores: {
+    tabla:"leads_asesores", titulo:"Asesores / Abogados", topbar:"Asesores y Profesionales",
+    statuses:["nuevo","contactado","calificado","cerrado"],
+    columnas:["Nombre","WhatsApp","Tipo Perfil","Clientes Activos","AIS","Relación","Status","Acciones"],
+    render: r => `
+      <td class="td-nombre">${r.nombre}</td>
+      <td class="td-wa">${r.whatsapp}</td>
+      <td>${r.tipo_perfil||"-"}</td>
+      <td>${r.clientes_activos||"-"}</td>
+      <td>${r.tiene_ais||"-"}</td>
+      <td>${r.tipo_relacion||"-"}</td>
+    `,
+    fields: r => [
+      ["Nombre",r.nombre],["WhatsApp",r.whatsapp],
+      ["Tipo de perfil",r.tipo_perfil],["Clientes activos",r.clientes_activos],
+      ["Tiene AIS",r.tiene_ais],["Tipo relación",r.tipo_relacion],
+      ["Comentario",r.comentario||"—"],["Registrado",fmtDate(r.created_at)],
+    ]
+  },
+  evaluacion: {
+    tabla:"leads_evaluacion", titulo:"Evaluaciones de Perfil", topbar:"Evaluaciones Landing",
+    statuses:["nuevo","contactado","link_enviado","pagado","evaluado"],
+    columnas:["Nombre","WhatsApp","Situación","Negado","Documentos","Status","Acciones"],
+    render: r => `
+      <td class="td-nombre">${r.nombre}</td>
+      <td class="td-wa">${r.whatsapp}</td>
+      <td>${r.situacion||"-"}</td>
+      <td>${r.negado_antes||"-"}</td>
+      <td>${r.tiene_documentos||"-"}</td>
+    `,
+    fields: r => [
+      ["Nombre",r.nombre],["WhatsApp",r.whatsapp],
+      ["Situación",r.situacion],["Negado antes",r.negado_antes],
+      ["Tiene documentos",r.tiene_documentos],["Listo para avanzar",r.listo_para_avanzar],
+      ["Comentario",r.comentario||"—"],["Registrado",fmtDate(r.created_at)],
+    ]
+  },
+  pagos: {
+    tabla:"pagos_evaluacion", titulo:"Pagos de Evaluación", topbar:"Pagos",
+    statuses:["pendiente","confirmado","completado"],
+    columnas:["Nombre","Plan","Monto","Método","Referencia","Status","Acciones"],
+    render: r => `
+      <td class="td-nombre">${r.nombre}</td>
+      <td>${r.plan||"-"}</td>
+      <td style="font-weight:700;color:var(--green)">RD$${(r.monto||0).toLocaleString()}</td>
+      <td>${r.metodo_pago||"-"}</td>
+      <td>${r.referencia_pago||r.paypal_order_id||"-"}</td>
+    `,
+    fields: r => [
+      ["Nombre",r.nombre],["WhatsApp",r.whatsapp||"—"],
+      ["Plan",r.plan],["Monto",`RD$${(r.monto||0).toLocaleString()}`],
+      ["Método de pago",r.metodo_pago],
+      ["Referencia",r.referencia_pago||"—"],["PayPal Order",r.paypal_order_id||"—"],
+      ["Registrado",fmtDate(r.created_at)],
+    ]
+  }
+};
+
+function fmtDate(d) {
+  if (!d) return "—";
+  return new Date(d).toLocaleDateString("es-DO",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+}
+
+function statusBadge(s) {
+  return `<span class="status status-${s}">${(s||"").replace("_"," ")}</span>`;
+}
+
+function cambiarVista(v) {
+  vistaActual  = v;
+  tablaActual  = VISTAS[v].tabla;
+  filtroStatus = "todos";
+  document.querySelectorAll(".nav-item").forEach(el => el.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(el => {
+    if (el.getAttribute("onclick") && el.getAttribute("onclick").includes(`'${v}'`)) el.classList.add("active");
+  });
+  document.getElementById("topbar-title").textContent = VISTAS[v].topbar;
+  document.getElementById("tabs-evaluacion").style.display = v === "evaluacion" ? "flex" : "none";
+  cargarDatos();
+}
+
+async function cargarDatos() {
+  document.getElementById("tabla-body").innerHTML = '<div class="loading">⏳ Cargando...</div>';
+  const v = VISTAS[vistaActual];
+  const { data, error } = await sb.from(v.tabla).select("*").order("created_at",{ascending:false});
+  if (error) { document.getElementById("tabla-body").innerHTML = `<div class="loading">❌ Error: ${error.message}</div>`; return; }
+  todosLosDatos  = data || [];
+  datosFiltrados = [...todosLosDatos];
+  renderStats();
+  renderFiltros();
+  renderTabla();
+}
+
+function renderStats() {
+  const v = VISTAS[vistaActual];
+  const total   = todosLosDatos.length;
+  const nuevos  = todosLosDatos.filter(r => r.status === "nuevo").length;
+  document.getElementById("badge-nuevos").textContent = `${nuevos} nuevos`;
+
+  const statsByStatus = {};
+  v.statuses.forEach(s => { statsByStatus[s] = todosLosDatos.filter(r => r.status === s).length; });
+
+  let html = `<div class="stat"><div class="stat-num">${total}</div><div class="stat-label">Total registros</div><div class="stat-new">↑ ${nuevos} nuevos</div></div>`;
+  v.statuses.forEach(s => {
+    html += `<div class="stat"><div class="stat-num">${statsByStatus[s]||0}</div><div class="stat-label">${s.replace("_"," ")}</div></div>`;
+  });
+  document.getElementById("stats-container").innerHTML = html;
+}
+
+function renderFiltros() {
+  const v = VISTAS[vistaActual];
+  const todos = ["todos", ...v.statuses];
+  document.getElementById("filtros-container").innerHTML = todos.map(s =>
+    `<button class="filtro-btn ${filtroStatus===s?"active":""}" onclick="setFiltro('${s}')">${s==="todos"?"Todos":s.replace("_"," ")} (${s==="todos"?todosLosDatos.length:todosLosDatos.filter(r=>r.status===s).length})</button>`
+  ).join("");
+}
+
+function setFiltro(s) {
+  filtroStatus   = s;
+  datosFiltrados = s === "todos" ? [...todosLosDatos] : todosLosDatos.filter(r => r.status === s);
+  renderFiltros();
+  renderTabla();
+}
+
+function filtrarBusqueda(q) {
+  const base = filtroStatus === "todos" ? todosLosDatos : todosLosDatos.filter(r => r.status === filtroStatus);
+  datosFiltrados = q ? base.filter(r =>
+    (r.nombre||"").toLowerCase().includes(q.toLowerCase()) ||
+    (r.whatsapp||"").includes(q)
+  ) : base;
+  renderTabla();
+}
+
+function renderTabla() {
+  const v = VISTAS[vistaActual];
+  document.getElementById("tabla-titulo").textContent = `${datosFiltrados.length} registros`;
+  if (!datosFiltrados.length) {
+    document.getElementById("tabla-body").innerHTML = '<div class="empty"><div class="empty-icon">📭</div><div>No hay registros en esta vista</div></div>';
+    return;
+  }
+  const thead = `<thead><tr>${v.columnas.map(c=>`<th>${c}</th>`).join("")}</tr></thead>`;
+  const tbody = datosFiltrados.map(r => `
+    <tr>
+      ${v.render(r)}
+      <td>${statusBadge(r.status)}</td>
+      <td style="display:flex;gap:6px;align-items:center;">
+        <button onclick="abrirModal('${r.id}')" style="background:var(--navy);color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;">Ver</button>
+        <button class="btn-wa" onclick="abrirWA('${r.whatsapp||""}','${r.nombre||""}')">WA</button>
+      </td>
+    </tr>
+  `).join("");
+  document.getElementById("tabla-body").innerHTML = `<table>${thead}<tbody>${tbody}</tbody></table>`;
+}
+
+function abrirWA(wa, nombre) {
+  if (!wa) return alert("Este registro no tiene WhatsApp");
+  const num = wa.replace(/\D/g,"");
+  const msg = encodeURIComponent(`Hola ${nombre}, te contactamos desde Tengo Visa RD.`);
+  window.open(`https://wa.me/${num}?text=${msg}`,"_blank");
+}
+
+function abrirModal(id) {
+  const v = VISTAS[vistaActual];
+  const r = todosLosDatos.find(x => x.id === id);
+  if (!r) return;
+  modalLead = r;
+  document.getElementById("modal-title").textContent = r.nombre;
+  document.getElementById("modal-fields").innerHTML = v.fields(r).map(([l,v]) =>
+    `<div class="modal-field"><div class="modal-label">${l}</div><div class="modal-value">${v||"—"}</div></div>`
+  ).join("");
+  document.getElementById("modal-nota").value = r.nota_interna || "";
+  const sel = document.getElementById("modal-status-sel");
+  sel.innerHTML = VISTAS[vistaActual].statuses.map(s =>
+    `<option value="${s}" ${r.status===s?"selected":""}>${s.replace("_"," ")}</option>`
+  ).join("");
+  document.getElementById("modal").style.display = "flex";
+}
+
+function cerrarModal(e) {
+  if (e.target.id === "modal") document.getElementById("modal").style.display = "none";
+}
+
+async function guardarModal() {
+  if (!modalLead) return;
+  const nota   = document.getElementById("modal-nota").value;
+  const status = document.getElementById("modal-status-sel").value;
+  const v      = VISTAS[vistaActual];
+  const { error } = await sb.from(v.tabla).update({ nota_interna:nota, status, updated_at:new Date().toISOString() }).eq("id", modalLead.id);
+  if (error) { alert("Error al guardar: " + error.message); return; }
+  document.getElementById("modal").style.display = "none";
+  cargarDatos();
+}
+
+function tabEval(t) {
+  document.querySelectorAll(".tab").forEach(el => el.classList.remove("active"));
+  event.target.classList.add("active");
+  vistaActual = t === "pagos" ? "pagos" : "evaluacion";
+  tablaActual = VISTAS[vistaActual].tabla;
+  cargarDatos();
+}
+
+// Inicio
+cargarDatos();
+// Auto-refresh cada 60 segundos
+setInterval(() => { if(document.visibilityState === "visible") cargarDatos(); }, 60000);
+</script>
+</body>
+</html>

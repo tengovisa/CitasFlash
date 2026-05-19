@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>¿Tu cita consular está muy lejos? | Tengo Visa RD</title>
+<meta name="description" content="Seguimiento personalizado de disponibilidad consular para intentar acercar tu cita ya programada."/>
+<style>
+:root{--navy:#1B2A4A;--navydk:#0f1e3a;--red:#E31837;--white:#fff;--off:#F8F9FC;--gray:#64748b;--border:#dde3ee;--green:#16a34a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--off);color:var(--navy);overflow-x:hidden;}
+a{text-decoration:none;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(27,42,74,0.97);backdrop-filter:blur(14px);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid rgba(227,24,55,0.2);}
+.logo{display:flex;flex-direction:column;line-height:1;}
+.logo-tengo{color:#fff;font-weight:900;font-style:italic;font-size:14px;font-family:Georgia,serif;}
+.logo-visa{color:var(--red);font-weight:900;font-style:italic;font-size:22px;font-family:Georgia,serif;}
+.logo-stars{background:var(--navy);border-radius:3px;padding:2px 5px;font-size:6px;color:var(--red);letter-spacing:1px;display:inline-block;margin-bottom:1px;}
+.nav-cta{background:var(--red);color:#fff;border-radius:8px;padding:9px 18px;font-weight:700;font-size:12px;letter-spacing:.3px;}
+
+/* HERO */
+.hero{min-height:100vh;background:linear-gradient(150deg,var(--navydk) 0%,var(--navy) 58%,#1a1a2e 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:110px 24px 80px;text-align:center;position:relative;overflow:hidden;}
+.hero-deco{position:absolute;border-radius:50%;pointer-events:none;}
+.hero-deco-1{top:-100px;right:-80px;width:460px;height:460px;background:rgba(227,24,55,.05);}
+.hero-deco-2{bottom:-100px;left:-80px;width:440px;height:440px;background:rgba(255,255,255,.02);}
+.hero-logo{margin-bottom:28px;}
+.badge{display:inline-flex;align-items:center;gap:7px;background:rgba(227,24,55,.12);border:1px solid rgba(227,24,55,.3);border-radius:100px;padding:7px 18px;margin-bottom:28px;color:#ff8a96;font-size:12px;font-weight:700;letter-spacing:1.2px;}
+.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,6vw,3.8rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:8px;letter-spacing:-1px;}
+.hero h1 span{color:var(--red);font-style:italic;}
+.hero p{font-size:clamp(1rem,2.4vw,1.18rem);color:rgba(255,255,255,.7);max-width:560px;line-height:1.85;margin-bottom:14px;}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.4);max-width:480px;line-height:1.7;margin-bottom:44px;font-style:italic;}
+.btn-hero{background:var(--red);color:#fff;border-radius:14px;padding:20px 44px;font-weight:800;font-size:clamp(14px,2.2vw,17px);box-shadow:0 10px 36px rgba(227,24,55,.5);letter-spacing:.4px;display:inline-block;transition:transform .2s,box-shadow .2s;}
+.btn-hero:hover{transform:translateY(-2px);box-shadow:0 14px 44px rgba(227,24,55,.65);}
+.hero-note{margin-top:52px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:18px 28px;max-width:500px;display:flex;align-items:center;gap:14px;}
+.hero-note p{color:rgba(255,255,255,.55);font-size:13px;line-height:1.7;text-align:left;}
+
+/* SECTIONS */
+section{padding:88px 24px;}
+.container{max-width:960px;margin:0 auto;}
+.section-label{text-align:center;color:var(--red);font-weight:700;font-size:11px;letter-spacing:2.5px;margin-bottom:12px;}
+.section-title{text-align:center;font-family:Georgia,serif;font-size:clamp(1.5rem,4vw,2.3rem);font-weight:900;margin-bottom:14px;}
+.section-sub{text-align:center;color:var(--gray);font-size:15px;max-width:460px;margin:0 auto 52px;line-height:1.7;}
+
+/* PASOS */
+.pasos{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:24px;}
+.paso{padding:30px 22px;border-radius:14px;border:1px solid #eaecf2;background:var(--off);position:relative;overflow:hidden;}
+.paso-n{position:absolute;top:10px;right:14px;font-size:3rem;font-weight:900;color:rgba(227,24,55,.05);}
+.paso-icon{font-size:26px;margin-bottom:12px;}
+.paso h3{font-weight:800;margin-bottom:6px;font-size:.95rem;color:var(--navy);}
+.paso p{color:var(--gray);line-height:1.6;font-size:14px;}
+
+/* BENEFICIOS */
+.beneficios{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;}
+.ben{background:#fff;border-radius:14px;padding:24px 22px;box-shadow:0 2px 14px rgba(27,42,74,.05);border-left:3px solid var(--red);display:flex;gap:14px;align-items:flex-start;transition:transform .3s,box-shadow .3s;}
+.ben:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(27,42,74,.1);}
+.ben-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.ben h3{font-weight:800;margin-bottom:5px;color:var(--navy);font-size:.92rem;}
+.ben p{color:var(--gray);font-size:13px;line-height:1.6;}
+
+/* HUMANO */
+.humano{background:linear-gradient(135deg,var(--navy) 0%,var(--navydk) 100%);border-radius:20px;padding:36px 40px;display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;box-shadow:0 8px 40px rgba(27,42,74,.2);}
+.humano h3{color:#fff;font-weight:900;font-size:1.1rem;margin-bottom:10px;}
+.humano p{color:rgba(255,255,255,.6);font-size:14px;line-height:1.8;}
+
+/* FORMULARIO */
+.form-wrap{max-width:660px;margin:0 auto;}
+.form-logo{display:flex;justify-content:center;margin-bottom:24px;}
+.form-box{background:var(--off);border-radius:18px;padding:clamp(22px,5vw,44px);box-shadow:0 4px 28px rgba(27,42,74,.07);border:1px solid #e8ecf2;}
+.field{margin-bottom:18px;}
+.field label{display:block;font-weight:700;margin-bottom:7px;font-size:14px;color:var(--navy);}
+.field input,.field select,.field textarea{width:100%;padding:14px 16px;border-radius:10px;border:1.5px solid var(--border);font-size:15px;outline:none;background:#fff;color:var(--navy);font-family:inherit;transition:border-color .2s;box-sizing:border-box;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);}
+.field textarea{resize:vertical;}
+.radio-group{display:flex;gap:10px;flex-wrap:wrap;}
+.radio-label{flex:1;padding:13px 14px;border-radius:10px;border:1.5px solid var(--border);cursor:pointer;text-align:center;font-weight:600;font-size:14px;color:var(--gray);transition:all .2s;min-width:140px;}
+.radio-label.active{border-color:var(--red);background:rgba(227,24,55,.05);color:var(--red);}
+.field input[type=radio]{display:none;}
+.warn-box{background:#fffbeb;border:1px solid #f59e0b;border-radius:10px;padding:12px 16px;margin-top:10px;color:#92400e;font-size:13px;line-height:1.6;}
+.error-box{background:rgba(227,24,55,.07);border:1px solid rgba(227,24,55,.22);border-radius:10px;padding:12px 16px;margin-bottom:18px;color:#b01226;font-size:14px;line-height:1.6;}
+.block-box{background:#fffbeb;border:1.5px solid #f59e0b;border-radius:14px;padding:28px 32px;margin-bottom:28px;text-align:center;}
+.block-box p{color:#92400e;font-size:15px;line-height:1.75;}
+.success-box{background:#f0fdf4;border:2px solid #22c55e;border-radius:16px;padding:44px 32px;text-align:center;}
+.success-box h3{font-weight:900;color:#166534;font-size:1.4rem;margin-bottom:10px;}
+.success-box p{color:#15803d;font-size:14px;line-height:1.8;}
+.btn-submit{width:100%;background:var(--red);color:#fff;border:none;border-radius:12px;padding:18px;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 6px 22px rgba(227,24,55,.4);transition:all .2s;letter-spacing:.3px;font-family:inherit;}
+.btn-submit:disabled{background:#aaa;box-shadow:none;cursor:not-allowed;}
+.form-note{text-align:center;font-size:11px;color:#94a3b8;margin-top:16px;line-height:1.65;}
+
+/* FAQ */
+.faq-list{max-width:640px;margin:0 auto;}
+.faq-item{background:#fff;border-radius:12px;margin-bottom:8px;border:1px solid #e8ecf2;overflow:hidden;transition:box-shadow .3s;}
+.faq-item.open{box-shadow:0 4px 18px rgba(27,42,74,.08);}
+.faq-q{width:100%;padding:18px 22px;background:none;border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:14px;text-align:left;}
+.faq-q span:first-child{font-weight:700;color:var(--navy);font-size:14px;line-height:1.4;}
+.faq-plus{color:var(--red);font-size:20px;font-weight:900;flex-shrink:0;transition:transform .3s;}
+.faq-item.open .faq-plus{transform:rotate(45deg);}
+.faq-a{padding:0 22px 18px;color:var(--gray);font-size:14px;line-height:1.75;display:none;}
+.faq-item.open .faq-a{display:block;}
+
+/* CTA FINAL */
+.cta-final{background:linear-gradient(135deg,var(--navy) 0%,var(--navydk) 100%);text-align:center;}
+.cta-final h2{font-family:Georgia,serif;font-size:clamp(1.6rem,4vw,2.5rem);font-weight:900;color:#fff;max-width:540px;margin:0 auto 14px;line-height:1.2;}
+.cta-final p{color:rgba(255,255,255,.5);font-size:15px;max-width:420px;margin:0 auto 36px;line-height:1.7;}
+.btn-cta{background:var(--red);color:#fff;border-radius:12px;padding:18px 40px;font-weight:800;font-size:16px;display:inline-block;box-shadow:0 8px 30px rgba(227,24,55,.5);}
+
+/* FOOTER */
+footer{padding:44px 24px;background:#0a1628;text-align:center;border-top:1px solid rgba(255,255,255,.05);}
+.footer-logo{display:flex;justify-content:center;margin-bottom:20px;}
+.footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:22px;}
+.footer-links a{color:rgba(255,255,255,.45);font-size:13px;}
+.legal-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:16px 22px;max-width:620px;margin:0 auto 20px;}
+.legal-box p{color:rgba(255,255,255,.3);font-size:12px;line-height:1.8;}
+.footer-copy{color:rgba(255,255,255,.14);font-size:11px;}
+
+@media(max-width:600px){
+  .humano{flex-direction:column;}
+  .radio-group{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-stars">★★★★★</div>
+    <div><span class="logo-tengo">tengo</span><span class="logo-visa">Visa</span> <span style="color:rgba(255,255,255,.4);font-size:12px">RD</span></div>
+  </div>
+  <a class="nav-cta" href="#formulario">SOLICITAR AHORA</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-deco hero-deco-1"></div>
+  <div class="hero-deco hero-deco-2"></div>
+  <div class="hero-logo">
+    <div class="logo" style="align-items:center;">
+      <div class="logo-stars" style="font-size:8px;padding:3px 8px;">★★★★★</div>
+      <div><span class="logo-tengo" style="font-size:20px">tengo</span><span class="logo-visa" style="font-size:34px">Visa</span></div>
+    </div>
+  </div>
+  <div class="badge">✈️ SOLO PARA CITAS YA PROGRAMADAS · ACCESO AIS REQUERIDO</div>
+  <h1>¿Tu cita consular<br/><span>está muy lejos?</span></h1>
+  <p>Nuestro equipo realiza <strong style="color:#fff">seguimiento personalizado de disponibilidad consular</strong> para identificar oportunidades de fechas más cercanas cuando el sistema oficial las habilite.</p>
+  <p class="hero-sub">Servicio exclusivo para personas que ya tienen una cita consular programada y acceso activo a su cuenta AIS.</p>
+  <a href="#formulario" class="btn-hero">SOLICITAR ACERCAR MI CITA</a>
+  <div class="hero-note">
+    <span style="font-size:26px;flex-shrink:0">👥</span>
+    <p><strong style="color:#fff">Revisión manual, equipo humano.</strong> Nuestros asesores revisan el sistema personalmente. Sin programas automatizados ni sistemas externos.</p>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section style="background:#fff">
+  <div class="container">
+    <p class="section-label">EL PROCESO</p>
+    <h2 class="section-title">¿Cómo funciona?</h2>
+    <p class="section-sub">Cuatro pasos. Un asesor humano. Sin automatizaciones.</p>
+    <div class="pasos">
+      <div class="paso"><div class="paso-n">01</div><div class="paso-icon">📝</div><h3>Completa el formulario</h3><p>Comparte los datos básicos de tu cita actual.</p></div>
+      <div class="paso"><div class="paso-n">02</div><div class="paso-icon">🔎</div><h3>Verificamos si calificas</h3><p>Confirmamos que tengas cita activa, acceso AIS y disposición para iniciar.</p></div>
+      <div class="paso"><div class="paso-n">03</div><div class="paso-icon">🤝</div><h3>Asignamos seguimiento</h3><p>Un asesor realiza revisión periódica de disponibilidad consular según tu caso.</p></div>
+      <div class="paso"><div class="paso-n">04</div><div class="paso-icon">📲</div><h3>Te contactamos si procede</h3><p>Si se identifica una oportunidad viable, se coordina contigo por WhatsApp.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section style="background:var(--off)">
+  <div class="container">
+    <p class="section-label">LO QUE INCLUYE</p>
+    <h2 class="section-title">Lo que incluye el acompañamiento</h2>
+    <div class="beneficios">
+      <div class="ben"><span class="ben-icon">🔍</span><div><h3>Revisión periódica de disponibilidad</h3><p>Nuestro equipo revisa el sistema de forma manual y constante, sin ningún programa automatizado.</p></div></div>
+      <div class="ben"><span class="ben-icon">🤝</span><div><h3>Atención personalizada</h3><p>Un asesor humano atiende tu caso de principio a fin con orientación directa.</p></div></div>
+      <div class="ben"><span class="ben-icon">✅</span><div><h3>Enfocado en citas ya programadas</h3><p>Este servicio es exclusivo para quienes ya cuentan con una cita consular vigente.</p></div></div>
+      <div class="ben"><span class="ben-icon">🔒</span><div><h3>Comunicación solo para casos calificados</h3><p>Mantenemos contacto directo solo con quienes cumplen el perfil del servicio.</p></div></div>
+      <div class="ben"><span class="ben-icon">💬</span><div><h3>Lenguaje claro y transparente</h3><p>Te explicamos qué hacemos, cómo lo hacemos y cuáles son los límites del servicio.</p></div></div>
+      <div class="ben"><span class="ben-icon">🚫</span><div><h3>Sin promesas falsas ni garantías irreales</h3><p>Trabajamos con lo que el sistema oficial habilita, nada más.</p></div></div>
+    </div>
+    <div style="margin-top:32px">
+      <div class="humano">
+        <span style="font-size:38px;flex-shrink:0">👥</span>
+        <div>
+          <h3>Trabajo 100% humano y manual</h3>
+          <p>Nuestro equipo realiza revisiones frecuentes y personalizadas del sistema consular. No utilizamos programas automatizados, bots ni sistemas externos. Cada caso es atendido directamente por un asesor humano dedicado a tu situación.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULARIO -->
+<section style="background:#fff" id="formulario">
+  <div class="form-wrap">
+    <div class="form-logo">
+      <div class="logo" style="align-items:center">
+        <div class="logo-stars">★★★★★</div>
+        <div><span class="logo-tengo">tengo</span><span class="logo-visa">Visa</span></div>
+      </div>
+    </div>
+    <p class="section-label">EVALUACIÓN DE SOLICITUD</p>
+    <h2 class="section-title">Solicitar acercar mi cita</h2>
+    <p class="section-sub" style="margin-bottom:36px">Completa el formulario. Solo clientes con cita activa y acceso AIS son evaluados.</p>
+
+    <div id="block-msg" class="block-box" style="display:none">
+      <div style="font-size:40px;margin-bottom:12px">ℹ️</div>
+      <p id="block-text"></p>
+    </div>
+
+    <div id="success-msg" class="success-box" style="display:none">
+      <div style="font-size:56px;margin-bottom:14px">✅</div>
+      <h3>¡Solicitud recibida!</h3>
+      <p>Serás redirigido a WhatsApp para hablar con uno de nuestros asesores.</p>
+    </div>
+
+    <div id="form-box" class="form-box">
+      <div class="field">
+        <label>Nombre completo *</label>
+        <input type="text" id="nombre" placeholder="Ej. Juan Pérez González"/>
+      </div>
+      <div class="field">
+        <label>WhatsApp del solicitante *</label>
+        <input type="tel" id="whatsapp" placeholder="+1 (849) 000-0000"/>
+      </div>
+      <div class="field">
+        <label>Fecha actual de cita consular *</label>
+        <input type="date" id="fechaCita"/>
+      </div>
+      <div class="field">
+        <label>Cantidad de solicitantes *</label>
+        <select id="solicitantes">
+          <option value="">— Selecciona —</option>
+          <option>1 solicitante</option>
+          <option>2 solicitantes</option>
+          <option>3 solicitantes</option>
+          <option>4 solicitantes</option>
+          <option>5 o más solicitantes</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>¿Tiene acceso a su cuenta AIS? *</label>
+        <div class="radio-group">
+          <label class="radio-label" id="ais-si-lbl"><input type="radio" name="ais" value="si" onchange="selectRadio('ais','si')"/> ✅ Sí, tengo acceso</label>
+          <label class="radio-label" id="ais-no-lbl"><input type="radio" name="ais" value="no" onchange="selectRadio('ais','no')"/> ❌ No tengo acceso</label>
+        </div>
+        <div id="ais-warn" class="warn-box" style="display:none">⚠️ El acceso AIS es necesario para realizar el seguimiento de disponibilidad consular.</div>
+      </div>
+      <div class="field">
+        <label>¿Está dispuesto/a a iniciar hoy si califica? *</label>
+        <div class="radio-group">
+          <label class="radio-label" id="ini-si-lbl"><input type="radio" name="ini" value="hoy" onchange="selectRadio('ini','hoy')"/> ✅ Sí, deseo iniciar hoy</label>
+          <label class="radio-label" id="ini-no-lbl"><input type="radio" name="ini" value="pensar" onchange="selectRadio('ini','pensar')"/> 🤔 Necesito pensarlo</label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Comentario adicional <span style="font-weight:400;color:#94a3b8">(opcional)</span></label>
+        <textarea id="comentario" rows="3" placeholder="Cuéntanos brevemente tu situación..."></textarea>
+      </div>
+      <div id="error-msg" class="error-box" style="display:none"></div>
+      <button class="btn-submit" id="btn-submit" onclick="enviar()">SOLICITAR ACERCAR MI CITA</button>
+      <p class="form-note">🔒 Tu información es confidencial. Un asesor real te responderá directamente.<br/>Servicio sujeto a disponibilidad publicada por el sistema oficial.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:var(--off)">
+  <div class="container">
+    <p class="section-label">PREGUNTAS FRECUENTES</p>
+    <h2 class="section-title">Respondemos tus dudas</h2>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>¿Usan algún tipo de sistema automatizado o bot?</span><span class="faq-plus">+</span></button><div class="faq-a">No. Todo el trabajo lo realiza nuestro equipo de asesores de forma manual y personal. Sin ningún programa automatizado ni sistema externo.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>¿Garantizan que encontrarán disponibilidad?</span><span class="faq-plus">+</span></button><div class="faq-a">No podemos garantizarlo porque toda disponibilidad depende del sistema oficial del Departamento de Estado. Garantizamos seguimiento profesional y comunicación directa.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>¿Por qué necesitan acceso a mi cuenta AIS?</span><span class="faq-plus">+</span></button><div class="faq-a">Es el requisito mínimo para que nuestro equipo pueda realizar el seguimiento de disponibilidad directamente relacionado con tu cita.</div></div>
+      <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)"><span>¿Cuántos solicitantes puede incluir el servicio?</span><span class="faq-plus">+</span></button><div class="faq-a">Trabajamos con casos individuales y grupos familiares. Indícalo en el formulario y tu asesor lo coordina.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <div class="container">
+    <h2>El sistema consular libera fechas sin previo aviso</h2>
+    <p>Nuestro equipo está pendiente todos los días. Acompañamiento profesional, humano y transparente.</p>
+    <a href="#formulario" class="btn-cta">SOLICITAR ACERCAR MI CITA →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">
+    <div class="logo" style="align-items:center">
+      <div class="logo-stars">★★★★★</div>
+      <div><span class="logo-tengo">tengo</span><span class="logo-visa">Visa</span></div>
+    </div>
+  </div>
+  <div class="footer-links">
+    <a href="https://tengovisard.com" target="_blank">🌐 tengovisard.com</a>
+    <a href="https://instagram.com/visaeeuu" target="_blank">📷 @visaeeuu</a>
+  </div>
+  <div class="legal-box">
+    <p><strong style="color:rgba(255,255,255,.45)">Aviso legal:</strong> Tengo Visa RD ofrece acompañamiento privado y seguimiento de disponibilidad consular. No somos representantes del consulado ni garantizamos fechas específicas. Toda disponibilidad depende exclusivamente del sistema oficial.</p>
+  </div>
+  <p class="footer-copy">© 2025 Tengo Visa RD · @visaeeuu</p>
+</footer>
+
+<script>
+const SUPA = "https://lbttnpcpqdjmpktuoegs.supabase.co";
+const KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxidHRucGNwcWRqbXBrdHVvZWdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NjAyNDEsImV4cCI6MjA5MTIzNjI0MX0.GsuZUkJIOmOITdl0hATt_P603a7vaI01j72nzG94O60";
+const WA   = "18499189998";
+
+const radios = {};
+
+function selectRadio(group, val) {
+  radios[group] = val;
+  document.querySelectorAll(`input[name="${group}"]`).forEach(r => {
+    const lbl = r.closest('.radio-label');
+    lbl.classList.toggle('active', r.value === val);
+  });
+  if (group === 'ais') {
+    document.getElementById('ais-warn').style.display = val === 'no' ? 'block' : 'none';
+  }
+}
+
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  item.classList.toggle('open');
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+async function enviar() {
+  const nombre     = document.getElementById('nombre').value.trim();
+  const whatsapp   = document.getElementById('whatsapp').value.trim();
+  const fechaCita  = document.getElementById('fechaCita').value;
+  const solicitantes = document.getElementById('solicitantes').value;
+  const ais        = radios['ais'] || '';
+  const ini        = radios['ini'] || '';
+  const comentario = document.getElementById('comentario').value.trim();
+
+  document.getElementById('error-msg').style.display = 'none';
+
+  if (!nombre || !whatsapp || !fechaCita || !solicitantes || !ais || !ini) {
+    showError('Por favor completa todos los campos requeridos para evaluar tu solicitud.'); return;
+  }
+  if (ais === 'no') {
+    document.getElementById('form-box').style.display = 'none';
+    document.getElementById('block-msg').style.display = 'block';
+    document.getElementById('block-text').textContent = 'Gracias por tu información. Este servicio requiere acceso activo a la cuenta AIS para poder realizar el seguimiento de disponibilidad.';
+    return;
+  }
+  if (ini === 'pensar') {
+    document.getElementById('form-box').style.display = 'none';
+    document.getElementById('block-msg').style.display = 'block';
+    document.getElementById('block-text').textContent = 'Gracias por tu interés. Este formulario está diseñado para personas listas para iniciar. Puedes volver cuando estés preparado/a.';
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  try {
+    await fetch(`${SUPA}/rest/v1/leads_cita`, {
+      method:'POST',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({nombre,whatsapp,fecha_cita:fechaCita,solicitantes,tiene_ais:ais,inicia_hoy:ini,comentario:comentario||null,status:'nuevo'})
+    });
+  } catch(e) { console.error(e); }
+
+  document.getElementById('form-box').style.display = 'none';
+  document.getElementById('success-msg').style.display = 'block';
+
+  const msg = encodeURIComponent(`Hola Tengo Visa RD. Deseo solicitar el servicio para intentar acercar mi cita mediante seguimiento de disponibilidad consular.\n\nNombre: ${nombre}\nWhatsApp: ${whatsapp}\nFecha cita: ${fechaCita}\nSolicitantes: ${solicitantes}\nAcceso AIS: Sí\nInicia hoy: Sí${comentario?'\nComentario: '+comentario:''}`);
+  window.open(`https://wa.me/${WA}?text=${msg}`, '_blank');
+}
+</script>
+</body>
+</html>

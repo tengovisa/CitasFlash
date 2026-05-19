@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "DS-160 AutoFill TengoVisaRD v2",
+  "version": "2.0.0",
+  "description": "Llena DS-160 en ceac.state.gov desde JSON del CRM",
+  "permissions": ["activeTab","scripting","storage"],
+  "host_permissions": ["https://ceac.state.gov/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "DS-160 AutoFill"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://ceac.state.gov/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

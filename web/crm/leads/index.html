@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Leads Landing | Tengo Visa RD</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#0f1e3a;color:#fff;min-height:100vh}header{background:#1B2A4A;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #E31837}.logo{font-family:Georgia,serif;font-size:20px;font-weight:900}.logo span{color:#E31837}.tabs{display:flex;gap:8px;padding:20px 24px;background:#1B2A4A;border-bottom:1px solid rgba(255,255,255,.1);flex-wrap:wrap}.tab{padding:8px 20px;border-radius:20px;border:1px solid rgba(255,255,255,.2);cursor:pointer;font-size:13px;font-weight:600;color:rgba(255,255,255,.6)}.tab.on{background:#E31837;border-color:#E31837;color:#fff}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:20px 24px}.stat{background:rgba(255,255,255,.05);border-radius:12px;padding:16px;text-align:center}.stat .n{font-size:2rem;font-weight:900;color:#E31837}.stat .l{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}.lista{padding:0 24px 24px}.item{background:rgba(255,255,255,.05);border-radius:12px;padding:16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-left:3px solid #E31837}.av{width:42px;height:42px;border-radius:50%;background:#E31837;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;flex-shrink:0}.info{flex:1}.info .name{font-weight:700;font-size:15px}.info .sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:3px}.badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(227,24,55,.2);color:#ff8a96}.wa{background:#25d366;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;margin-top:6px}.fecha{font-size:11px;color:rgba(255,255,255,.35)}.loading{text-align:center;padding:60px;color:rgba(255,255,255,.4)}</style>
+</head><body>
+<header><div class="logo">tengo<span>Visa</span> &middot; Leads</div><span style="font-size:12px;color:rgba(255,255,255,.4)" id="updated"></span></header>
+<div class="tabs">
+<div class="tab on" id="tab-todos" onclick="filtrar('todos',this)">Todos</div>
+<div class="tab" id="tab-cita" onclick="filtrar('cita',this)">Cita Consular</div>
+<div class="tab" id="tab-asesores" onclick="filtrar('asesores',this)">Asesores</div>
+<div class="tab" id="tab-evaluacion" onclick="filtrar('evaluacion',this)">Evaluacion</div>
+</div>
+<div class="stats">
+<div class="stat"><div class="n" id="st-total">0</div><div class="l">Total Leads</div></div>
+<div class="stat"><div class="n" id="st-cita">0</div><div class="l">Cita Consular</div></div>
+<div class="stat"><div class="n" id="st-asesores">0</div><div class="l">Asesores</div></div>
+<div class="stat"><div class="n" id="st-eval">0</div><div class="l">Evaluacion</div></div>
+</div>
+<div class="lista" id="lista"><div class="loading">Cargando leads...</div></div>
+<script>
+const SUPA="https://lbttnpcpqdjmpktuoegs.supabase.co",KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxidHRucGNwcWRqbXBrdHVvZWdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NjAyNDEsImV4cCI6MjA5MTIzNjI0MX0.GsuZUkJIOmOITdl0hATt_P603a7vaI01j72nzG94O60";
+let todos=[];
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+async function cargar(){
+  try{
+    const r=await fetch(SUPA+'/rest/v1/leads?order=created_at.desc&limit=200',{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Accept-Profile':'crm'}});
+    todos=await r.json();
+    document.getElementById('st-total').textContent=todos.length;
+    document.getElementById('st-cita').textContent=todos.filter(l=>(l.origen||'').includes('Cita')).length;
+    document.getElementById('st-asesores').textContent=todos.filter(l=>(l.origen||'').includes('Asesor')).length;
+    document.getElementById('st-eval').textContent=todos.filter(l=>(l.origen||'').includes('Evaluac')).length;
+    document.getElementById('updated').textContent='Actualizado: '+new Date().toLocaleTimeString('es-DO');
+    render(todos);
+  }catch(e){document.getElementById('lista').innerHTML='Error cargando datos';}
+}
+function filtrar(tipo,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  let data=todos;
+  if(tipo==='cita') data=todos.filter(l=>(l.origen||'').includes('Cita'));
+  if(tipo==='asesores') data=todos.filter(l=>(l.origen||'').includes('Asesor'));
+  if(tipo==='evaluacion') data=todos.filter(l=>(l.origen||'').includes('Evaluac'));
+  render(data);
+}
+function render(data){
+  const el=document.getElementById('lista');
+  if(!data.length){el.innerHTML='<div class="loading">Sin leads en esta categoria</div>';return;}
+  el.innerHTML=data.map(l=>{
+    const ini=(l.nombre||'?')[0].toUpperCase();
+    const wa=(l.whatsapp||'').replace(/\D/g,'');
+    const fecha=l.created_at?new Date(l.created_at).toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'}):'';
+    const origen=l.origen||'Desconocido';
+    const icon=origen.includes('Cita')?'Cita':origen.includes('Asesor')?'Asesor':origen.includes('Evaluac')?'Evaluacion':'Otro';
+    return '<div class="item"><div class="av">'+ini+'</div><div class="info"><div class="name">'+esc(l.nombre)+(l.apellido?' '+esc(l.apellido):'')+'</div><div class="sub">'+esc(l.whatsapp||'')+(l.notas?'<br>'+esc(l.notas.slice(0,100)):'')+'</div></div><div style="text-align:right;flex-shrink:0"><div class="badge">'+icon+'</div><div class="fecha">'+fecha+'</div>'+(wa?'<a class="wa" href="https://wa.me/'+wa+'" target="_blank">WA</a>':'')+'</div></div>';
+  }).join('');
+}
+cargar();
+setInterval(cargar,60000);
+</script></body></html>

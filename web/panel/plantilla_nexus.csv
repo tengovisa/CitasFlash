@@ -1,0 +1,2 @@
+email,password,schedule_id,country,facility_id,asc_facility_id,min_date,max_date,visa_type,need_asc,asesor,tarifa,estado_pago
+ejemplo@gmail.com,ClaveAIS123,73289464,do,138,139,2026-03-25,2026-04-25,B1/B2,true,NombreAsesor,50,pendiente

@@ -119,8 +119,21 @@
   @media(max-width:768px) {
     .sidebar { width:60px; }
     .logo-tengo, .logo-visa, .logo-stars, .nav-section, .nav-item span { display:none; }
+    .nav-icon { font-size:20px; }
+    .nav-item { padding:14px 0; justify-content:center; }
     .main { margin-left:60px; }
     .stats { grid-template-columns:1fr 1fr; }
+    .topbar { padding:8px 10px; }
+    .topbar-title { font-size:14px; }
+    .tabla-search { width:140px; }
+    table { font-size:12px; }
+    .content { padding:12px; }
+    .tabs { flex-wrap:wrap; gap:4px; }
+    .tab { padding:6px 12px; font-size:12px; }
+  }
+  @media(max-width:480px) {
+    .sidebar { width:0; overflow:hidden; }
+    .main { margin-left:0; }
   }
 </style>
 </head>

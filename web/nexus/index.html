@@ -306,8 +306,8 @@ input[type="date"] { max-width: 115px; }
 
 /* ══ MOBILE OPTIMIZADO ══ */
 @media(max-width:768px){
-  /* Sidebar oculto en móvil */
-  .sidebar{ display:none !important; }
+  /* Sidebar fuera de pantalla en móvil (se desliza con .mob-open) */
+  .sidebar{ display:flex !important; left:-260px !important; }
   .main{ margin-left:0 !important; padding:8px !important; }
   
   /* FAB visible */

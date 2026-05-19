@@ -367,6 +367,25 @@ input[type="date"] { max-width: 115px; }
 *{ -webkit-overflow-scrolling:touch; }
 
 
+/* ── GRID DE SECCIONES ── */
+.set-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:768px){
+  .set-grid{grid-template-columns:1fr !important;}
+  .console-grid{grid-template-columns:1fr !important;}
+  .frow{grid-template-columns:1fr !important;}
+  /* Botones que desbordan en móvil */
+  #turbo-btn2{width:100% !important;margin-top:8px !important;}
+  /* Toggles: poner descripción arriba del toggle */
+  .card-body [style*="justify-content:space-between"]{flex-wrap:wrap !important;gap:8px !important;}
+  /* Headers de vista */
+  .view-hdr,.tbl-hdr{flex-direction:column !important;align-items:flex-start !important;gap:8px !important;}
+  .view-actions,.tbl-hdr>div:last-child{flex-wrap:wrap !important;gap:6px !important;width:100% !important;}
+  /* Barra de herramientas */
+  .toolbar,.act-w{flex-wrap:wrap !important;gap:6px !important;}
+  /* Gráficos */
+  canvas{max-width:100% !important;height:auto !important;}
+}
+
 /* ── SIDEBAR MÓVIL COLAPSABLE ── */
 @media(max-width:768px){
   #mob-menu-btn{ display:flex !important; align-items:center; }
@@ -674,7 +693,7 @@ input[type="date"] { max-width: 115px; }
     <button class="btn btn-outline btn-sm" onclick="filterP()">Limpiar filtros</button>
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+  <div class="set-grid">
     <div class="tbl-card">
       <div class="tbl-hdr">
         <div><div class="tbl-title">Pool de conexiones</div><div class="tbl-sub">Importación manual, edición, eliminación y uso por cuenta</div></div>
@@ -932,7 +951,7 @@ input[type="date"] { max-width: 115px; }
 
 <!-- ══ AJUSTES ══ -->
 <div class="page" id="page-ajustes">
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;flex-wrap:wrap;">
+  <div class="set-grid">
 
     <!-- CONEXION API -->
     <div class="card">
@@ -2277,7 +2296,7 @@ function startTimers(){
       </div>
     </div>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+  <div class="set-grid" style="margin-bottom:14px;">
     <div class="card"><div class="card-hdr"><div class="card-title">Simular login AIS</div></div>
       <div class="card-body">
         <div class="fgrp"><label class="lbl">Email</label><input class="inp" id="t-em" type="email" placeholder="test@gmail.com"></div>

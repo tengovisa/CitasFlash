@@ -2018,6 +2018,21 @@ document.addEventListener('DOMContentLoaded',()=>{
 <script src="/extras.js"></script>
 
 <script>
+/* ── Override navigate para cerrar sidebar en móvil ── */
+/* Se ejecuta DESPUÉS de extras.js para no interferir con la inicialización */
+(function(){
+  var _origNav = window.navigate;
+  if(typeof _origNav === 'function'){
+    window.navigate = function(view, param){
+      _origNav(view, param);
+      if(window.innerWidth <= 900){
+        closeSidebarMobile();
+        window.scrollTo(0, 0);
+      }
+    };
+  }
+})();
+
 // ── SERVICE WORKER PWA ──
 if('serviceWorker' in navigator){
   window.addEventListener('load', function(){
@@ -2089,19 +2104,7 @@ function closeSidebarMobile(){
   if(ov) ov.classList.remove('active');
 }
 
-/* ── Cerrar sidebar + scroll top al navegar en móvil ── */
-document.addEventListener('DOMContentLoaded', function(){
-  const _orig = window.navigate;
-  if(typeof _orig === 'function'){
-    window.navigate = function(view, param){
-      _orig(view, param);
-      if(window.innerWidth <= 900){
-        closeSidebarMobile();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    };
-  }
-});
+/* ── navigate wrapper se aplica después de extras.js (ver abajo) ── */
 
 /* ── Bottom nav activo ── */
 function setBNM(view){
